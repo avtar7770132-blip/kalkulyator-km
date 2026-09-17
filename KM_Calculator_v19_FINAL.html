@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>КМ Калькулятор v19.0 FINAL</title>
+    <style>
+        :root { --primary: #d32f2f; --secondary: #ff9800; --dark: #333; --light: #f5f5f5; --border: #ddd; --success: #2e7d32; }
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--light); color: var(--dark); line-height: 1.5; font-size: 16px; }
+        
+        .tabs { display: flex; overflow-x: auto; background: #fff; border-bottom: 2px solid var(--border); position: sticky; top: 0; z-index: 100; scrollbar-width: none; }
+        .tabs::-webkit-scrollbar { display: none; }
+        .tab-btn { flex: 0 0 auto; padding: 15px 20px; border: none; background: none; font-size: 15px; font-weight: 600; color: #666; cursor: pointer; border-bottom: 3px solid transparent; transition: 0.2s; white-space: nowrap; }
+        .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); background: #fff5f5; }
+
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+        .section { display: none; animation: fadeIn 0.3s; }
+        .section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .card { background: #fff; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        h2 { font-size: 20px; margin-bottom: 15px; color: var(--dark); border-left: 4px solid var(--primary); padding-left: 10px; }
+        
+        .calc-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr 0.5fr; gap: 10px; align-items: end; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
+        @media (max-width: 768px) { .calc-row { grid-template-columns: 1fr 1fr; } .calc-row > div:first-child { grid-column: span 2; } }
+
+        .form-group { margin-bottom: 5px; }
+        label { display: block; font-weight: 600; margin-bottom: 2px; font-size: 12px; color: #777; }
+        select, input[type="number"], input[type="text"] { width: 100%; padding: 8px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; background: #fff; }
+        
+        .btn { padding: 10px 15px; border: none; border-radius: 6px; font-size: 14px; font-weight: 700; cursor: pointer; transition: 0.2s; text-align: center; }
+        .btn-calc { background: var(--success); color: #fff; width: 100%; font-size: 18px; padding: 15px; margin-top: 20px; }
+        .btn-add { background: #1976d2; color: #fff; width: 100%; margin-bottom: 20px; }
+        .btn-del { background: #ffcdd2; color: #c62828; padding: 8px; font-size: 12px; }
+        .btn-print { background: var(--primary); color: #fff; width: 100%; margin-top: 20px; font-size: 16px; padding: 15px;}
+        .btn-upload { background: #1976d2; color: #fff; margin-bottom: 10px; font-size: 14px; padding: 10px; width: 100%; }
+
+        .detail-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 13px; }
+        .detail-table th, .detail-table td { border: 1px solid #333; padding: 6px; text-align: left; vertical-align: middle; }
+        .detail-table th { background: #eee; text-align: center; }
+        .detail-table .col-num { text-align: right; }
+        .total-row { background: #d4edda; font-weight: bold; font-size: 16px; }
+        
+        .photos-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; }
+        .photo-slot { border: 2px dashed #ccc; height: 200px; display: flex; align-items: center; justify-content: center; background: #fafafa; cursor: pointer; position: relative; overflow: hidden; border-radius: 8px; }
+        .photo-slot img { width: 100%; height: 100%; object-fit: contain; position: absolute; top:0; left:0; }
+        .photo-slot span { color: #999; font-size: 12px; text-align: center; padding: 10px; }
+
+        .kp-header { text-align: center; margin-bottom: 20px; }
+        .kp-title { font-size: 24px; font-weight: bold; color: var(--dark); }
+        .kp-subtitle { color: #666; margin-bottom: 20px; font-size: 18px; font-weight: bold; }
+        .kp-terms { font-size: 14px; line-height: 1.6; margin: 20px 0; padding: 15px; background: #f5f5f5; border-radius: 8px; }
+        .kp-footer { margin-top: 30px; padding-top: 20px; border-top: 2px solid var(--primary); text-align: center; font-size: 14px; }
+        .kp-manager { font-size: 18px; font-weight: bold; color: var(--primary); margin-bottom: 10px; }
+
+        /* Script Styles */
+        .script-block { margin-bottom: 20px; padding: 15px; background: #fff; border-radius: 8px; border-left: 4px solid var(--secondary); }
+        .script-phrase { background: #fff8e1; padding: 10px; border-radius: 6px; margin: 8px 0; font-style: italic; border-left: 3px solid var(--secondary); }
+        .script-list { margin-left: 20px; margin-top: 10px; }
+        .script-list li { margin-bottom: 6px; }
+
+        @media print {
+            body { background: #fff; }
+            .tabs, .btn, .no-print, .btn-upload, .manager-input-group, .calc-controls { display: none !important; }
+            .section { display: block !important; }
+            .card { box-shadow: none; border: none; padding: 0; }
+            .container { max-width: 100%; padding: 0; }
+            .photo-slot { border: 1px solid #ccc; break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('calc')">🧮 Калькулятор</button>
+    <button class="tab-btn" onclick="switchTab('tech')">📋 Тех. бланк</button>
+    <button class="tab-btn" onclick="switchTab('kp')">📄 КП Клиенту</button>
+    <button class="tab-btn" onclick="switchTab('script')">💡 Скрипт</button>
+    <button class="tab-btn" onclick="switchTab('objections')">🛡 Возражения</button>
+    <button class="tab-btn" onclick="switchTab('materials')">🎨 Материалы</button>
+</div>
+
+<div class="container">
+
+    <!-- === ВКЛАДКА 1: КАЛЬКУЛЯТОР === -->
+    <div id="calc" class="section active">
+        <div class="card">
+            <h2>🛠 Конструктор сметы</h2>
+            
+            <div class="form-group" style="margin-bottom: 20px;">
+                <label style="font-size: 16px; color: var(--primary);">Название изделия (для шапки документов)</label>
+                <input type="text" id="item-name" value="Шкаф в прихожую" style="font-size: 18px; padding: 12px; border: 2px solid var(--primary);">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr 0.5fr; gap: 10px; margin-bottom: 10px; font-weight: bold; color: #555; font-size: 12px; text-transform: uppercase;">
+                <div>Материал / Позиция</div>
+                <div>Ширина (мм)</div>
+                <div>Высота (мм)</div>
+                <div>Глубина/Толщ (мм)</div>
+                <div>Кол-во (шт)</div>
+                <div></div>
+            </div>
+
+            <div id="positions-container"></div>
+
+            <button class="btn btn-add" onclick="addPosition()">➕ ДОБАВИТЬ ПОЗИЦИЮ</button>
+            <button class="btn btn-calc" onclick="calculateTotal()">🧮 РАССЧИТАТЬ ИТОГО</button>
+        </div>
+    </div>
+
+    <!-- === ВКЛАДКА 2: ТЕХ. БЛАНК === -->
+    <div id="tech" class="section">
+        <div class="card">
+            <div style="text-align: center; margin-bottom: 20px;">
+                <div style="font-size: 32px; font-weight: 900; color: var(--primary);">🍲 КМ</div>
+                <div style="font-size: 12px; color: #666;">КУХНЯ МЕБЕЛИ</div>
+                <h2 style="border:none; margin-top:10px;" id="tech-title">ПРОСЧЁТ</h2>
+            </div>
+            <table class="detail-table">
+                <thead><tr><th>№</th><th>Наименование</th><th>Размер / Параметры</th><th>Ед.</th><th>Кол-во</th><th>Цена</th><th>Сумма</th></tr></thead>
+                <tbody id="tech-body"><tr><td colspan="7" style="text-align:center; color:#999;">Выполните расчёт</td></tr></tbody>
+            </table>
+            <div style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px;">
+                <label style="display:block; margin-bottom:10px; font-weight:bold;">Чертежи клиента (до 3 шт.):</label>
+                <div class="photos-grid">
+                    <div class="photo-slot" onclick="document.getElementById('t-img-1').click()"><span id="t-ph-1">+ Фото 1</span><input type="file" id="t-img-1" style="display:none" onchange="loadImg(this,'t-prev-1','t-ph-1')"><img id="t-prev-1" style="display:none"></div>
+                    <div class="photo-slot" onclick="document.getElementById('t-img-2').click()"><span id="t-ph-2">+ Фото 2</span><input type="file" id="t-img-2" style="display:none" onchange="loadImg(this,'t-prev-2','t-ph-2')"><img id="t-prev-2" style="display:none"></div>
+                    <div class="photo-slot" onclick="document.getElementById('t-img-3').click()"><span id="t-ph-3">+ Фото 3</span><input type="file" id="t-img-3" style="display:none" onchange="loadImg(this,'t-prev-3','t-ph-3')"><img id="t-prev-3" style="display:none"></div>
+                </div>
+            </div>
+            <button class="btn btn-print" onclick="window.print()">🖨 ПЕЧАТЬ / PDF</button>
+        </div>
+    </div>
+
+    <!-- === ВКЛАДКА 3: КП КЛИЕНТУ === -->
+    <div id="kp" class="section">
+        <div class="card">
+            <div class="manager-input-group no-print" style="margin-bottom: 15px; padding: 10px; background: #e3f2fd; border-radius: 8px;">
+                <label style="display:inline-block; margin-right: 10px; font-weight: bold; color: #1565c0;">Имя менеджера:</label>
+                <input type="text" id="manager-name" value="Александр" oninput="updateManagerName()" style="width: 200px; padding: 5px; border: 1px solid #1565c0; border-radius: 4px;">
+            </div>
+            <button class="btn btn-upload no-print" onclick="document.getElementById('kp-head-img').click()">📷 ФОТО ДЛЯ ШАПКИ</button>
+            <input type="file" id="kp-head-img" style="display:none" onchange="loadImg(this,'kp-head-prev',null)">
+            <div id="kp-head-cont" style="width:100%; height:300px; background:#eee; margin-bottom:20px; display:none; border-radius: 8px; overflow: hidden;">
+                <img id="kp-head-prev" style="width:100%; height:100%; object-fit: cover; display: block;">
+            </div>
+            <div class="kp-header">
+                <div class="kp-title">Коммерческое предложение</div>
+                <div class="kp-subtitle" id="kp-item-name">Изделие</div>
+            </div>
+            <table class="detail-table">
+                <thead><tr><th>Наименование</th><th>Параметры</th><th>Кол-во</th><th>Стоимость</th></tr></thead>
+                <tbody id="kp-body"><tr><td colspan="4" style="text-align:center; color:#999;">Выполните расчёт</td></tr></tbody>
+            </table>
+            <div class="kp-terms">
+                <strong>Стоимость со сборкой и доставкой</strong><br>
+                Сроки изготовления: от 15 до 25 рабочих дней<br>
+                Вызов инженера-замерщика: по г. Москва 500₽, за МКАД 1000₽<br><br>
+                <strong>Условия оплаты:</strong><br>
+                Первый платёж 60% — запуск в производство<br>
+                Второй платёж 30%<br>
+                Третий платёж 10% после сборки мебели<br>
+                Для Вашего удобства при себе специалист имеет эквайринг.
+            </div>
+            <div style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px;">
+                <label style="display:block; margin-bottom:10px; font-weight:bold; color:#666;">Приложения (чертежи):</label>
+                <div class="photos-grid">
+                    <div class="photo-slot" onclick="document.getElementById('k-img-1').click()" style="height:150px;"><span id="k-ph-1">+ Чертеж 1</span><input type="file" id="k-img-1" style="display:none" onchange="loadImg(this,'k-prev-1','k-ph-1')"><img id="k-prev-1" style="display:none"></div>
+                    <div class="photo-slot" onclick="document.getElementById('k-img-2').click()" style="height:150px;"><span id="k-ph-2">+ Чертеж 2</span><input type="file" id="k-img-2" style="display:none" onchange="loadImg(this,'k-prev-2','k-ph-2')"><img id="k-prev-2" style="display:none"></div>
+                    <div class="photo-slot" onclick="document.getElementById('k-img-3').click()" style="height:150px;"><span id="k-ph-3">+ Чертеж 3</span><input type="file" id="k-img-3" style="display:none" onchange="loadImg(this,'k-prev-3','k-ph-3')"><img id="k-prev-3" style="display:none"></div>
+                </div>
+            </div>
+            <div class="kp-footer">
+                <div class="kp-manager" id="kp-manager-display">С Уважением, менеджер Александр</div>
+                <div>Мебельная компания КМ | WhatsApp: +7999-579-77-59</div>
+            </div>
+            <button class="btn btn-print" onclick="window.print()" style="margin-top:20px;">🖨 ПЕЧАТЬ КП</button>
+        </div>
+    </div>
+
+    <!-- === ВКЛАДКА 4: СКРИПТ ПРОДАЖ === -->
+    <div id="script" class="section">
+        <div class="card">
+            <h2>💡 Скрипт продаж (Первый звонок и квалификация)</h2>
+            
+            <div class="script-block">
+                <h3>📞 Первый звонок (15 секунд на квалификацию)</h3>
+                <div class="script-phrase">«Добрый день! Меня зовут Александр, я представляю мебельную компанию КМ. Мы изготавливаем корпусную мебель под заказ. Подскажите, вам будут интересны наши услуги?»</div>
+                <div class="script-phrase">«Вы оставляли заявку на изготовление корпусной мебели. Всё правильно? … Скажите, вас интересует покупка корпусной мебели?»</div>
+            </div>
+
+            <div class="script-block">
+                <h3>🔍 Вопросы для квалификации</h3>
+                <strong>Кухня:</strong>
+                <ul class="script-list">
+                    <li>Размеры: длина по стенам, высота потолка, глубина (стандарт 600 мм)</li>
+                    <li>Уровни: 2 или 3? Верхний ряд стандарт 720 мм или выше (920/1200)?</li>
+                    <li>Фасад: материал предпочтения? (если не знает → презентация материалов)</li>
+                    <li>Столешница: нужна? Какая? (пластик / камень / HPL)</li>
+                    <li>Стеновая панель: плитка или панель в цвет столешницы?</li>
+                    <li>Пеналы / встройка техники: есть?</li>
+                    <li>Фурнитура: Boyard / Blum / Hettich?</li>
+                    <li>Сроки: когда нужна мебель?</li>
+                    <li>Бюджет: на какую сумму рассчитываете?</li>
+                    <li>Адрес: Москва / за МКАД?</li>
+                </ul>
+                <strong>Шкаф-купе / Гардеробная / Прихожая:</strong>
+                <ul class="script-list">
+                    <li>Размеры: высота × ширина × глубина (если клиент сомневается в глубине → предлагаем 550 мм как середину)</li>
+                    <li>Тип конструкции: купе / распашной / гардеробная?</li>
+                    <li>Наполнение: полки, штанги, ящики — сколько?</li>
+                    <li>Фасад: ЛДСП / зеркало / стекло / МДФ?</li>
+                    <li>Зеркало в прихожую: нужно ли в полный рост?</li>
+                </ul>
+            </div>
+
+            <div class="script-block">
+                <h3>📐 Закрытие на замер</h3>
+                <div class="script-phrase">«Предлагаю так: я делаю предварительный просчёт, а инженер приезжает на замер и подтверждает цифру до рубля. На какой день вас записать?»</div>
+                <div class="script-phrase">«Мы с вами договорились на замер, дата проведения [дата], это [день недели], время проведения [время]. За сутки с вами свяжется наш логист.»</div>
+                <div class="script-phrase"><strong>Информация для клиента (обязательно проговорить!):</strong> Присутствие на адресе вас и других лиц, принимающих решение, обязательно. Если вас всё устроит — возможно оформить договор на месте (предоплата 60%). Замер занимает: шкаф 1.5 часа / кухня 2.5–3 часа. Очистить помещение для корректного замера. Срок производства: 15–25 рабочих дней. Монтаж: 10% (бесплатная сборка — акция). Возможны различные условия оплаты: наличные, безнал, QR-код, рассрочка, кредит.</div>
+            </div>
+
+            <div class="script-block">
+                <h3>💳 Рассрочка и акции</h3>
+                <ul class="script-list">
+                    <li><strong>Рассрочка:</strong> Максимум 199 000 ₽ (банки: Тинькофф, ОТП, МТС, Ренессанс). Если нужно больше — оформим на двоих (муж + жена). Скидка 10% от прайса при рассрочке.</li>
+                    <li><strong>Скидка 10%</strong> при оплате по счёту (безнал).</li>
+                    <li><strong>Акции для постоянных:</strong> 3 000 ₽ за пост с рекомендацией в домовом чате (скриншот обязателен). 5 000 ₽ за приведённого клиента с заключённым договором. 1 000 ₽ за отзыв на Яндекс.Картах с фото проекта.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- === ВКЛАДКА 5: ОТРАБОТКА ВОЗРАЖЕНИЙ === -->
+    <div id="objections" class="section">
+        <div class="card">
+            <h2>🛡 Отработка возражений</h2>
+            
+            <div class="script-block">
+                <h3>💰 «Дорого»</h3>
+                <div class="script-phrase">«Понимаю. Давайте разберём, из чего цена: корпус Е1 трёхслойный, фасад Тадж/Аделит, фурнитура Boyard/Blum с доводчиками, доставка и сборка уже внутри. Дешевле бывает у тех, кто экономит на плите и плёнке: у масс-маркета плёнка отходит от фасада за полгода активной готовки — у нас плёнка другой толщины и класса, антивандальная и влагостойкая.»</div>
+            </div>
+
+            <div class="script-block">
+                <h3> «Цена — единственное, что вас останавливает?»</h3>
+                <div class="script-phrase">«Ольга, скажите, а цена — это единственное, что вас останавливает? … Я понимаю, стоимость 250 тысяч — это и недешево, и недорого. Но мы отвечаем за своё качество. С нашими фабриками мы работаем 15 лет. Если вдруг какая-то рекламация случится, мы всё берём на себя. У нас европейские станки, потрясающее качество, фурнитура, ЛДСП без запаха, фурнитура, которая не расшатается и не вылетит. То есть мы вам предлагаем полный сервис ещё и на адресе, когда вам привезут образцы.»</div>
+            </div>
+
+            <div class="script-block">
+                <h3>🏭 «Вы перекупы?»</h3>
+                <div class="script-phrase">«Да, мы работаем с 8 фабриками 15 лет. Благодаря этому у нас хорошие закупочные цены, быстрые сроки (14–25 дней) и гарантия качества. Никакая другая компания вам за две недели не доставит мебель.»</div>
+            </div>
+
+            <div class="script-block">
+                <h3>⏳ «Я подумаю»</h3>
+                <div class="script-phrase">«Хорошо. Подскажите, что именно взвесить: цену, срок или материал? … Давайте так: я зафиксирую за вами текущие цены до [дата], пришлю расчёт в PDF и завтра наберу, отвечу на вопросы.»</div>
+            </div>
+
+            <div class="script-block">
+                <h3>📏 «Зачем платить за замер?»</h3>
+                <div class="script-phrase">«Замер стоит 500 ₽ по Москве и 1000 ₽ за МКАД: инженер снимет точные размеры, учтёт все нюансы стен и коммуникаций — это страховка от ошибки на десятки тысяч. А для горячих клиентов я могу согласовать бесплатный замер — давайте посмотрю по вашей ситуации.»</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- === ВКЛАДКА 6: ПРЕЗЕНТАЦИЯ МАТЕРИАЛОВ === -->
+    <div id="materials" class="section">
+        <div class="card">
+            <h2>🎨 Презентация материалов</h2>
+            <div class="script-phrase" style="margin-bottom: 20px;">«Давайте я озвучу материалы, которые мы используем в своих проектах, — чтобы вы понимали, откуда складывается цена, и могли спокойно сравнить нас с другими производителями.»</div>
+            
+            <div class="script-block">
+                <h3>🪵 Корпус ЛДСП (Увадрев / EGGER)</h3>
+                <p>«Корпус и наполнение — ЛДСП первого класса ламинации, класс эмиссии Е1: полностью экологичный, без запахов — такие материалы допускаются даже в дошкольных и медицинских учреждениях. Плита трёхслойная, без воздушных пустот внутри — а именно от этого зависит срок службы мебели. 56 цветов корпуса на выбор, два производителя: Увадрев и EGGER.»</p>
+            </div>
+
+            <div class="script-block">
+                <h3>🚪 МДФ ПВХ (Плёнка)</h3>
+                <p>«На сегодня это лучшее предложение по соотношению цена–качество. Работаем с двумя лучшими производителями в России — Тадж и Аделит: более 450 цветов, фактур и покрытий: матовые, суперматовые, глянец, текстуры дерева, камня, кожи. Плёнка антивандальная, влагостойкая, не выгорает — и при этом доступная цена.»</p>
+            </div>
+
+            <div class="script-block">
+                <h3>✨ ALVIC (Испания)</h3>
+                <p>«ALVIC — запатентованный пластик. Три варианта: суперглянец с отражением 85% — как зеркало, но с глубокими яркими цветами; супермат пастельных тонов; имитация камня, бетона, гранита. Плита 18 мм. Цвета эксклюзивные — таких нет больше ни у кого. И в отличие от других глянцев — фасады могут быть с фрезой!»</p>
+            </div>
+
+            <div class="script-block">
+                <h3> Эмаль (Премиум)</h3>
+                <p>«Самый дорогой тип фасадов: итальянские лакокрасочные материалы, более 1000 цветов, 100% попадание в цвет и оттенок. Производство с покрасочными боксами и сушильными камерами — изделия идеальные. Отличная влагостойкость и долгий срок службы.»</p>
+            </div>
+
+            <div class="script-block">
+                <h3>🛡 ARPA Fenix (Италия)</h3>
+                <p>«ARPA — на сегодня самые неубиваемые фасады, по характеристикам превосходят любой другой тип. Практически невозможно испортить. Может изготавливаться и как столешница, и как стеновая панель — вся кухня в одном цвете. Более 600 цветов и фактур! Единственное — фасады только гладкие, без фрезы.»</p>
+            </div>
+
+            <div class="script-block">
+                <h3>🪞 Зеркало и Стекло</h3>
+                <p>«Зеркало серебро 4мм — классика для шкафов-купе и прихожих. Также есть бронза, графит, золото. Стекло Лакомат (матовое) или Лакобель (цветное) — для современных интерьеров. Безопасность: все зеркала и стёкла клеятся на прочную основу, не рассыпаются при повреждении.»</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // === БАЗА ЦЕН (Полная) ===
+    const DB = {
+        'ldsp_uvadrev': { cat: 'Корпус', name: 'ЛДСП 16мм Увадрев', price: 2500, unit: 'м²', type: 'area' },
+        'ldsp_egger': { cat: 'Корпус', name: 'ЛДСП 16мм EGGER', price: 3500, unit: 'м²', type: 'area' },
+        'dvb': { cat: 'Корпус', name: 'ДВП задняя стенка', price: 400, unit: 'м²', type: 'area' },
+        'mdf_matte': { cat: 'Фасад', name: 'МДФ ПВХ Матовый 16мм', price: 11000, unit: 'м²', type: 'area' },
+        'mdf_gloss': { cat: 'Фасад', name: 'МДФ ПВХ Глянцевый 16мм', price: 12000, unit: 'м²', type: 'area' },
+        'mdf_supermat': { cat: 'Фасад', name: 'МДФ ПВХ Супермат 16мм', price: 12500, unit: 'м²', type: 'area' },
+        'alvic_1': { cat: 'Фасад', name: 'Alvic Кат 1 (Испания)', price: 18000, unit: 'м²', type: 'area' },
+        'alvic_2': { cat: 'Фасад', name: 'Alvic Кат 2', price: 20000, unit: 'м²', type: 'area' },
+        'tss_1': { cat: 'Фасад', name: 'TSS Cleaf Кат 1', price: 19000, unit: 'м²', type: 'area' },
+        'arpa_1': { cat: 'Фасад', name: 'ARPA Fenix Кат 1', price: 17000, unit: 'м²', type: 'area' },
+        'enamel_16': { cat: 'Фасад', name: 'Эмаль 16мм Матовая', price: 35000, unit: 'м²', type: 'area' },
+        'mirror_silver': { cat: 'Фасад', name: 'Зеркало Серебро 4мм', price: 4500, unit: 'м²', type: 'area' },
+        'mirror_bronze': { cat: 'Фасад', name: 'Зеркало Бронза 4мм', price: 5500, unit: 'м²', type: 'area' },
+        'glass_lacomat': { cat: 'Фасад', name: 'Стекло Лакомат', price: 5000, unit: 'м²', type: 'area' },
+        'top_plast_1': { cat: 'Столешница', name: 'Пластик 38мм Кат 1 (FORST)', price: 4500, unit: 'м²', type: 'area' },
+        'top_quartz': { cat: 'Столешница', name: 'Кварц / Керамика', price: 25000, unit: 'м²', type: 'area' },
+        'hw_blum_drawer': { cat: 'Фурнитура', name: 'Ящик Blum Tandembox', price: 6500, unit: 'шт', type: 'qty' },
+        'hw_boyard_drawer': { cat: 'Фурнитура', name: 'Ящик Boyard Start', price: 2500, unit: 'шт', type: 'qty' },
+        'hw_rod': { cat: 'Фурнитура', name: 'Штанга хром d25', price: 800, unit: 'пог.м', type: 'length' },
+        'hw_hinge_boyard': { cat: 'Фурнитура', name: 'Петля Boyard с доводчиком', price: 250, unit: 'шт', type: 'qty' },
+        'hw_handle_gola': { cat: 'Фурнитура', name: 'Ручка профиль Gola', price: 3500, unit: 'пог.м', type: 'length' },
+        'hw_tipon': { cat: 'Фурнитура', name: 'Tip-ON Blum (толкатель)', price: 800, unit: 'шт', type: 'qty' }
+    };
+
+    let positions = [];
+
+    function switchTab(id) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        event.target.classList.add('active');
+    }
+
+    function updateManagerName() {
+        const name = document.getElementById('manager-name').value;
+        document.getElementById('kp-manager-display').innerText = `С Уважением, менеджер ${name}`;
+    }
+
+    function loadImg(input, imgId, spanId) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = e => {
+                const img = document.getElementById(imgId);
+                img.src = e.target.result;
+                img.style.display = 'block';
+                if(spanId) document.getElementById(spanId).style.display = 'none';
+                if(imgId === 'kp-head-prev') document.getElementById('kp-head-cont').style.display = 'block';
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function fmt(n) { return Math.round(n).toLocaleString('ru-RU') + ' ₽'; }
+
+    function addPosition() {
+        const id = Date.now();
+        const div = document.createElement('div');
+        div.className = 'calc-row';
+        div.id = `row-${id}`;
+
+        let opts = '<option value="" disabled selected>Выбрать...</option>';
+        let currentCat = '';
+        for (let key in DB) {
+            if (DB[key].cat !== currentCat) {
+                if (currentCat !== '') opts += '</optgroup>';
+                currentCat = DB[key].cat;
+                opts += `<optgroup label="${currentCat}">`;
+            }
+            opts += `<option value="${key}">${DB[key].name} (${DB[key].price}₽)</option>`;
+        }
+        opts += '</optgroup>';
+
+        div.innerHTML = `
+            <div class="form-group"><select onchange="updateRowType(${id}, this.value)">${opts}</select></div>
+            <div class="form-group"><input type="number" id="w-${id}" placeholder="Шир" min="10" max="6000"></div>
+            <div class="form-group"><input type="number" id="h-${id}" placeholder="Выс" min="10" max="6000"></div>
+            <div class="form-group"><input type="number" id="d-${id}" placeholder="Глуб" min="10" max="6000"></div>
+            <div class="form-group"><input type="number" id="q-${id}" value="1" min="0.1" step="0.1"></div>
+            <div class="form-group"><button class="btn btn-del" onclick="removePosition(${id})">✕</button></div>
+        `;
+        document.getElementById('positions-container').appendChild(div);
+        positions.push(id);
+    }
+
+    function removePosition(id) {
+        document.getElementById(`row-${id}`).remove();
+        positions = positions.filter(p => p !== id);
+    }
+
+    function calculateTotal() {
+        const itemName = document.getElementById('item-name').value;
+        let rows = [];
+        let totalRaw = 0;
+
+        positions.forEach(id => {
+            const row = document.getElementById(`row-${id}`);
+            const key = row.querySelector('select').value;
+            if (!key) return;
+
+            const w = parseFloat(document.getElementById(`w-${id}`).value) || 0;
+            const h = parseFloat(document.getElementById(`h-${id}`).value) || 0;
+            const d = parseFloat(document.getElementById(`d-${id}`).value) || 0;
+            const qInput = parseFloat(document.getElementById(`q-${id}`).value) || 0;
+            
+            const item = DB[key];
+            let qty = 0;
+            let calcStr = '';
+
+            if (item.type === 'area') {
+                let dim1 = w;
+                let dim2 = h > 0 ? h : d;
+                let area = (dim1 * dim2) / 1000000;
+                qty = area * qInput;
+                calcStr = `${dim1}x${dim2}мм`;
+            } else if (item.type === 'length') {
+                let len = w > 0 ? w : (h > 0 ? h : d);
+                qty = (len / 1000) * qInput;
+                calcStr = `${len}мм`;
+            } else {
+                qty = qInput;
+                calcStr = (w > 0 || h > 0) ? `${w}x${h}x${d}мм` : '-';
+            }
+
+            const sum = qty * item.price;
+            if (sum > 0) {
+                rows.push({ n: item.name, m: calcStr, u: item.unit, q: qty.toFixed(2), p: item.price, s: sum });
+                totalRaw += sum;
+            }
+        });
+
+        const finalTotal = Math.ceil((totalRaw * 2.7 * 0.8) / 1000) * 1000;
+
+        document.getElementById('tech-title').innerText = `ПРОСЧЁТ: ${itemName.toUpperCase()}`;
+        document.getElementById('kp-item-name').innerText = itemName;
+
+        let tHtml = '';
+        let kHtml = '';
+        rows.forEach((r, i) => {
+            tHtml += `<tr><td style="text-align:center">${i+1}</td><td>${r.n}</td><td>${r.m}</td><td style="text-align:center">${r.u}</td><td style="text-align:center">${r.q}</td><td class="col-num">${fmt(r.p)}</td><td class="col-num">${fmt(r.s * 2.7 * 0.8)}</td></tr>`;
+            kHtml += `<tr><td>${r.n}</td><td>${r.m}</td><td style="text-align:center">${r.q} ${r.u}</td><td class="col-num">${fmt(r.s * 2.7 * 0.8)}</td></tr>`;
+        });
+        tHtml += `<tr class="total-row"><td colspan="6" style="text-align:right">ИТОГО:</td><td class="col-num">${fmt(finalTotal)}</td></tr>`;
+        kHtml += `<tr class="total-row"><td colspan="3" style="text-align:right">ИТОГО:</td><td class="col-num">${fmt(finalTotal)}</td></tr>`;
+        
+        document.getElementById('tech-body').innerHTML = tHtml;
+        document.getElementById('kp-body').innerHTML = kHtml;
+
+        alert(`Готово! ${itemName}: ${fmt(finalTotal)}`);
+    }
+
+    addPosition();
+</script>
+</body>
+</html>
