@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <title>КМ Калькулятор v24.0 MGS FULL</title>
+    <title>КМ Калькулятор v24.1 MGS FULL</title>
     <style>
         :root { --primary: #d32f2f; --secondary: #ff9800; --dark: #333; --light: #f5f5f5; --border: #ddd; --success: #2e7d32; }
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -77,7 +77,7 @@
     <!-- === ВКЛАДКА 1: КАЛЬКУЛЯТОР === -->
     <div id="calc" class="section active">
         <div class="card">
-            <h2>🛠 Конструктор сметы (v24.0 MGS FULL)</h2>
+            <h2>🛠 Конструктор сметы (v24.1 MGS FULL)</h2>
             <div class="form-group" style="margin-bottom: 20px;">
                 <label style="font-size: 16px; color: var(--primary);">Название изделия</label>
                 <input type="text" id="item-name" value="Кухня прямая 2м" style="font-size: 18px; padding: 12px; border: 2px solid var(--primary);">
@@ -248,10 +248,10 @@ https://kompkm.ru/products/
                 <button class="btn btn-copy" onclick="copyText('tpl-zamer')">📋 Копировать</button>
             </div>
             <div class="script-block">
-                <h3>🏢 Приглашение в шоурум (ТЦ Калибр)</h3>
+                <h3>🏢 Приглашение в шоурум (ТЦ Калибри)</h3>
                 <div class="script-phrase" id="tpl-showroom">Если вам удобнее посмотреть материалы вживую перед замером — приглашаю вас в наш шоурум!
 
-📍 Адрес: г. Котельники, Новорязанское шоссе, д. 1А, ТЦ «Калибр» (рядом с метро Котельники)
+📍 Адрес: г. Люберцы, Новорязанское шоссе, д. 1А, ТЦ «Калибри» (рядом с метро Котельники)
 🕒 Работаем ежедневно с 10:00 до 20:00
 🅿️ Парковка бесплатная для посетителей ТЦ
 
@@ -374,11 +374,11 @@ https://kompkm.ru/products/
                 <p>«34 000 ₽/м². Любые цвета, идеальная поверхность, влагостойкость. Можно фрезеровать. Срок 35 дней. Итальянские материалы, 1000+ цветов.»</p>
             </div>
             <div class="script-block">
-                <h3>🛡 Компакт-плита HPL (НОВОЕ)</h3>
+                <h3>🛡 Компакт-плита HPL</h3>
                 <p>«Сверхпрочная плита 10–12 мм для столешниц и столов: не боится воды, царапин, температуры. Торцы — чёрные или в цвет. Arcobaleno/СЛОПЛАСТ 17 000 ₽/м², ALVIC 19 800 ₽/м², MGS+Fenix до 24 300 ₽/м². Обработка и полировка торцов — бесплатно.»</p>
             </div>
             <div class="script-block">
-                <h3>💎 Кварц и Керамика (НОВОЕ)</h3>
+                <h3>💎 Кварц и Керамика</h3>
                 <p>«Кварцевая столешница ALG: 12 мм — 38 000 ₽/м², 26 мм — 45 000 ₽/м². Керамика 24 мм — 38 120 ₽/м². Это вечные материалы: не царапаются, не боятся горячего. Вырезы под мойку и варочную — 6 750 ₽, под розетку/смеситель — 3 000 ₽.»</p>
             </div>
             <div class="script-block">
@@ -390,7 +390,7 @@ https://kompkm.ru/products/
                 <p>«Зеркало серебро/бронза/графит 4мм, стекло Лакомат и Лакобель. Все зеркала клеятся на прочную основу — не рассыпаются.»</p>
             </div>
             <div class="script-block">
-                <h3>🗄 Ящики Hettich AvanTech YOU (НОВОЕ)</h3>
+                <h3>🗄 Ящики Hettich AvanTech YOU</h3>
                 <p>«Премиальные ящики с плавным ходом: Silent System (доводчик) или Push to Open (открываются от нажатия). Высоты 77–251 мм, нагрузка до 40 кг. Комплект от 6 594 ₽ до 10 493 ₽ в зависимости от высоты.»</p>
             </div>
             <div class="script-block">
@@ -403,7 +403,7 @@ https://kompkm.ru/products/
 </div>
 
 <script>
-    // === БАЗА ЦЕН v24.0 MGS FULL ===
+    // === БАЗА ЦЕН v24.1 MGS FULL ===
     const DB = {
         // КОРПУС
         'ldsp_uvadrev': { cat: 'Корпус', name: 'ЛДСП 16мм Увадрев', price: 2500, unit: 'м²', type: 'area' },
@@ -438,7 +438,7 @@ https://kompkm.ru/products/
         'mirror_bronze': { cat: 'Фасад Стекло', name: 'Зеркало Бронза 4мм', price: 5500, unit: 'м²', type: 'area' },
         'glass_lacomat': { cat: 'Фасад Стекло', name: 'Стекло Лакомат', price: 5000, unit: 'м²', type: 'area' },
         'glass_lacobel': { cat: 'Фасад Стекло', name: 'Стекло Лакобель', price: 5500, unit: 'м²', type: 'area' },
-        // ФАСАД КЕРАМИКА (НОВОЕ MGS)
+        // ФАСАД КЕРАМИКА
         'facade_keramo': { cat: 'Фасад Керамика', name: 'Керамический фасад Keramo 18мм', price: 23570, unit: 'м²', type: 'area' },
         // СТОЛЕШНИЦЫ
         'top_plast_1': { cat: 'Столешница', name: 'Пластик 38мм Кат 1 (FORST/Кедр)', price: 4500, unit: 'м²', type: 'area' },
@@ -455,7 +455,7 @@ https://kompkm.ru/products/
         'hole_socket_q': { cat: 'Столешница', name: 'Отверстие розетка/смеситель (кварц/керамика)', price: 3000, unit: 'шт', type: 'qty' },
         'frez_otv': { cat: 'Столешница', name: 'Фрезеровка отверстия любого размера', price: 1500, unit: 'шт', type: 'qty' },
         'ktop_styazhka': { cat: 'Столешница', name: 'K-TOP стяжка (плиты от 10мм)', price: 260, unit: 'шт', type: 'qty' },
-        // КОМПАКТ-ПЛИТА (НОВОЕ MGS раздел 12)
+        // КОМПАКТ-ПЛИТА
         'compact_arcobaleno': { cat: 'Компакт-плита', name: 'Компакт-плита HPL Arcobaleno 12мм (склад)', price: 17000, unit: 'м²', type: 'area' },
         'compact_sloplast': { cat: 'Компакт-плита', name: 'Компакт-плита HPL СЛОПЛАСТ 12мм', price: 17000, unit: 'м²', type: 'area' },
         'compact_mgs_tx000': { cat: 'Компакт-плита', name: 'Компакт-плита HPL MGS TX-000 чёрный+Fenix', price: 18260, unit: 'м²', type: 'area' },
@@ -465,7 +465,7 @@ https://kompkm.ru/products/
         'compact_sht2': { cat: 'Компакт-плита', name: 'Компакт-плита Arcobaleno кат.2 (ШТУЧНАЯ)', price: 48000, unit: 'шт', type: 'qty' },
         // СТЕНОВАЯ
         'wall_plast': { cat: 'Стеновая', name: 'Стеновая панель Пластик 5мм', price: 3500, unit: 'м²', type: 'area' },
-        // КРОМКА (НОВОЕ MGS раздел 14)
+        // КРОМКА
         'kromka_egger_uzk': { cat: 'Кромка', name: 'Кромка EGGER 23/1 (узкая)', price: 125, unit: 'пог.м', type: 'length' },
         'kromka_egger_shir': { cat: 'Кромка', name: 'Кромка EGGER 43/2 (широкая)', price: 420, unit: 'пог.м', type: 'length' },
         'kromka_egger_ps': { cat: 'Кромка', name: 'Кромка EGGER Perfect Sense 23/1', price: 105, unit: 'пог.м', type: 'length' },
@@ -482,13 +482,13 @@ https://kompkm.ru/products/
         'kromka_agt': { cat: 'Кромка', name: 'Кромка AGT PANEL/SUPRAMAT 23/1', price: 210, unit: 'пог.м', type: 'length' },
         'kromka_cleaf': { cat: 'Кромка', name: 'Кромка CLEAF 23/1 (узкая)', price: 390, unit: 'пог.м', type: 'length' },
         'kant_alu': { cat: 'Кромка', name: 'Алюмин. кант для фасада 18мм', price: 180, unit: 'пог.м', type: 'length' },
-        // ЦОКОЛЬ (НОВОЕ MGS раздел 13)
+        // ЦОКОЛЬ
         'tsokol_plast_100': { cat: 'Цоколь', name: 'Цоколь пластик 4м h=100мм', price: 1000, unit: 'шт', type: 'qty' },
         'tsokol_plast_150': { cat: 'Цоколь', name: 'Цоколь пластик 4м h=150мм', price: 1550, unit: 'шт', type: 'qty' },
         'tsokol_sfer': { cat: 'Цоколь', name: 'Цоколь сферический пластик', price: 1000, unit: 'шт', type: 'qty' },
         'tsokol_alu': { cat: 'Цоколь', name: 'Цоколь алюм. MGS 4м h=100мм', price: 1450, unit: 'пог.м', type: 'length' },
         'uplotn_tsokolya': { cat: 'Цоколь', name: 'Уплотнитель цоколя 16/19мм (3м)', price: 110, unit: 'шт', type: 'qty' },
-        // ВОДООТБОЙНИК (НОВОЕ MGS)
+        // ВОДООТБОЙНИК
         'vodootboinik': { cat: 'Водоотбойник', name: 'Водоотбойник 3м/4м', price: 700, unit: 'шт', type: 'qty' },
         'vodootboinik_alu': { cat: 'Водоотбойник', name: 'Водоотбойник алюминиевый 3м', price: 1000, unit: 'шт', type: 'qty' },
         'vodootboinik_korner': { cat: 'Водоотбойник', name: 'Водоотбойник Korner LB 3м', price: 800, unit: 'шт', type: 'qty' },
@@ -496,7 +496,7 @@ https://kompkm.ru/products/
         'hw_blum_drawer': { cat: 'Фурнитура', name: 'Ящик Blum Tandembox', price: 6500, unit: 'шт', type: 'qty' },
         'hw_boyard_drawer': { cat: 'Фурнитура', name: 'Ящик Boyard Start', price: 2500, unit: 'шт', type: 'qty' },
         'hw_hettich_drawer': { cat: 'Фурнитура', name: 'Ящик Hettich InnoTech', price: 5500, unit: 'шт', type: 'qty' },
-        // ЯЩИКИ HETTICH AVANTECH YOU (НОВОЕ со скринов)
+        // ЯЩИКИ HETTICH AVANTECH YOU
         'hw_avantech_h77': { cat: 'Ящики Hettich', name: 'Ящик AvanTech YOU H77 (Push to Open Silent)', price: 9870, unit: 'компл', type: 'qty' },
         'hw_avantech_h101': { cat: 'Ящики Hettich', name: 'Ящик AvanTech YOU H101 (Silent)', price: 6594, unit: 'компл', type: 'qty' },
         'hw_avantech_h139': { cat: 'Ящики Hettich', name: 'Ящик AvanTech YOU H139 (Silent)', price: 7012, unit: 'компл', type: 'qty' },
