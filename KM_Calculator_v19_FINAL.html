@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <title>КМ Калькулятор v19.0 FINAL</title>
+    <title>КМ Калькулятор v22.0 EXACT</title>
     <style>
         :root { --primary: #d32f2f; --secondary: #ff9800; --dark: #333; --light: #f5f5f5; --border: #ddd; --success: #2e7d32; }
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -54,7 +54,6 @@
         .kp-footer { margin-top: 30px; padding-top: 20px; border-top: 2px solid var(--primary); text-align: center; font-size: 14px; }
         .kp-manager { font-size: 18px; font-weight: bold; color: var(--primary); margin-bottom: 10px; }
 
-        /* Script Styles */
         .script-block { margin-bottom: 20px; padding: 15px; background: #fff; border-radius: 8px; border-left: 4px solid var(--secondary); }
         .script-phrase { background: #fff8e1; padding: 10px; border-radius: 6px; margin: 8px 0; font-style: italic; border-left: 3px solid var(--secondary); }
         .script-list { margin-left: 20px; margin-top: 10px; }
@@ -86,19 +85,19 @@
     <!-- === ВКЛАДКА 1: КАЛЬКУЛЯТОР === -->
     <div id="calc" class="section active">
         <div class="card">
-            <h2>🛠 Конструктор сметы</h2>
+            <h2>🛠 Конструктор сметы (Точный расчёт)</h2>
             
             <div class="form-group" style="margin-bottom: 20px;">
-                <label style="font-size: 16px; color: var(--primary);">Название изделия (для шапки документов)</label>
-                <input type="text" id="item-name" value="Шкаф в прихожую" style="font-size: 18px; padding: 12px; border: 2px solid var(--primary);">
+                <label style="font-size: 16px; color: var(--primary);">Название изделия</label>
+                <input type="text" id="item-name" value="Кухня прямая 2м" style="font-size: 18px; padding: 12px; border: 2px solid var(--primary);">
             </div>
 
             <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr 0.5fr; gap: 10px; margin-bottom: 10px; font-weight: bold; color: #555; font-size: 12px; text-transform: uppercase;">
                 <div>Материал / Позиция</div>
                 <div>Ширина (мм)</div>
                 <div>Высота (мм)</div>
-                <div>Глубина/Толщ (мм)</div>
-                <div>Кол-во (шт)</div>
+                <div>Глубина (мм)</div>
+                <div>Кол-во</div>
                 <div></div>
             </div>
 
@@ -179,11 +178,18 @@
         </div>
     </div>
 
-    <!-- === ВКЛАДКА 4: СКРИПТ ПРОДАЖ === -->
+    <!-- === ВКЛАДКА 4: СКРИПТ (ПОЛНЫЙ + WHATSAPP) === -->
     <div id="script" class="section">
         <div class="card">
-            <h2>💡 Скрипт продаж (Первый звонок и квалификация)</h2>
+            <h2>💡 Скрипт продаж v3.0 (Полный + WhatsApp)</h2>
             
+            <div class="script-block">
+                <h3>📱 WhatsApp (для клиентов, которые предпочитают переписку)</h3>
+                <div class="script-phrase">«Здравствуйте! Меня зовут Александр, компания КМ. Видел вашу заявку на кухню. Подскажите, вам уже есть понимание по размерам и материалам, или нужна помощь с выбором?»</div>
+                <div class="script-phrase">«По вашим размерам (прямая 2м, высота 2.4м, верх до потолка) предварительная стоимость в МДФ ПВХ матовый — около 185–195 тысяч со сборкой. Чтобы назвать точную цифру, уточню пару деталей: материал фасада, тип ручек, нужны ли ящики. Когда удобно созвониться на 5 минут?»</div>
+                <div class="script-phrase">«Отправил вам коммерческое предложение в PDF. Посмотрите, пожалуйста, и дайте знать, какие вопросы появились. Готов обсудить по телефону или в чате — как вам удобнее.»</div>
+            </div>
+
             <div class="script-block">
                 <h3>📞 Первый звонок (15 секунд на квалификацию)</h3>
                 <div class="script-phrase">«Добрый день! Меня зовут Александр, я представляю мебельную компанию КМ. Мы изготавливаем корпусную мебель под заказ. Подскажите, вам будут интересны наши услуги?»</div>
@@ -233,10 +239,10 @@
         </div>
     </div>
 
-    <!-- === ВКЛАДКА 5: ОТРАБОТКА ВОЗРАЖЕНИЙ === -->
+    <!-- === ВКЛАДКА 5: ВОЗРАЖЕНИЯ (ПОЛНЫЕ) === -->
     <div id="objections" class="section">
         <div class="card">
-            <h2>🛡 Отработка возражений</h2>
+            <h2>🛡 Отработка возражений (Полная версия)</h2>
             
             <div class="script-block">
                 <h3>💰 «Дорого»</h3>
@@ -244,7 +250,7 @@
             </div>
 
             <div class="script-block">
-                <h3> «Цена — единственное, что вас останавливает?»</h3>
+                <h3>🤔 «Цена — единственное, что вас останавливает?»</h3>
                 <div class="script-phrase">«Ольга, скажите, а цена — это единственное, что вас останавливает? … Я понимаю, стоимость 250 тысяч — это и недешево, и недорого. Но мы отвечаем за своё качество. С нашими фабриками мы работаем 15 лет. Если вдруг какая-то рекламация случится, мы всё берём на себя. У нас европейские станки, потрясающее качество, фурнитура, ЛДСП без запаха, фурнитура, которая не расшатается и не вылетит. То есть мы вам предлагаем полный сервис ещё и на адресе, когда вам привезут образцы.»</div>
             </div>
 
@@ -265,10 +271,10 @@
         </div>
     </div>
 
-    <!-- === ВКЛАДКА 6: ПРЕЗЕНТАЦИЯ МАТЕРИАЛОВ === -->
+    <!-- === ВКЛАДКА 6: МАТЕРИАЛЫ (ПОЛНЫЕ + НОВЫЕ) === -->
     <div id="materials" class="section">
         <div class="card">
-            <h2>🎨 Презентация материалов</h2>
+            <h2>🎨 Презентация материалов (Полная + Новые позиции)</h2>
             <div class="script-phrase" style="margin-bottom: 20px;">«Давайте я озвучу материалы, которые мы используем в своих проектах, — чтобы вы понимали, откуда складывается цена, и могли спокойно сравнить нас с другими производителями.»</div>
             
             <div class="script-block">
@@ -282,13 +288,18 @@
             </div>
 
             <div class="script-block">
+                <h3>🏡 МДФ ПВХ с фрезеровкой (Прованс) — НОВОЕ</h3>
+                <p>«Стиль Прованс — это фасады с фрезеровкой (рамочный профиль). Работаем только с МДФ в плёнке — другие материалы фрезеровать нельзя. Цена 12 000 ₽/м². Выглядит как классика, но стоит дешевле эмали.»</p>
+            </div>
+
+            <div class="script-block">
                 <h3>✨ ALVIC (Испания)</h3>
                 <p>«ALVIC — запатентованный пластик. Три варианта: суперглянец с отражением 85% — как зеркало, но с глубокими яркими цветами; супермат пастельных тонов; имитация камня, бетона, гранита. Плита 18 мм. Цвета эксклюзивные — таких нет больше ни у кого. И в отличие от других глянцев — фасады могут быть с фрезой!»</p>
             </div>
 
             <div class="script-block">
-                <h3> Эмаль (Премиум)</h3>
-                <p>«Самый дорогой тип фасадов: итальянские лакокрасочные материалы, более 1000 цветов, 100% попадание в цвет и оттенок. Производство с покрасочными боксами и сушильными камерами — изделия идеальные. Отличная влагостойкость и долгий срок службы.»</p>
+                <h3>🎨 Эмаль (Премиум) — ОБНОВЛЕНО</h3>
+                <p>«Эмаль — премиум. 34 000 ₽/м². Любые цвета, идеальная поверхность, влагостойкость. Можно фрезеровать. Срок изготовления дольше (35 дней). Итальянские лакокрасочные материалы, более 1000 цветов, 100% попадание в цвет и оттенок.»</p>
             </div>
 
             <div class="script-block">
@@ -297,8 +308,18 @@
             </div>
 
             <div class="script-block">
+                <h3>🌳 Массив (Ольха / Дуб / Ясень) — НОВОЕ</h3>
+                <p>«Натуральное дерево. 60 000–70 000 ₽/м². Экологично, уникальный рисунок, долгий срок службы. Требует соблюдения влажности. Работаем с ольхой, дубом и ясенем.»</p>
+            </div>
+
+            <div class="script-block">
                 <h3>🪞 Зеркало и Стекло</h3>
                 <p>«Зеркало серебро 4мм — классика для шкафов-купе и прихожих. Также есть бронза, графит, золото. Стекло Лакомат (матовое) или Лакобель (цветное) — для современных интерьеров. Безопасность: все зеркала и стёкла клеятся на прочную основу, не рассыпаются при повреждении.»</p>
+            </div>
+
+            <div class="script-block">
+                <h3>💡 Подсветка — НОВОЕ</h3>
+                <p>«LED-подсветка под верхними шкафами — 4000 ₽ за погонный метр с подключением. Создаёт уют и рабочую зону на столешнице. Рекомендуется для всех кухонь с верхними шкафами.»</p>
             </div>
         </div>
     </div>
@@ -306,30 +327,54 @@
 </div>
 
 <script>
-    // === БАЗА ЦЕН (Полная) ===
+    // === ПОЛНАЯ БАЗА ЦЕН ===
     const DB = {
         'ldsp_uvadrev': { cat: 'Корпус', name: 'ЛДСП 16мм Увадрев', price: 2500, unit: 'м²', type: 'area' },
         'ldsp_egger': { cat: 'Корпус', name: 'ЛДСП 16мм EGGER', price: 3500, unit: 'м²', type: 'area' },
         'dvb': { cat: 'Корпус', name: 'ДВП задняя стенка', price: 400, unit: 'м²', type: 'area' },
-        'mdf_matte': { cat: 'Фасад', name: 'МДФ ПВХ Матовый 16мм', price: 11000, unit: 'м²', type: 'area' },
-        'mdf_gloss': { cat: 'Фасад', name: 'МДФ ПВХ Глянцевый 16мм', price: 12000, unit: 'м²', type: 'area' },
-        'mdf_supermat': { cat: 'Фасад', name: 'МДФ ПВХ Супермат 16мм', price: 12500, unit: 'м²', type: 'area' },
-        'alvic_1': { cat: 'Фасад', name: 'Alvic Кат 1 (Испания)', price: 18000, unit: 'м²', type: 'area' },
-        'alvic_2': { cat: 'Фасад', name: 'Alvic Кат 2', price: 20000, unit: 'м²', type: 'area' },
-        'tss_1': { cat: 'Фасад', name: 'TSS Cleaf Кат 1', price: 19000, unit: 'м²', type: 'area' },
-        'arpa_1': { cat: 'Фасад', name: 'ARPA Fenix Кат 1', price: 17000, unit: 'м²', type: 'area' },
-        'enamel_16': { cat: 'Фасад', name: 'Эмаль 16мм Матовая', price: 35000, unit: 'м²', type: 'area' },
-        'mirror_silver': { cat: 'Фасад', name: 'Зеркало Серебро 4мм', price: 4500, unit: 'м²', type: 'area' },
-        'mirror_bronze': { cat: 'Фасад', name: 'Зеркало Бронза 4мм', price: 5500, unit: 'м²', type: 'area' },
-        'glass_lacomat': { cat: 'Фасад', name: 'Стекло Лакомат', price: 5000, unit: 'м²', type: 'area' },
-        'top_plast_1': { cat: 'Столешница', name: 'Пластик 38мм Кат 1 (FORST)', price: 4500, unit: 'м²', type: 'area' },
+        'mdf_matte': { cat: 'Фасад МДФ', name: 'МДФ ПВХ Матовый 16мм', price: 11000, unit: 'м²', type: 'area' },
+        'mdf_gloss': { cat: 'Фасад МДФ', name: 'МДФ ПВХ Глянцевый 16мм', price: 12000, unit: 'м²', type: 'area' },
+        'mdf_supermat': { cat: 'Фасад МДФ', name: 'МДФ ПВХ Супермат 16мм', price: 12500, unit: 'м²', type: 'area' },
+        'mdf_provens': { cat: 'Фасад МДФ', name: 'МДФ ПВХ Фрезеровка (Прованс)', price: 12000, unit: 'м²', type: 'area' },
+        'enamel_16': { cat: 'Фасад Эмаль', name: 'Эмаль 16мм Матовая/Глянцевая', price: 34000, unit: 'м²', type: 'area' },
+        'alvic_1': { cat: 'Фасад Alvic', name: 'Alvic Кат 1 (Испания)', price: 18000, unit: 'м²', type: 'area' },
+        'alvic_2': { cat: 'Фасад Alvic', name: 'Alvic Кат 2', price: 20000, unit: 'м²', type: 'area' },
+        'alvic_3': { cat: 'Фасад Alvic', name: 'Alvic Кат 3', price: 22000, unit: 'м²', type: 'area' },
+        'tss_1': { cat: 'Фасад TSS', name: 'TSS Cleaf Кат 1', price: 19000, unit: 'м²', type: 'area' },
+        'tss_2': { cat: 'Фасад TSS', name: 'TSS Cleaf Кат 2', price: 21000, unit: 'м²', type: 'area' },
+        'arpa_1': { cat: 'Фасад ARPA', name: 'ARPA Fenix Кат 1', price: 17000, unit: 'м²', type: 'area' },
+        'fenix_8': { cat: 'Фасад ARPA', name: 'Fenix NTM Кат 8', price: 25000, unit: 'м²', type: 'area' },
+        'massiv_olha': { cat: 'Фасад Массив', name: 'Массив Ольха', price: 60000, unit: 'м²', type: 'area' },
+        'massiv_dub': { cat: 'Фасад Массив', name: 'Массив Дуб', price: 70000, unit: 'м²', type: 'area' },
+        'massiv_yasen': { cat: 'Фасад Массив', name: 'Массив Ясень', price: 65000, unit: 'м²', type: 'area' },
+        'mirror_silver': { cat: 'Фасад Стекло', name: 'Зеркало Серебро 4мм', price: 4500, unit: 'м²', type: 'area' },
+        'mirror_bronze': { cat: 'Фасад Стекло', name: 'Зеркало Бронза 4мм', price: 5500, unit: 'м²', type: 'area' },
+        'glass_lacomat': { cat: 'Фасад Стекло', name: 'Стекло Лакомат', price: 5000, unit: 'м²', type: 'area' },
+        'glass_lacobel': { cat: 'Фасад Стекло', name: 'Стекло Лакобель', price: 5500, unit: 'м²', type: 'area' },
+        'top_plast_1': { cat: 'Столешница', name: 'Пластик 38мм Кат 1 (FORST/Кедр)', price: 4500, unit: 'м²', type: 'area' },
+        'top_plast_2': { cat: 'Столешница', name: 'Пластик 38мм Кат 2', price: 5500, unit: 'м²', type: 'area' },
+        'top_plast_3': { cat: 'Столешница', name: 'Пластик 38мм Кат 3', price: 6500, unit: 'м²', type: 'area' },
+        'top_alvic': { cat: 'Столешница', name: 'Alvic 38мм', price: 8500, unit: 'м²', type: 'area' },
+        'top_fenix': { cat: 'Столешница', name: 'Fenix 38мм', price: 11500, unit: 'м²', type: 'area' },
+        'top_hpl': { cat: 'Столешница', name: 'HPL Compact 12мм', price: 17000, unit: 'м²', type: 'area' },
         'top_quartz': { cat: 'Столешница', name: 'Кварц / Керамика', price: 25000, unit: 'м²', type: 'area' },
+        'wall_plast': { cat: 'Стеновая', name: 'Стеновая панель Пластик 5мм', price: 3500, unit: 'м²', type: 'area' },
         'hw_blum_drawer': { cat: 'Фурнитура', name: 'Ящик Blum Tandembox', price: 6500, unit: 'шт', type: 'qty' },
         'hw_boyard_drawer': { cat: 'Фурнитура', name: 'Ящик Boyard Start', price: 2500, unit: 'шт', type: 'qty' },
-        'hw_rod': { cat: 'Фурнитура', name: 'Штанга хром d25', price: 800, unit: 'пог.м', type: 'length' },
+        'hw_hettich_drawer': { cat: 'Фурнитура', name: 'Ящик Hettich InnoTech', price: 5500, unit: 'шт', type: 'qty' },
         'hw_hinge_boyard': { cat: 'Фурнитура', name: 'Петля Boyard с доводчиком', price: 250, unit: 'шт', type: 'qty' },
-        'hw_handle_gola': { cat: 'Фурнитура', name: 'Ручка профиль Gola', price: 3500, unit: 'пог.м', type: 'length' },
-        'hw_tipon': { cat: 'Фурнитура', name: 'Tip-ON Blum (толкатель)', price: 800, unit: 'шт', type: 'qty' }
+        'hw_hinge_blum': { cat: 'Фурнитура', name: 'Петля Blum Clip Top', price: 850, unit: 'шт', type: 'qty' },
+        'hw_handle_gola': { cat: 'Ручки', name: 'Ручка профиль Gola (пог.м)', price: 3500, unit: 'пог.м', type: 'length' },
+        'hw_handle_skoba_1': { cat: 'Ручки', name: 'Ручка-скоба 128мм (хром)', price: 350, unit: 'шт', type: 'qty' },
+        'hw_handle_skoba_2': { cat: 'Ручки', name: 'Ручка-скоба 160мм (чёрная)', price: 450, unit: 'шт', type: 'qty' },
+        'hw_handle_skoba_3': { cat: 'Ручки', name: 'Ручка-скоба 256мм (золото)', price: 650, unit: 'шт', type: 'qty' },
+        'hw_handle_knob': { cat: 'Ручки', name: 'Ручка-кнопка (классика)', price: 250, unit: 'шт', type: 'qty' },
+        'hw_rod': { cat: 'Фурнитура', name: 'Штанга хром d25', price: 800, unit: 'пог.м', type: 'length' },
+        'hw_tipon': { cat: 'Фурнитура', name: 'Tip-ON Blum (толкатель)', price: 800, unit: 'шт', type: 'qty' },
+        'hw_dryer': { cat: 'Фурнитура', name: 'Сушка 600мм белая', price: 1500, unit: 'шт', type: 'qty' },
+        'hw_bottle': { cat: 'Фурнитура', name: 'Бутылочница 150мм', price: 2500, unit: 'шт', type: 'qty' },
+        'hw_pantograph': { cat: 'Фурнитура', name: 'Пантограф', price: 5500, unit: 'шт', type: 'qty' },
+        'led_light': { cat: 'Подсветка', name: 'LED подсветка с подключением', price: 4000, unit: 'пог.м', type: 'length' }
     };
 
     let positions = [];
@@ -360,7 +405,10 @@
         }
     }
 
-    function fmt(n) { return Math.round(n).toLocaleString('ru-RU') + ' ₽'; }
+    // Форматирование без округления (точное число)
+    function fmt(n) { 
+        return n.toLocaleString('ru-RU', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' ₽'; 
+    }
 
     function addPosition() {
         const id = Date.now();
@@ -376,12 +424,12 @@
                 currentCat = DB[key].cat;
                 opts += `<optgroup label="${currentCat}">`;
             }
-            opts += `<option value="${key}">${DB[key].name} (${DB[key].price}₽)</option>`;
+            opts += `<option value="${key}">${DB[key].name} (${DB[key].price}₽/${DB[key].unit})</option>`;
         }
         opts += '</optgroup>';
 
         div.innerHTML = `
-            <div class="form-group"><select onchange="updateRowType(${id}, this.value)">${opts}</select></div>
+            <div class="form-group"><select>${opts}</select></div>
             <div class="form-group"><input type="number" id="w-${id}" placeholder="Шир" min="10" max="6000"></div>
             <div class="form-group"><input type="number" id="h-${id}" placeholder="Выс" min="10" max="6000"></div>
             <div class="form-group"><input type="number" id="d-${id}" placeholder="Глуб" min="10" max="6000"></div>
@@ -438,7 +486,10 @@
             }
         });
 
-        const finalTotal = Math.ceil((totalRaw * 2.7 * 0.8) / 1000) * 1000;
+        // ТОЧНЫЙ РАСЧЁТ БЕЗ ОКРУГЛЕНИЯ ВВЕРХ
+        const finalTotalExact = totalRaw * 2.7 * 0.8;
+        // Округляем до целого рубля (математически), а не вверх до тысячи
+        const finalTotal = Math.round(finalTotalExact);
 
         document.getElementById('tech-title').innerText = `ПРОСЧЁТ: ${itemName.toUpperCase()}`;
         document.getElementById('kp-item-name').innerText = itemName;
@@ -446,8 +497,10 @@
         let tHtml = '';
         let kHtml = '';
         rows.forEach((r, i) => {
-            tHtml += `<tr><td style="text-align:center">${i+1}</td><td>${r.n}</td><td>${r.m}</td><td style="text-align:center">${r.u}</td><td style="text-align:center">${r.q}</td><td class="col-num">${fmt(r.p)}</td><td class="col-num">${fmt(r.s * 2.7 * 0.8)}</td></tr>`;
-            kHtml += `<tr><td>${r.n}</td><td>${r.m}</td><td style="text-align:center">${r.q} ${r.u}</td><td class="col-num">${fmt(r.s * 2.7 * 0.8)}</td></tr>`;
+            // Точная сумма каждой позиции с коэффициентом
+            const exactSum = r.s * 2.7 * 0.8;
+            tHtml += `<tr><td style="text-align:center">${i+1}</td><td>${r.n}</td><td>${r.m}</td><td style="text-align:center">${r.u}</td><td style="text-align:center">${r.q}</td><td class="col-num">${fmt(r.p)}</td><td class="col-num">${fmt(Math.round(exactSum))}</td></tr>`;
+            kHtml += `<tr><td>${r.n}</td><td>${r.m}</td><td style="text-align:center">${r.q} ${r.u}</td><td class="col-num">${fmt(Math.round(exactSum))}</td></tr>`;
         });
         tHtml += `<tr class="total-row"><td colspan="6" style="text-align:right">ИТОГО:</td><td class="col-num">${fmt(finalTotal)}</td></tr>`;
         kHtml += `<tr class="total-row"><td colspan="3" style="text-align:right">ИТОГО:</td><td class="col-num">${fmt(finalTotal)}</td></tr>`;
@@ -455,7 +508,7 @@
         document.getElementById('tech-body').innerHTML = tHtml;
         document.getElementById('kp-body').innerHTML = kHtml;
 
-        alert(`Готово! ${itemName}: ${fmt(finalTotal)}`);
+        alert(`Готово! ${itemName}: ${fmt(finalTotal)} (точная сумма без округления вверх)`);
     }
 
     addPosition();
