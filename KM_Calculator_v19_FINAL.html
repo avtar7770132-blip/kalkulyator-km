@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <title>КМ Калькулятор v24.1 MGS FULL</title>
+    <title>КМ Калькулятор v25.0 MULTI</title>
     <style>
         :root { --primary: #d32f2f; --secondary: #ff9800; --dark: #333; --light: #f5f5f5; --border: #ddd; --success: #2e7d32; }
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -18,6 +18,7 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .card { background: #fff; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
         h2 { font-size: 20px; margin-bottom: 15px; color: var(--dark); border-left: 4px solid var(--primary); padding-left: 10px; }
+        .item-block { border: 2px solid #e0e0e0; border-radius: 10px; padding: 15px; margin-bottom: 20px; background: #fcfcfc; }
         .calc-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr 0.5fr; gap: 10px; align-items: end; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
         @media (max-width: 768px) { .calc-row { grid-template-columns: 1fr 1fr; } .calc-row > div:first-child { grid-column: span 2; } }
         .form-group { margin-bottom: 5px; }
@@ -25,7 +26,7 @@
         select, input[type="number"], input[type="text"] { width: 100%; padding: 8px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; background: #fff; }
         .btn { padding: 10px 15px; border: none; border-radius: 6px; font-size: 14px; font-weight: 700; cursor: pointer; transition: 0.2s; text-align: center; }
         .btn-calc { background: var(--success); color: #fff; width: 100%; font-size: 18px; padding: 15px; margin-top: 20px; }
-        .btn-add { background: #1976d2; color: #fff; width: 100%; margin-bottom: 20px; }
+        .btn-add { background: #1976d2; color: #fff; width: 100%; margin-bottom: 10px; }
         .btn-del { background: #ffcdd2; color: #c62828; padding: 8px; font-size: 12px; }
         .btn-print { background: var(--primary); color: #fff; width: 100%; margin-top: 20px; font-size: 16px; padding: 15px;}
         .btn-upload { background: #1976d2; color: #fff; margin-bottom: 10px; font-size: 14px; padding: 10px; width: 100%; }
@@ -36,6 +37,7 @@
         .detail-table .col-num { text-align: right; }
         .total-row { background: #d4edda; font-weight: bold; font-size: 16px; }
         .service-row { background: #e3f2fd; font-style: italic; }
+        .group-row { background: #ffe0b2; font-weight: bold; }
         .photos-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; }
         .photo-slot { border: 2px dashed #ccc; height: 200px; display: flex; align-items: center; justify-content: center; background: #fafafa; cursor: pointer; position: relative; overflow: hidden; border-radius: 8px; }
         .photo-slot img { width: 100%; height: 100%; object-fit: contain; position: absolute; top:0; left:0; }
@@ -48,6 +50,8 @@
         .kp-manager { font-size: 18px; font-weight: bold; color: var(--primary); margin-bottom: 10px; }
         .script-block { margin-bottom: 20px; padding: 15px; background: #fff; border-radius: 8px; border-left: 4px solid var(--secondary); }
         .script-phrase { background: #fff8e1; padding: 10px; border-radius: 6px; margin: 8px 0; font-style: italic; border-left: 3px solid var(--secondary); white-space: pre-wrap; }
+        .tpl-body[contenteditable="true"] { outline: 1px dashed #bbb; cursor: text; }
+        .tpl-body[contenteditable="true"]:focus { outline: 2px solid var(--secondary); background: #fffdf5; }
         .script-list { margin-left: 20px; margin-top: 10px; }
         .script-list li { margin-bottom: 6px; }
         @media print {
@@ -74,26 +78,15 @@
 
 <div class="container">
 
-    <!-- === ВКЛАДКА 1: КАЛЬКУЛЯТОР === -->
+    <!-- === ВКЛАДКА 1: КАЛЬКУЛЯТОР (МУЛЬТИ-ИЗДЕЛИЯ) === -->
     <div id="calc" class="section active">
         <div class="card">
-            <h2>🛠 Конструктор сметы (v24.1 MGS FULL)</h2>
-            <div class="form-group" style="margin-bottom: 20px;">
-                <label style="font-size: 16px; color: var(--primary);">Название изделия</label>
-                <input type="text" id="item-name" value="Кухня прямая 2м" style="font-size: 18px; padding: 12px; border: 2px solid var(--primary);">
-            </div>
-            <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr 0.5fr; gap: 10px; margin-bottom: 10px; font-weight: bold; color: #555; font-size: 12px; text-transform: uppercase;">
-                <div>Материал / Позиция</div>
-                <div>Ширина (мм)</div>
-                <div>Высота (мм)</div>
-                <div>Глубина (мм)</div>
-                <div>Кол-во</div>
-                <div></div>
-            </div>
-            <div id="positions-container"></div>
-            <button class="btn btn-add" onclick="addPosition()">➕ ДОБАВИТЬ ПОЗИЦИЮ</button>
+            <h2>🛠 Конструктор сметы (v25.0 MULTI)</h2>
+            <p style="color:#666; font-size:13px; margin-bottom:15px;">Можно добавить несколько изделий в одну смету (кухня + шкаф + тумба). У каждого изделия своё название и свои позиции.</p>
+            <div id="items-container"></div>
+            <button class="btn btn-add" onclick="addItem()">➕ ДОБАВИТЬ ИЗДЕЛИЕ (кухня, шкаф и т.д.)</button>
             <div style="margin-top: 20px; padding: 15px; background: #f9f9f9; border-radius: 8px; border: 1px solid #eee;">
-                <h3 style="font-size: 16px; margin-bottom: 10px;">Услуги и Доп. работы</h3>
+                <h3 style="font-size: 16px; margin-bottom: 10px;">Услуги и Доп. работы (на весь заказ)</h3>
                 <div class="form-group">
                     <label>Доставка и подъём (фикс.)</label>
                     <input type="number" id="delivery_sum" value="5000">
@@ -162,7 +155,7 @@
             <div class="kp-terms">
                 <strong>Стоимость со сборкой и доставкой</strong><br>
                 Сроки изготовления: от 15 до 25 рабочих дней<br>
-                Вызов инженера-замерщика: по г. Москва 500₽, за МКАД 1000₽<br><br>
+                Вызов инженера-замерщика: по г. Москва 500₽, за МКАД и область 1000₽<br><br>
                 <strong>Условия оплаты:</strong><br>
                 Первый платёж 60% — запуск в производство<br>
                 Второй платёж 30%<br>
@@ -187,14 +180,20 @@
         </div>
     </div>
 
-    <!-- === ВКЛАДКА 4: ШАБЛОНЫ === -->
+    <!-- === ВКЛАДКА 4: ШАБЛОНЫ (РЕДАКТИРУЕМЫЕ) === -->
     <div id="templates" class="section">
         <div class="card">
             <h2>📱 Шаблоны сообщений и Визитки</h2>
-            <p style="color:#666; font-size:14px; margin-bottom:20px;">Нажмите "Копировать" и вставьте в WhatsApp/Telegram.</p>
+            <div style="display:flex; gap:10px; margin-bottom:15px; flex-wrap:wrap;" class="no-print">
+                <button class="btn" style="background:#1976d2; color:#fff; width:auto; margin:0;" onclick="addCustomTemplate()">➕ Добавить свой шаблон</button>
+                <button class="btn" style="background:#2e7d32; color:#fff; width:auto; margin:0;" onclick="saveTemplates(true)">💾 Сохранить все шаблоны</button>
+                <button class="btn" style="background:#999; color:#fff; width:auto; margin:0;" onclick="resetTemplates()">♻️ Сбросить к стандартным</button>
+            </div>
+            <p style="color:#666; font-size:13px; margin-bottom:20px;">✏️ Текст любого шаблона можно редактировать прямо здесь: кликни по жёлтому блоку и правь. Правки сохраняются автоматически в этом браузере. Кнопка «Копировать» берёт текущий (отредактированный) текст.</p>
+
             <div class="script-block">
                 <h3>🪪 Визитка компании (для первого контакта)</h3>
-                <div class="script-phrase" id="tpl-visita">🍲 КУХНЯ МЕБЕЛИ (КМ)
+                <div class="script-phrase tpl-builtin" id="tpl-visita" contenteditable="true">🍲 КУХНЯ МЕБЕЛИ (КМ)
 Корпусная мебель под заказ
 
 📐 Кухни | Шкафы-купе | Гардеробные
@@ -214,7 +213,7 @@ https://kompkm.ru/products/
             </div>
             <div class="script-block">
                 <h3>👻 Клиент молчит после визитки</h3>
-                <div class="script-phrase" id="tpl-silent1">Здравствуйте! 👋
+                <div class="script-phrase tpl-builtin" id="tpl-silent1" contenteditable="true">Здравствуйте! 👋
 Не хочу вас беспокоить, просто уточню — получилось ли посмотреть мою визитку?
 
 Понимаю, что сейчас много дел, возможно, сообщение затерялось. Если вам уже не актуально — просто напишите "нет", я пойму и не буду отвлекать.
@@ -224,32 +223,46 @@ https://kompkm.ru/products/
             </div>
             <div class="script-block">
                 <h3>👻 Клиент молчит после предварительного просчёта</h3>
-                <div class="script-phrase" id="tpl-silent2">Здравствуйте! Подскажите один момент — вы планируете кухню в ближайшие 1–2 месяца или пока просто прицениваетесь?
+                <div class="script-phrase tpl-builtin" id="tpl-silent2" contenteditable="true">Здравствуйте! Подскажите один момент — вы планируете кухню в ближайшие 1–2 месяца или пока просто прицениваетесь?
 
 От этого зависит, насколько детально мне сейчас готовить просчёт. Если срочно — сделаю полный расчёт с чертежами за сегодня. Если не к спеху — можно спокойно подобрать материалы, я пришлю образцы фото в WhatsApp.</div>
                 <button class="btn btn-copy" onclick="copyText('tpl-silent2')">📋 Копировать</button>
             </div>
             <div class="script-block">
                 <h3>👻 Клиент молчит после отправки КП</h3>
-                <div class="script-phrase" id="tpl-silent3">Здравствуйте! Отправил вам коммерческое предложение в PDF. Посмотрите, пожалуйста, и дайте знать, какие вопросы появились.
+                <div class="script-phrase tpl-builtin" id="tpl-silent3" contenteditable="true">Здравствуйте! Отправил вам коммерческое предложение в PDF. Посмотрите, пожалуйста, и дайте знать, какие вопросы появились.
 
 Готов обсудить по телефону или в чате — как вам удобнее. Если нужно что-то поменять в комплектации или материалах — скажите, я быстро пересчитаю.</div>
                 <button class="btn btn-copy" onclick="copyText('tpl-silent3')">📋 Копировать</button>
             </div>
             <div class="script-block">
+                <h3>📩 Недозвон → первое сообщение в WhatsApp</h3>
+                <div class="script-phrase tpl-builtin" id="tpl-nedozvon" contenteditable="true">Здравствуйте! Это Александр, компания «Кухня Мебели». Не дозвонился до вас.
+Если вы еще планируете кухню или шкаф — напишите мне сюда примерные размеры или что именно ищете. Я за 2 минуты рассчитаю стоимость и пришлю цифры.
+Если уже не актуально — просто напишите «нет», и я больше не побеспокою. Хорошего дня!</div>
+                <button class="btn btn-copy" onclick="copyText('tpl-nedozvon')">📋 Копировать</button>
+            </div>
+            <div class="script-block">
+                <h3>🔴 Прощальное сообщение (после 3-го недозвона, перед архивом)</h3>
+                <div class="script-phrase tpl-builtin" id="tpl-farewell" contenteditable="true">Здравствуйте! Это Александр, «Кухня Мебели». Вчера и сегодня звонил, но так и не дозвонился. Видимо, не судьба 🙂
+Закрываю вашу заявку в архив, чтобы зря не надоедать звонками.
+Если мебель ещё актуальна — просто напишите, я на связи. Если нет — напишите «нет», удалю номер из базы. Всего доброго!</div>
+                <button class="btn btn-copy" onclick="copyText('tpl-farewell')">📋 Копировать</button>
+            </div>
+            <div class="script-block">
                 <h3>📐 Приглашение на замер (выезд инженера)</h3>
-                <div class="script-phrase" id="tpl-zamer">Знаете, что я вам предложу? Давайте мы с вами не будем гадать по ценам в переписке, а сделаем так: наш инженер-замерщик приедет к вам, привезёт с собой образцы всех материалов — и массив, и шпон, и эмаль, и ЛДСП.
+                <div class="script-phrase tpl-builtin" id="tpl-zamer" contenteditable="true">Знаете, что я вам предложу? Давайте мы с вами не будем гадать по ценам в переписке, а сделаем так: наш инженер-замерщик приедет к вам, привезёт с собой образцы всех материалов — и массив, и шпон, и эмаль, и ЛДСП.
 
 Вы вживую посмотрите, потрогаете, сравните фактуры прямо у себя дома. Он на месте снимет точные размеры, даст рекомендации по материалам и сразу просчитает точную стоимость до рубля.
 
-Выезд по Москве 500₽, за МКАД 1000₽ (компенсация горючего). При заказе в ближайшие 3 дня я вычитаю стоимость выезда из суммы кухни + скину ещё 5 000 ₽ сверху.
+Выезд по Москве 500₽, за МКАД и область 1000₽ (компенсация горючего). При заказе в ближайшие 3 дня я вычитаю стоимость выезда из суммы кухни + скину ещё 5 000 ₽ сверху.
 
 На какой день вам удобно принять инженера?</div>
                 <button class="btn btn-copy" onclick="copyText('tpl-zamer')">📋 Копировать</button>
             </div>
             <div class="script-block">
                 <h3>🏢 Приглашение в шоурум (ТЦ Калибри)</h3>
-                <div class="script-phrase" id="tpl-showroom">Если вам удобнее посмотреть материалы вживую перед замером — приглашаю вас в наш шоурум!
+                <div class="script-phrase tpl-builtin" id="tpl-showroom" contenteditable="true">Если вам удобнее посмотреть материалы вживую перед замером — приглашаю вас в наш шоурум!
 
 📍 Адрес: г. Люберцы, Новорязанское шоссе, д. 1А, ТЦ «Калибри» (рядом с метро Котельники)
 🕒 Работаем ежедневно с 10:00 до 20:00
@@ -260,11 +273,9 @@ https://kompkm.ru/products/
 Когда вам было бы удобно подъехать?</div>
                 <button class="btn btn-copy" onclick="copyText('tpl-showroom')">📋 Копировать</button>
             </div>
-            <div class="script-block">
-                <h3>✏️ Добавить свой шаблон</h3>
-                <textarea id="custom-tpl" style="width:100%; height:100px; padding:10px; border:1px solid #ddd; border-radius:6px;" placeholder="Введите свой текст шаблона здесь..."></textarea>
-                <button class="btn btn-copy" onclick="copyText('custom-tpl')" style="margin-top:10px;">📋 Копировать мой шаблон</button>
-            </div>
+
+            <h2 style="margin-top:30px;">✏️ Мои шаблоны</h2>
+            <div id="custom-tpl-container"></div>
         </div>
     </div>
 
@@ -339,7 +350,7 @@ https://kompkm.ru/products/
             </div>
             <div class="script-block">
                 <h3>📏 «Зачем платить за замер?»</h3>
-                <div class="script-phrase">«Замер стоит 500 ₽ по Москве и 1000 ₽ за МКАД: инженер снимет точные размеры, учтёт все нюансы стен — это страховка от ошибки на десятки тысяч. А для горячих клиентов я могу согласовать бесплатный замер.»</div>
+                <div class="script-phrase">«Замер стоит 500 ₽ по Москве и 1000 ₽ за МКАД и область: инженер снимет точные размеры, учтёт все нюансы стен — это страховка от ошибки на десятки тысяч. А для горячих клиентов я могу согласовать бесплатный замер.»</div>
             </div>
         </div>
     </div>
@@ -403,44 +414,33 @@ https://kompkm.ru/products/
 </div>
 
 <script>
-    // === БАЗА ЦЕН v24.1 MGS FULL ===
+    // === БАЗА ЦЕН v25.0 MGS FULL ===
     const DB = {
-        // КОРПУС
         'ldsp_uvadrev': { cat: 'Корпус', name: 'ЛДСП 16мм Увадрев', price: 2500, unit: 'м²', type: 'area' },
         'ldsp_egger': { cat: 'Корпус', name: 'ЛДСП 16мм EGGER', price: 3500, unit: 'м²', type: 'area' },
         'ldsp_kronospan': { cat: 'Корпус', name: 'ЛДСП 16мм Kronospan', price: 2300, unit: 'м²', type: 'area' },
         'dvb': { cat: 'Корпус', name: 'ДВП задняя стенка', price: 400, unit: 'м²', type: 'area' },
-        // ФАСАД ЛДСП
         'facade_ldsp_egger': { cat: 'Фасад ЛДСП', name: 'Фасад ЛДСП Egger (кромка ПВХ)', price: 5000, unit: 'м²', type: 'area' },
-        // ФАСАД МДФ
         'mdf_matte': { cat: 'Фасад МДФ', name: 'МДФ ПВХ Матовый 16мм', price: 11000, unit: 'м²', type: 'area' },
         'mdf_gloss': { cat: 'Фасад МДФ', name: 'МДФ ПВХ Глянцевый 16мм', price: 12000, unit: 'м²', type: 'area' },
         'mdf_supermat': { cat: 'Фасад МДФ', name: 'МДФ ПВХ Супермат 16мм', price: 12500, unit: 'м²', type: 'area' },
         'mdf_provens': { cat: 'Фасад МДФ', name: 'МДФ ПВХ Фрезеровка (Прованс)', price: 12000, unit: 'м²', type: 'area' },
-        // ФАСАД ЭМАЛЬ
         'enamel_16': { cat: 'Фасад Эмаль', name: 'Эмаль 16мм Матовая/Глянцевая', price: 34000, unit: 'м²', type: 'area' },
-        // ФАСАД ALVIC
         'alvic_1': { cat: 'Фасад Alvic', name: 'Alvic Кат 1 (Испания)', price: 18000, unit: 'м²', type: 'area' },
         'alvic_2': { cat: 'Фасад Alvic', name: 'Alvic Кат 2', price: 20000, unit: 'м²', type: 'area' },
         'alvic_3': { cat: 'Фасад Alvic', name: 'Alvic Кат 3', price: 22000, unit: 'м²', type: 'area' },
-        // ФАСАД TSS
         'tss_1': { cat: 'Фасад TSS', name: 'TSS Cleaf Кат 1', price: 19000, unit: 'м²', type: 'area' },
         'tss_2': { cat: 'Фасад TSS', name: 'TSS Cleaf Кат 2', price: 21000, unit: 'м²', type: 'area' },
-        // ФАСАД ARPA
         'arpa_1': { cat: 'Фасад ARPA', name: 'ARPA Fenix Кат 1', price: 17000, unit: 'м²', type: 'area' },
         'fenix_8': { cat: 'Фасад ARPA', name: 'Fenix NTM Кат 8', price: 25000, unit: 'м²', type: 'area' },
-        // ФАСАД МАССИВ
         'massiv_olha': { cat: 'Фасад Массив', name: 'Массив Ольха', price: 60000, unit: 'м²', type: 'area' },
         'massiv_dub': { cat: 'Фасад Массив', name: 'Массив Дуб', price: 70000, unit: 'м²', type: 'area' },
         'massiv_yasen': { cat: 'Фасад Массив', name: 'Массив Ясень', price: 65000, unit: 'м²', type: 'area' },
-        // ФАСАД СТЕКЛО
         'mirror_silver': { cat: 'Фасад Стекло', name: 'Зеркало Серебро 4мм', price: 4500, unit: 'м²', type: 'area' },
         'mirror_bronze': { cat: 'Фасад Стекло', name: 'Зеркало Бронза 4мм', price: 5500, unit: 'м²', type: 'area' },
         'glass_lacomat': { cat: 'Фасад Стекло', name: 'Стекло Лакомат', price: 5000, unit: 'м²', type: 'area' },
         'glass_lacobel': { cat: 'Фасад Стекло', name: 'Стекло Лакобель', price: 5500, unit: 'м²', type: 'area' },
-        // ФАСАД КЕРАМИКА
         'facade_keramo': { cat: 'Фасад Керамика', name: 'Керамический фасад Keramo 18мм', price: 23570, unit: 'м²', type: 'area' },
-        // СТОЛЕШНИЦЫ
         'top_plast_1': { cat: 'Столешница', name: 'Пластик 38мм Кат 1 (FORST/Кедр)', price: 4500, unit: 'м²', type: 'area' },
         'top_plast_2': { cat: 'Столешница', name: 'Пластик 38мм Кат 2', price: 5500, unit: 'м²', type: 'area' },
         'top_plast_3': { cat: 'Столешница', name: 'Пластик 38мм Кат 3', price: 6500, unit: 'м²', type: 'area' },
@@ -455,7 +455,6 @@ https://kompkm.ru/products/
         'hole_socket_q': { cat: 'Столешница', name: 'Отверстие розетка/смеситель (кварц/керамика)', price: 3000, unit: 'шт', type: 'qty' },
         'frez_otv': { cat: 'Столешница', name: 'Фрезеровка отверстия любого размера', price: 1500, unit: 'шт', type: 'qty' },
         'ktop_styazhka': { cat: 'Столешница', name: 'K-TOP стяжка (плиты от 10мм)', price: 260, unit: 'шт', type: 'qty' },
-        // КОМПАКТ-ПЛИТА
         'compact_arcobaleno': { cat: 'Компакт-плита', name: 'Компакт-плита HPL Arcobaleno 12мм (склад)', price: 17000, unit: 'м²', type: 'area' },
         'compact_sloplast': { cat: 'Компакт-плита', name: 'Компакт-плита HPL СЛОПЛАСТ 12мм', price: 17000, unit: 'м²', type: 'area' },
         'compact_mgs_tx000': { cat: 'Компакт-плита', name: 'Компакт-плита HPL MGS TX-000 чёрный+Fenix', price: 18260, unit: 'м²', type: 'area' },
@@ -463,9 +462,7 @@ https://kompkm.ru/products/
         'compact_alvic': { cat: 'Компакт-плита', name: 'Компакт-плита HPL ALVIC 10мм', price: 19800, unit: 'м²', type: 'area' },
         'compact_sht1': { cat: 'Компакт-плита', name: 'Компакт-плита Arcobaleno кат.1 (ШТУЧНАЯ)', price: 46000, unit: 'шт', type: 'qty' },
         'compact_sht2': { cat: 'Компакт-плита', name: 'Компакт-плита Arcobaleno кат.2 (ШТУЧНАЯ)', price: 48000, unit: 'шт', type: 'qty' },
-        // СТЕНОВАЯ
         'wall_plast': { cat: 'Стеновая', name: 'Стеновая панель Пластик 5мм', price: 3500, unit: 'м²', type: 'area' },
-        // КРОМКА
         'kromka_egger_uzk': { cat: 'Кромка', name: 'Кромка EGGER 23/1 (узкая)', price: 125, unit: 'пог.м', type: 'length' },
         'kromka_egger_shir': { cat: 'Кромка', name: 'Кромка EGGER 43/2 (широкая)', price: 420, unit: 'пог.м', type: 'length' },
         'kromka_egger_ps': { cat: 'Кромка', name: 'Кромка EGGER Perfect Sense 23/1', price: 105, unit: 'пог.м', type: 'length' },
@@ -482,21 +479,17 @@ https://kompkm.ru/products/
         'kromka_agt': { cat: 'Кромка', name: 'Кромка AGT PANEL/SUPRAMAT 23/1', price: 210, unit: 'пог.м', type: 'length' },
         'kromka_cleaf': { cat: 'Кромка', name: 'Кромка CLEAF 23/1 (узкая)', price: 390, unit: 'пог.м', type: 'length' },
         'kant_alu': { cat: 'Кромка', name: 'Алюмин. кант для фасада 18мм', price: 180, unit: 'пог.м', type: 'length' },
-        // ЦОКОЛЬ
         'tsokol_plast_100': { cat: 'Цоколь', name: 'Цоколь пластик 4м h=100мм', price: 1000, unit: 'шт', type: 'qty' },
         'tsokol_plast_150': { cat: 'Цоколь', name: 'Цоколь пластик 4м h=150мм', price: 1550, unit: 'шт', type: 'qty' },
         'tsokol_sfer': { cat: 'Цоколь', name: 'Цоколь сферический пластик', price: 1000, unit: 'шт', type: 'qty' },
         'tsokol_alu': { cat: 'Цоколь', name: 'Цоколь алюм. MGS 4м h=100мм', price: 1450, unit: 'пог.м', type: 'length' },
         'uplotn_tsokolya': { cat: 'Цоколь', name: 'Уплотнитель цоколя 16/19мм (3м)', price: 110, unit: 'шт', type: 'qty' },
-        // ВОДООТБОЙНИК
         'vodootboinik': { cat: 'Водоотбойник', name: 'Водоотбойник 3м/4м', price: 700, unit: 'шт', type: 'qty' },
         'vodootboinik_alu': { cat: 'Водоотбойник', name: 'Водоотбойник алюминиевый 3м', price: 1000, unit: 'шт', type: 'qty' },
         'vodootboinik_korner': { cat: 'Водоотбойник', name: 'Водоотбойник Korner LB 3м', price: 800, unit: 'шт', type: 'qty' },
-        // ФУРНИТУРА ЯЩИКИ
         'hw_blum_drawer': { cat: 'Фурнитура', name: 'Ящик Blum Tandembox', price: 6500, unit: 'шт', type: 'qty' },
         'hw_boyard_drawer': { cat: 'Фурнитура', name: 'Ящик Boyard Start', price: 2500, unit: 'шт', type: 'qty' },
         'hw_hettich_drawer': { cat: 'Фурнитура', name: 'Ящик Hettich InnoTech', price: 5500, unit: 'шт', type: 'qty' },
-        // ЯЩИКИ HETTICH AVANTECH YOU
         'hw_avantech_h77': { cat: 'Ящики Hettich', name: 'Ящик AvanTech YOU H77 (Push to Open Silent)', price: 9870, unit: 'компл', type: 'qty' },
         'hw_avantech_h101': { cat: 'Ящики Hettich', name: 'Ящик AvanTech YOU H101 (Silent)', price: 6594, unit: 'компл', type: 'qty' },
         'hw_avantech_h139': { cat: 'Ящики Hettich', name: 'Ящик AvanTech YOU H139 (Silent)', price: 7012, unit: 'компл', type: 'qty' },
@@ -505,17 +498,14 @@ https://kompkm.ru/products/
         'hw_avantech_sync': { cat: 'Ящики Hettich', name: 'Синхронизация Push to Open (штанга L2000)', price: 923, unit: 'шт', type: 'qty' },
         'hw_avantech_adapter': { cat: 'Ящики Hettich', name: 'Адаптер синхронизации Push to Open Silent', price: 215, unit: 'шт', type: 'qty' },
         'hw_avantech_stab': { cat: 'Ящики Hettich', name: 'Стабилизатор передней панели AvanTech', price: 139, unit: 'шт', type: 'qty' },
-        // ПЕТЛИ
         'hw_hinge_boyard': { cat: 'Фурнитура', name: 'Петля Boyard с доводчиком', price: 250, unit: 'шт', type: 'qty' },
         'hw_hinge_blum': { cat: 'Фурнитура', name: 'Петля Blum Clip Top', price: 850, unit: 'шт', type: 'qty' },
         'hw_hinge_hettich': { cat: 'Фурнитура', name: 'Петля Hettich с доводчиком', price: 550, unit: 'шт', type: 'qty' },
-        // РУЧКИ
         'hw_handle_gola': { cat: 'Ручки', name: 'Ручка профиль Gola (пог.м)', price: 3500, unit: 'пог.м', type: 'length' },
         'hw_handle_skoba_1': { cat: 'Ручки', name: 'Ручка-скоба 128мм (хром)', price: 350, unit: 'шт', type: 'qty' },
         'hw_handle_skoba_2': { cat: 'Ручки', name: 'Ручка-скоба 160мм (чёрная)', price: 450, unit: 'шт', type: 'qty' },
         'hw_handle_skoba_3': { cat: 'Ручки', name: 'Ручка-скоба 256мм (золото)', price: 650, unit: 'шт', type: 'qty' },
         'hw_handle_knob': { cat: 'Ручки', name: 'Ручка-кнопка (классика)', price: 250, unit: 'шт', type: 'qty' },
-        // ФУРНИТУРА ДОП
         'hw_rod': { cat: 'Фурнитура', name: 'Штанга хром d25', price: 800, unit: 'пог.м', type: 'length' },
         'hw_tipon': { cat: 'Фурнитура', name: 'Tip-ON Blum (толкатель)', price: 800, unit: 'шт', type: 'qty' },
         'hw_dryer': { cat: 'Фурнитура', name: 'Сушка 600мм белая', price: 1500, unit: 'шт', type: 'qty' },
@@ -523,12 +513,11 @@ https://kompkm.ru/products/
         'hw_bottle_hettich': { cat: 'Фурнитура', name: 'Бутылочница 150мм Hettich', price: 4000, unit: 'шт', type: 'qty' },
         'hw_gaslift': { cat: 'Фурнитура', name: 'Газ-лифт', price: 1000, unit: 'шт', type: 'qty' },
         'hw_pantograph': { cat: 'Фурнитура', name: 'Пантограф', price: 5500, unit: 'шт', type: 'qty' },
-        // ПОДСВЕТКА
         'led_light_full': { cat: 'Подсветка', name: 'LED подсветка с подключением', price: 4000, unit: 'пог.м', type: 'length' },
         'led_light_connect': { cat: 'Подсветка', name: 'Только подключение подсветки', price: 2000, unit: 'пог.м', type: 'length' }
     };
 
-    let positions = [];
+    let itemCounter = 0;
 
     function switchTab(id) {
         document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -558,16 +547,52 @@ https://kompkm.ru/products/
 
     function copyText(elementId) {
         const text = document.getElementById(elementId).innerText;
-        navigator.clipboard.writeText(text).then(() => { alert('Скопировано в буфер обмена!'); });
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(() => alert('Скопировано в буфер обмена!'));
+        } else {
+            const ta = document.createElement('textarea');
+            ta.value = text; document.body.appendChild(ta); ta.select();
+            document.execCommand('copy'); document.body.removeChild(ta);
+            alert('Скопировано в буфер обмена!');
+        }
     }
 
     function fmt(n) { return n.toLocaleString('ru-RU', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' ₽'; }
 
-    function addPosition() {
-        const id = Date.now();
+    // === МУЛЬТИ-ИЗДЕЛИЯ ===
+    function addItem() {
+        itemCounter++;
+        const itemId = itemCounter;
+        const div = document.createElement('div');
+        div.className = 'item-block';
+        div.id = `item-${itemId}`;
+        div.innerHTML = `
+            <div style="display:flex; gap:10px; align-items:center; margin-bottom:10px; flex-wrap:wrap;">
+                <label style="font-size:14px; color:var(--primary); margin:0;">Изделие:</label>
+                <input type="text" class="item-name" value="Изделие ${itemId}" style="flex:1; min-width:200px; font-size:16px; padding:8px; border:2px solid var(--primary); border-radius:6px;">
+                <button class="btn btn-del" onclick="removeItem(${itemId})">✕ Удалить изделие</button>
+            </div>
+            <div style="display:grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr 0.5fr; gap:10px; margin-bottom:10px; font-weight:bold; color:#555; font-size:11px; text-transform:uppercase;">
+                <div>Материал / Позиция</div><div>Шир (мм)</div><div>Выс (мм)</div><div>Глуб (мм)</div><div>Кол-во</div><div></div>
+            </div>
+            <div id="pos-cont-${itemId}"></div>
+            <button class="btn btn-add" style="width:auto; margin-bottom:0;" onclick="addPosition(${itemId})">➕ Добавить позицию</button>
+        `;
+        document.getElementById('items-container').appendChild(div);
+        addPosition(itemId);
+    }
+
+    function removeItem(itemId) {
+        if (confirm('Удалить изделие вместе со всеми позициями?')) {
+            document.getElementById(`item-${itemId}`).remove();
+        }
+    }
+
+    function addPosition(itemId) {
+        const id = 'r' + Date.now() + Math.floor(Math.random()*1000);
         const div = document.createElement('div');
         div.className = 'calc-row';
-        div.id = `row-${id}`;
+        div.id = id;
         let opts = '<option value="" disabled selected>Выбрать...</option>';
         let currentCat = '';
         for (let key in DB) {
@@ -581,50 +606,58 @@ https://kompkm.ru/products/
         opts += '</optgroup>';
         div.innerHTML = `
             <div class="form-group"><select>${opts}</select></div>
-            <div class="form-group"><input type="number" id="w-${id}" placeholder="Шир" min="10" max="6000"></div>
-            <div class="form-group"><input type="number" id="h-${id}" placeholder="Выс" min="10" max="6000"></div>
-            <div class="form-group"><input type="number" id="d-${id}" placeholder="Глуб" min="10" max="6000"></div>
-            <div class="form-group"><input type="number" id="q-${id}" value="1" min="0.1" step="0.1"></div>
-            <div class="form-group"><button class="btn btn-del" onclick="removePosition(${id})">✕</button></div>
+            <div class="form-group"><input type="number" class="w" placeholder="Шир" min="10" max="6000"></div>
+            <div class="form-group"><input type="number" class="h" placeholder="Выс" min="10" max="6000"></div>
+            <div class="form-group"><input type="number" class="d" placeholder="Глуб" min="10" max="6000"></div>
+            <div class="form-group"><input type="number" class="q" value="1" min="0.1" step="0.1"></div>
+            <div class="form-group"><button class="btn btn-del" onclick="removePosition('${id}')">✕</button></div>
         `;
-        document.getElementById('positions-container').appendChild(div);
-        positions.push(id);
+        document.getElementById('pos-cont-' + itemId).appendChild(div);
     }
 
     function removePosition(id) {
-        document.getElementById(`row-${id}`).remove();
-        positions = positions.filter(p => p !== id);
+        const el = document.getElementById(id);
+        if (el) el.remove();
     }
 
     function calculateTotal() {
-        const itemName = document.getElementById('item-name').value;
-        let rows = [];
-        let totalRaw = 0;
-        positions.forEach(id => {
-            const row = document.getElementById(`row-${id}`);
-            const key = row.querySelector('select').value;
-            if (!key) return;
-            const w = parseFloat(document.getElementById(`w-${id}`).value) || 0;
-            const h = parseFloat(document.getElementById(`h-${id}`).value) || 0;
-            const d = parseFloat(document.getElementById(`d-${id}`).value) || 0;
-            const qInput = parseFloat(document.getElementById(`q-${id}`).value) || 0;
-            const item = DB[key];
-            let qty = 0; let calcStr = '';
-            if (item.type === 'area') {
-                let dim1 = w; let dim2 = h > 0 ? h : d;
-                qty = (dim1 * dim2 / 1000000) * qInput;
-                calcStr = `${dim1}x${dim2}мм`;
-            } else if (item.type === 'length') {
-                let len = w > 0 ? w : (h > 0 ? h : d);
-                qty = (len / 1000) * qInput;
-                calcStr = `${len}мм`;
-            } else {
-                qty = qInput;
-                calcStr = (w > 0 || h > 0) ? `${w}x${h}x${d}мм` : '-';
+        const blocks = document.querySelectorAll('.item-block');
+        let groups = [];
+        blocks.forEach(block => {
+            const name = block.querySelector('.item-name').value.trim() || 'Изделие';
+            let rows = [];
+            block.querySelectorAll('.calc-row').forEach(row => {
+                const sel = row.querySelector('select');
+                if (!sel || !sel.value) return;
+                const w = parseFloat(row.querySelector('.w').value) || 0;
+                const h = parseFloat(row.querySelector('.h').value) || 0;
+                const d = parseFloat(row.querySelector('.d').value) || 0;
+                const qInput = parseFloat(row.querySelector('.q').value) || 0;
+                const item = DB[sel.value];
+                let qty = 0; let calcStr = '';
+                if (item.type === 'area') {
+                    let dim1 = w; let dim2 = h > 0 ? h : d;
+                    qty = (dim1 * dim2 / 1000000) * qInput;
+                    calcStr = `${dim1}x${dim2}мм`;
+                } else if (item.type === 'length') {
+                    let len = w > 0 ? w : (h > 0 ? h : d);
+                    qty = (len / 1000) * qInput;
+                    calcStr = `${len}мм`;
+                } else {
+                    qty = qInput;
+                    calcStr = (w > 0 || h > 0) ? `${w}x${h}x${d}мм` : '-';
+                }
+                const sum = qty * item.price;
+                if (sum > 0) rows.push({ n: item.name, m: calcStr, u: item.unit, q: qty.toFixed(2), p: item.price, sale: Math.round(sum * 2.7 * 0.8) });
+            });
+            if (rows.length) {
+                const gSum = rows.reduce((a, r) => a + r.sale, 0);
+                groups.push({ name: name, rows: rows, sum: gSum });
             }
-            const sum = qty * item.price;
-            if (sum > 0) { rows.push({ n: item.name, m: calcStr, u: item.unit, q: qty.toFixed(2), p: item.price, s: sum }); totalRaw += sum; }
         });
+
+        if (!groups.length) { alert('Добавьте хотя бы одну позицию с материалом!'); return; }
+
         const deliverySum = parseFloat(document.getElementById('delivery_sum').value) || 0;
         const assemblyPercent = parseFloat(document.getElementById('assembly_percent').value) || 0;
         let addWorksSum = 0; let addWorksList = [];
@@ -634,16 +667,26 @@ https://kompkm.ru/products/
         if(document.getElementById('add_wash').checked) { addWorksSum += 3500; addWorksList.push('Стиральная/посудомойка'); }
         const stairsCount = parseInt(document.getElementById('stairs_count').value) || 0;
         if(stairsCount > 0) { addWorksSum += stairsCount * 300; addWorksList.push(`Подъём без лифта (${stairsCount} эт.)`); }
-        const furnitureTotal = Math.round(totalRaw * 2.7 * 0.8);
+
+        const furnitureTotal = groups.reduce((a, g) => a + g.sum, 0);
         const assemblySum = Math.round(furnitureTotal * (assemblyPercent / 100));
         const grandTotal = furnitureTotal + deliverySum + assemblySum;
-        document.getElementById('tech-title').innerText = `ПРОСЧЁТ: ${itemName.toUpperCase()}`;
-        document.getElementById('kp-item-name').innerText = itemName;
-        let tHtml = ''; let kHtml = '';
-        rows.forEach((r, i) => {
-            const exactSum = Math.round(r.s * 2.7 * 0.8);
-            tHtml += `<tr><td style="text-align:center">${i+1}</td><td>${r.n}</td><td>${r.m}</td><td style="text-align:center">${r.u}</td><td style="text-align:center">${r.q}</td><td class="col-num">${fmt(r.p)}</td><td class="col-num">${fmt(exactSum)}</td></tr>`;
-            kHtml += `<tr><td>${r.n}</td><td>${r.m}</td><td style="text-align:center">${r.q} ${r.u}</td><td class="col-num">${fmt(exactSum)}</td></tr>`;
+
+        const names = groups.map(g => g.name).join(' + ');
+        document.getElementById('tech-title').innerText = `ПРОСЧЁТ: ${names.toUpperCase()}`;
+        document.getElementById('kp-item-name').innerText = names;
+
+        let tHtml = ''; let kHtml = ''; let num = 0;
+        groups.forEach(g => {
+            tHtml += `<tr class="group-row"><td colspan="7">📦 ${g.name}</td></tr>`;
+            kHtml += `<tr class="group-row"><td colspan="4">📦 ${g.name}</td></tr>`;
+            g.rows.forEach(r => {
+                num++;
+                tHtml += `<tr><td style="text-align:center">${num}</td><td>${r.n}</td><td>${r.m}</td><td style="text-align:center">${r.u}</td><td style="text-align:center">${r.q}</td><td class="col-num">${fmt(r.p)}</td><td class="col-num">${fmt(r.sale)}</td></tr>`;
+                kHtml += `<tr><td>${r.n}</td><td>${r.m}</td><td style="text-align:center">${r.q} ${r.u}</td><td class="col-num">${fmt(r.sale)}</td></tr>`;
+            });
+            tHtml += `<tr class="service-row"><td colspan="6" style="text-align:right">Подытог по «${g.name}»:</td><td class="col-num">${fmt(g.sum)}</td></tr>`;
+            kHtml += `<tr class="service-row"><td colspan="3" style="text-align:right">Подытог по «${g.name}»:</td><td class="col-num">${fmt(g.sum)}</td></tr>`;
         });
         tHtml += `<tr class="service-row"><td></td><td>Доставка и подъём</td><td>-</td><td>усл.</td><td>1</td><td class="col-num">${fmt(deliverySum)}</td><td class="col-num">${fmt(deliverySum)}</td></tr>`;
         tHtml += `<tr class="service-row"><td></td><td>Сборка и установка (${assemblyPercent}%)</td><td>-</td><td>усл.</td><td>1</td><td class="col-num">-</td><td class="col-num">${fmt(assemblySum)}</td></tr>`;
@@ -657,10 +700,99 @@ https://kompkm.ru/products/
         }
         document.getElementById('tech-body').innerHTML = tHtml;
         document.getElementById('kp-body').innerHTML = kHtml;
-        alert(`Готово!\nМебель: ${fmt(furnitureTotal)}\nДоставка: ${fmt(deliverySum)}\nСборка: ${fmt(assemblySum)}\nИТОГО: ${fmt(grandTotal)}\n\nДоп. работы (на месте): ${fmt(addWorksSum)}`);
+
+        let alertText = 'Готово!\n';
+        groups.forEach(g => { alertText += `📦 ${g.name}: ${fmt(g.sum)}\n`; });
+        alertText += `\nМебель: ${fmt(furnitureTotal)}\nДоставка: ${fmt(deliverySum)}\nСборка: ${fmt(assemblySum)}\nИТОГО: ${fmt(grandTotal)}\n\nДоп. работы (на месте): ${fmt(addWorksSum)}`;
+        alert(alertText);
     }
 
-    addPosition();
+    // === ШАБЛОНЫ: РЕДАКТИРОВАНИЕ + СВОИ + СОХРАНЕНИЕ ===
+    const LS_KEY = 'km_templates_v25';
+
+    function saveTemplatesSilent() {
+        const builtin = {};
+        document.querySelectorAll('.tpl-builtin').forEach(el => { builtin[el.id] = el.innerText; });
+        const custom = [];
+        document.querySelectorAll('.tpl-custom').forEach(bl => {
+            custom.push({
+                id: bl.id,
+                title: bl.querySelector('.tpl-title').value,
+                text: bl.querySelector('.tpl-body').innerText
+            });
+        });
+        try { localStorage.setItem(LS_KEY, JSON.stringify({ builtin, custom })); } catch(e) {}
+    }
+
+    function saveTemplates(withAlert) {
+        saveTemplatesSilent();
+        if (withAlert) alert('Шаблоны сохранены! Они останутся после перезагрузки страницы (в этом браузере).');
+    }
+
+    function resetTemplates() {
+        if (confirm('Сбросить все шаблоны к стандартным? Ваши правки и свои шаблоны будут удалены.')) {
+            try { localStorage.removeItem(LS_KEY); } catch(e) {}
+            location.reload();
+        }
+    }
+
+    function createCustomBlock(id, title, text) {
+        const div = document.createElement('div');
+        div.className = 'script-block tpl-custom';
+        div.id = id;
+        const h = document.createElement('h3');
+        h.style.cssText = 'display:flex; gap:10px; align-items:center; margin-bottom:8px; flex-wrap:wrap;';
+        const inp = document.createElement('input');
+        inp.type = 'text'; inp.className = 'tpl-title'; inp.value = title;
+        inp.style.cssText = 'flex:1; min-width:150px; font-size:16px; padding:6px; border:1px solid #ddd; border-radius:6px;';
+        inp.oninput = saveTemplatesSilent;
+        const del = document.createElement('button');
+        del.className = 'btn btn-del'; del.innerText = '✕ Удалить';
+        del.onclick = function() { removeCustomTemplate(id); };
+        h.appendChild(inp); h.appendChild(del);
+        const body = document.createElement('div');
+        body.className = 'script-phrase tpl-body'; body.id = id + '-body';
+        body.contentEditable = 'true';
+        body.style.minHeight = '60px';
+        body.innerText = text;
+        body.oninput = saveTemplatesSilent;
+        const cp = document.createElement('button');
+        cp.className = 'btn btn-copy'; cp.innerText = '📋 Копировать';
+        cp.onclick = function() { copyText(id + '-body'); };
+        div.appendChild(h); div.appendChild(body); div.appendChild(cp);
+        document.getElementById('custom-tpl-container').appendChild(div);
+    }
+
+    function addCustomTemplate() {
+        createCustomBlock('custom-' + Date.now(), 'Мой шаблон', '');
+        saveTemplatesSilent();
+    }
+
+    function removeCustomTemplate(id) {
+        if (confirm('Удалить этот шаблон?')) {
+            const el = document.getElementById(id);
+            if (el) el.remove();
+            saveTemplatesSilent();
+        }
+    }
+
+    function restoreTemplates() {
+        let saved = null;
+        try { saved = JSON.parse(localStorage.getItem(LS_KEY) || 'null'); } catch(e) {}
+        if (!saved) return;
+        for (const id in (saved.builtin || {})) {
+            const el = document.getElementById(id);
+            if (el) el.innerText = saved.builtin[id];
+        }
+        (saved.custom || []).forEach(t => createCustomBlock(t.id, t.title, t.text));
+    }
+
+    // === СТАРТ ===
+    addItem();
+    restoreTemplates();
+    document.querySelectorAll('.tpl-builtin').forEach(el => {
+        el.addEventListener('input', saveTemplatesSilent);
+    });
 </script>
 </body>
 </html>
