@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <title>КМ Калькулятор v25.2 MULTI PRO</title>
+    <title>КМ Калькулятор v25.4 MULTI PRO</title>
     <style>
         :root { --primary: #d32f2f; --secondary: #ff9800; --dark: #333; --light: #f5f5f5; --border: #ddd; --success: #2e7d32; }
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -38,6 +38,8 @@
         .total-row { background: #d4edda; font-weight: bold; font-size: 16px; }
         .service-row { background: #e3f2fd; font-style: italic; }
         .group-row { background: #ffe0b2; font-weight: bold; }
+        .discount-row { background: #fce4ec; font-weight: bold; }
+        .voiced-row { background: #fff8e1; }
         .photos-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; }
         .photo-slot { border: 2px dashed #ccc; height: 200px; display: flex; align-items: center; justify-content: center; background: #fafafa; cursor: pointer; position: relative; overflow: hidden; border-radius: 8px; }
         .photo-slot img { width: 100%; height: 100%; object-fit: contain; position: absolute; top:0; left:0; }
@@ -61,6 +63,7 @@
             .card { box-shadow: none; border: none; padding: 0; }
             .container { max-width: 100%; padding: 0; }
             .photo-slot { border: 1px solid #ccc; break-inside: avoid; }
+            #tech-voiced { border: none; background: transparent; font-size: 14px; }
         }
     </style>
 </head>
@@ -81,8 +84,8 @@
     <!-- === ВКЛАДКА 1: КАЛЬКУЛЯТОР === -->
     <div id="calc" class="section active">
         <div class="card">
-            <h2>🛠 Конструктор сметы (v25.2 MULTI PRO)</h2>
-            <p style="color:#666; font-size:13px; margin-bottom:15px;">Несколько изделий в одной смете (кухня + шкаф + тумба). Точный расчёт без округлений — округляете сами в диалоге с клиентом.</p>
+            <h2>🛠 Конструктор сметы (v25.4 MULTI PRO)</h2>
+            <p style="color:#666; font-size:13px; margin-bottom:15px;">Несколько изделий в одной смете. Точный расчёт без округлений — округляете сами в диалоге с клиентом.</p>
             <div id="items-container"></div>
             <button class="btn btn-add" onclick="addItem()">➕ ДОБАВИТЬ ИЗДЕЛИЕ (кухня, шкаф и т.д.)</button>
             <div style="margin-top: 20px; padding: 15px; background: #f9f9f9; border-radius: 8px; border: 1px solid #eee;">
@@ -147,6 +150,24 @@
                 <label style="display:inline-block; margin-right: 10px; font-weight: bold; color: #1565c0;">Имя менеджера:</label>
                 <input type="text" id="manager-name" value="Александр" oninput="updateManagerName()" style="width: 200px; padding: 5px; border: 1px solid #1565c0; border-radius: 4px;">
             </div>
+
+            <!-- ПРАВКИ МЕНЕДЖЕРА (не печатаются) -->
+            <div class="no-print" style="margin-bottom: 15px; padding: 15px; background: #fff8e1; border-radius: 8px; border: 1px solid #ffe082;">
+                <h3 style="font-size:16px; margin-bottom:10px;">✏️ Правки менеджера (влияют только на КП, не на Тех. бланк)</h3>
+                <div id="kp-exact-display" style="font-weight:bold; margin:8px 0;">Точная расчётная стоимость: —</div>
+                <div class="form-group">
+                    <label>Скидка, ₽ (0 = скидки не было; согласуется с руководством)</label>
+                    <input type="number" id="kp-discount" value="0" min="0" oninput="renderKP()">
+                </div>
+                <label style="display:inline-block; margin:5px 0; font-size:13px;"><input type="checkbox" id="kp-show-discount" checked onchange="renderKP()"> Показывать строку «Скидка» в КП (сними галочку — строки не будет)</label>
+                <div class="form-group">
+                    <label>Итог итоговый, как озвучили клиенту, ₽ (пусто = точная сумма)</label>
+                    <input type="number" id="kp-final-total" placeholder="Авто (точная сумма)" oninput="renderKP()">
+                </div>
+                <div id="kp-final-display" style="font-weight:bold; margin:8px 0; color:var(--primary);">Итог в КП: —</div>
+                <p style="font-size:12px; color:#777; margin-top:8px;">При вводе озвученного итога суммы позиций пересчитываются так, чтобы таблица сошлась копейка в копейку. Тех. бланк остаётся точным.</p>
+            </div>
+
             <button class="btn btn-upload no-print" onclick="document.getElementById('kp-head-img').click()">📷 ФОТО ДЛЯ ШАПКИ</button>
             <input type="file" id="kp-head-img" style="display:none" onchange="loadImg(this,'kp-head-prev',null)">
             <div id="kp-head-cont" style="width:100%; height:300px; background:#eee; margin-bottom:20px; display:none; border-radius: 8px; overflow: hidden;">
@@ -422,7 +443,7 @@ https://kompkm.ru/products/
 </div>
 
 <script>
-    // === БАЗА ЦЕН v25.2 MGS FULL ===
+    // === БАЗА ЦЕН v25.4 MGS FULL ===
     const DB = {
         'ldsp_uvadrev': { cat: 'Корпус', name: 'ЛДСП 16мм Увадрев', price: 2500, unit: 'м²', type: 'area' },
         'ldsp_egger': { cat: 'Корпус', name: 'ЛДСП 16мм EGGER', price: 3500, unit: 'м²', type: 'area' },
@@ -526,6 +547,8 @@ https://kompkm.ru/products/
     };
 
     let itemCounter = 0;
+    let lastCalc = null;
+    let voicedSum = '';
 
     function switchTab(id) {
         document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -628,6 +651,28 @@ https://kompkm.ru/products/
         if (el) el.remove();
     }
 
+    // === ОЗВУЧЕННАЯ СУММА (Тех. бланк) ===
+    function setVoiced(v) {
+        voicedSum = v;
+        refreshVoicedDiff();
+    }
+
+    function refreshVoicedDiff() {
+        const el = document.getElementById('voiced-diff-row');
+        if (!el) return;
+        const v = parseFloat(voicedSum);
+        if (!lastCalc || isNaN(v) || v <= 0) { el.innerHTML = '<td colspan="7" style="font-size:12px; color:#999; padding:4px 6px;">Менеджер: впишите сумму, озвученную клиенту (строка выше). При печати она попадёт в Тех. бланк.</td>'; return; }
+        const diff = v - lastCalc.grandTotal;
+        if (diff === 0) {
+            el.innerHTML = '<td colspan="7" style="font-size:12px; color:#2e7d32; padding:4px 6px;">✔ Озвученная сумма совпадает с точным расчётом</td>';
+        } else if (diff > 0) {
+            el.innerHTML = `<td colspan="7" style="font-size:12px; color:#777; padding:4px 6px;">Разница с точным расчётом: +${fmt(diff)} (озвучено выше точной суммы)</td>`;
+        } else {
+            el.innerHTML = `<td colspan="7" style="font-size:12px; color:#777; padding:4px 6px;">Разница с точным расчётом: −${fmt(Math.abs(diff))} (озвучено ниже точной суммы)</td>`;
+        }
+    }
+
+    // === РАСЧЁТ ===
     function calculateTotal() {
         const blocks = document.querySelectorAll('.item-block');
         let groups = [];
@@ -690,55 +735,108 @@ https://kompkm.ru/products/
         const assemblySum = Math.round(furnitureTotal * (assemblyPercent / 100));
         const grandTotal = furnitureTotal + deliverySum + assemblySum;
 
-        // График платежей 60/30/10 — точными суммами без округлений вверх
-        const pay1 = Math.round(grandTotal * 0.6);
-        const pay2 = Math.round(grandTotal * 0.3);
-        const pay3 = grandTotal - pay1 - pay2;
+        lastCalc = { groups, deliverySum, assemblySum, assemblyPercent, furnitureTotal, grandTotal, addWorksSum, addWorksList };
 
         const names = groups.map(g => g.name).join(' + ');
         document.getElementById('tech-title').innerText = `ПРОСЧЁТ: ${names.toUpperCase()}`;
         document.getElementById('kp-item-name').innerText = names;
 
-        let tHtml = ''; let kHtml = ''; let num = 0;
-        groups.forEach(g => {
-            tHtml += `<tr class="group-row"><td colspan="7">📦 ${g.name}</td></tr>`;
-            kHtml += `<tr class="group-row"><td colspan="4">📦 ${g.name}</td></tr>`;
-            g.rows.forEach(r => {
-                num++;
-                tHtml += `<tr><td style="text-align:center">${num}</td><td>${r.n}</td><td>${r.m}</td><td style="text-align:center">${r.u}</td><td style="text-align:center">${r.q}</td><td class="col-num">${fmt(r.p)}</td><td class="col-num">${fmt(r.sale)}</td></tr>`;
-                kHtml += `<tr><td>${r.n}</td><td>${r.m}</td><td style="text-align:center">${r.q} ${r.u}</td><td class="col-num">${fmt(r.sale)}</td></tr>`;
-            });
-            tHtml += `<tr class="service-row"><td colspan="6" style="text-align:right">Подытог по «${g.name}»:</td><td class="col-num">${fmt(g.sum)}</td></tr>`;
-            kHtml += `<tr class="service-row"><td colspan="3" style="text-align:right">Подытог по «${g.name}»:</td><td class="col-num">${fmt(g.sum)}</td></tr>`;
-        });
-        tHtml += `<tr class="service-row"><td></td><td>Доставка и подъём</td><td>-</td><td>усл.</td><td>1</td><td class="col-num">${fmt(deliverySum)}</td><td class="col-num">${fmt(deliverySum)}</td></tr>`;
-        tHtml += `<tr class="service-row"><td></td><td>Сборка и установка (${assemblyPercent}%)</td><td>-</td><td>усл.</td><td>1</td><td class="col-num">-</td><td class="col-num">${fmt(assemblySum)}</td></tr>`;
-        kHtml += `<tr class="service-row"><td>Доставка и подъём</td><td>-</td><td style="text-align:center">1 усл.</td><td class="col-num">${fmt(deliverySum)}</td></tr>`;
-        kHtml += `<tr class="service-row"><td>Сборка и установка (${assemblyPercent}%)</td><td>-</td><td style="text-align:center">1 усл.</td><td class="col-num">${fmt(assemblySum)}</td></tr>`;
-        tHtml += `<tr class="total-row"><td colspan="6" style="text-align:right">ИТОГО ПО ДОГОВОРУ:</td><td class="col-num">${fmt(grandTotal)}</td></tr>`;
-        kHtml += `<tr class="total-row"><td colspan="3" style="text-align:right">ИТОГО ПО ДОГОВОРУ:</td><td class="col-num">${fmt(grandTotal)}</td></tr>`;
-        tHtml += `<tr class="service-row"><td colspan="6" style="text-align:right">Предоплата 60% (запуск в производство):</td><td class="col-num">${fmt(pay1)}</td></tr>`;
-        tHtml += `<tr class="service-row"><td colspan="6" style="text-align:right">Платёж при доставке 30%:</td><td class="col-num">${fmt(pay2)}</td></tr>`;
-        tHtml += `<tr class="service-row"><td colspan="6" style="text-align:right">Платёж после сборки 10%:</td><td class="col-num">${fmt(pay3)}</td></tr>`;
-        kHtml += `<tr class="service-row"><td>Предоплата 60% (запуск в производство)</td><td>-</td><td style="text-align:center">-</td><td class="col-num">${fmt(pay1)}</td></tr>`;
-        kHtml += `<tr class="service-row"><td>Платёж при доставке 30%</td><td>-</td><td style="text-align:center">-</td><td class="col-num">${fmt(pay2)}</td></tr>`;
-        kHtml += `<tr class="service-row"><td>Платёж после сборки 10%</td><td>-</td><td style="text-align:center">-</td><td class="col-num">${fmt(pay3)}</td></tr>`;
-        if(addWorksSum > 0) {
-            tHtml += `<tr style="background:#fff3e0;"><td colspan="6" style="text-align:right; font-size:12px;"><strong>Доп. работы (оплата сборщику на месте):</strong> ${addWorksList.join(', ')}</td><td class="col-num" style="font-size:12px;">${fmt(addWorksSum)} ₽</td></tr>`;
-            kHtml += `<tr style="background:#fff3e0;"><td colspan="3" style="text-align:right; font-size:12px;"><strong>Доп. работы (оплата сборщику на месте):</strong> ${addWorksList.join(', ')}</td><td class="col-num" style="font-size:12px;">${fmt(addWorksSum)} ₽</td></tr>`;
-        }
-        document.getElementById('tech-body').innerHTML = tHtml;
-        document.getElementById('kp-body').innerHTML = kHtml;
+        renderTech();
+        renderKP();
 
         let alertText = 'Готово!\n';
         groups.forEach(g => { alertText += `📦 ${g.name}: ${fmt(g.sum)}\n`; });
-        alertText += `\nМебель: ${fmt(furnitureTotal)}\nДоставка: ${fmt(deliverySum)}\nСборка: ${fmt(assemblySum)}\nИТОГО: ${fmt(grandTotal)}`;
-        alertText += `\n\n💳 График платежей:\n60% запуск: ${fmt(pay1)}\n30% при доставке: ${fmt(pay2)}\n10% после сборки: ${fmt(pay3)}`;
+        alertText += `\nМебель: ${fmt(furnitureTotal)}\nДоставка: ${fmt(deliverySum)}\nСборка: ${fmt(assemblySum)}\nИТОГО ТОЧНО: ${fmt(grandTotal)}`;
+        alertText += `\n\n💳 График платежей (60/30/10):\n${fmt(Math.round(grandTotal*0.6))} / ${fmt(Math.round(grandTotal*0.3))} / ${fmt(grandTotal - Math.round(grandTotal*0.6) - Math.round(grandTotal*0.3))}`;
         alertText += `\n\nДоп. работы (на месте): ${fmt(addWorksSum)}`;
+        alertText += `\n\n🗣 В Тех. бланке впишите озвученную клиенту сумму в графу после ИТОГО.`;
+        alertText += `\n✏️ Во вкладке КП можно подогнать итог под озвученную цифру и добавить скидку.`;
         alert(alertText);
     }
 
-    // === ШАБЛОНЫ: РЕДАКТИРОВАНИЕ + СВОИ + СОХРАНЕНИЕ ===
+    // === ТЕХ. БЛАНК (всегда точный + графа «Озвучено клиенту») ===
+    function renderTech() {
+        if (!lastCalc) return;
+        const { groups, deliverySum, assemblySum, assemblyPercent, furnitureTotal, grandTotal, addWorksSum, addWorksList } = lastCalc;
+        let tHtml = ''; let num = 0;
+        groups.forEach(g => {
+            tHtml += `<tr class="group-row"><td colspan="7">📦 ${g.name}</td></tr>`;
+            g.rows.forEach(r => {
+                num++;
+                tHtml += `<tr><td style="text-align:center">${num}</td><td>${r.n}</td><td>${r.m}</td><td style="text-align:center">${r.u}</td><td style="text-align:center">${r.q}</td><td class="col-num">${fmt(r.p)}</td><td class="col-num">${fmt(r.sale)}</td></tr>`;
+            });
+            const gSum = g.rows.reduce((a, r) => a + r.sale, 0);
+            tHtml += `<tr class="service-row"><td colspan="6" style="text-align:right">Подытог по «${g.name}»:</td><td class="col-num">${fmt(gSum)}</td></tr>`;
+        });
+        tHtml += `<tr class="service-row"><td></td><td>Доставка и подъём</td><td>-</td><td>усл.</td><td>1</td><td class="col-num">${fmt(deliverySum)}</td><td class="col-num">${fmt(deliverySum)}</td></tr>`;
+        tHtml += `<tr class="service-row"><td></td><td>Сборка и установка (${assemblyPercent}%)</td><td>-</td><td>усл.</td><td>1</td><td class="col-num">-</td><td class="col-num">${fmt(assemblySum)}</td></tr>`;
+        tHtml += `<tr class="total-row"><td colspan="6" style="text-align:right">ИТОГО ПО ДОГОВОРУ (точно):</td><td class="col-num">${fmt(grandTotal)}</td></tr>`;
+        tHtml += `<tr class="voiced-row"><td colspan="6" style="text-align:right"><strong>🗣 Озвучено клиенту (заполняет менеджер):</strong></td><td class="col-num"><input type="number" id="tech-voiced" value="${voicedSum}" placeholder="—" style="width:120px; padding:4px 6px; border:1px solid #999; border-radius:4px; font-weight:bold; font-size:14px; text-align:right;" oninput="setVoiced(this.value)"></td></tr>`;
+        tHtml += `<tr id="voiced-diff-row"></tr>`;
+        const p1 = Math.round(grandTotal*0.6), p2 = Math.round(grandTotal*0.3), p3 = grandTotal - p1 - p2;
+        tHtml += `<tr class="service-row"><td colspan="6" style="text-align:right">Предоплата 60% (запуск в производство):</td><td class="col-num">${fmt(p1)}</td></tr>`;
+        tHtml += `<tr class="service-row"><td colspan="6" style="text-align:right">Платёж при доставке 30%:</td><td class="col-num">${fmt(p2)}</td></tr>`;
+        tHtml += `<tr class="service-row"><td colspan="6" style="text-align:right">Платёж после сборки 10%:</td><td class="col-num">${fmt(p3)}</td></tr>`;
+        if(addWorksSum > 0) {
+            tHtml += `<tr style="background:#fff3e0;"><td colspan="6" style="text-align:right; font-size:12px;"><strong>Доп. работы (оплата сборщику на месте):</strong> ${addWorksList.join(', ')}</td><td class="col-num" style="font-size:12px;">${fmt(addWorksSum)} ₽</td></tr>`;
+        }
+        document.getElementById('tech-body').innerHTML = tHtml;
+        refreshVoicedDiff();
+    }
+
+    // === КП (с правками менеджера: скидка + озвученный итог) ===
+    function renderKP() {
+        if (!lastCalc) return;
+        const { groups, deliverySum, assemblySum, assemblyPercent, furnitureTotal, grandTotal, addWorksSum, addWorksList } = lastCalc;
+
+        const D = Math.max(0, parseFloat(document.getElementById('kp-discount').value) || 0);
+        const showD = document.getElementById('kp-show-discount').checked && D > 0;
+        const Finput = parseFloat(document.getElementById('kp-final-total').value);
+        let finalTotal = (isNaN(Finput) || Finput <= 0) ? (grandTotal - (showD ? D : 0)) : Finput;
+
+        let targetFurniture = finalTotal + (showD ? D : 0) - deliverySum - assemblySum;
+        let k = furnitureTotal > 0 ? targetFurniture / furnitureTotal : 1;
+        if (!isFinite(k) || k <= 0) { k = 1; finalTotal = furnitureTotal + deliverySum + assemblySum - (showD ? D : 0); targetFurniture = furnitureTotal; }
+
+        let scaledGroups = groups.map(g => ({ name: g.name, rows: g.rows.map(r => ({ ...r, disp: Math.round(r.sale * k) })) }));
+        let sumScaled = scaledGroups.reduce((a,g) => a + g.rows.reduce((b,r) => b + r.disp, 0), 0);
+        const delta = Math.round(targetFurniture) - sumScaled;
+        if (delta !== 0 && scaledGroups.length && scaledGroups[scaledGroups.length-1].rows.length) {
+            const lg = scaledGroups[scaledGroups.length-1];
+            lg.rows[lg.rows.length-1].disp += delta;
+            sumScaled += delta;
+        }
+        const totalDisp = sumScaled + deliverySum + assemblySum - (showD ? D : 0);
+
+        let kHtml = '';
+        scaledGroups.forEach(g => {
+            kHtml += `<tr class="group-row"><td colspan="4">📦 ${g.name}</td></tr>`;
+            g.rows.forEach(r => {
+                kHtml += `<tr><td>${r.n}</td><td>${r.m}</td><td style="text-align:center">${r.q} ${r.u}</td><td class="col-num">${fmt(r.disp)}</td></tr>`;
+            });
+            const gSum = g.rows.reduce((b,r) => b + r.disp, 0);
+            kHtml += `<tr class="service-row"><td colspan="3" style="text-align:right">Подытог по «${g.name}»:</td><td class="col-num">${fmt(gSum)}</td></tr>`;
+        });
+        kHtml += `<tr class="service-row"><td>Доставка и подъём</td><td>-</td><td style="text-align:center">1 усл.</td><td class="col-num">${fmt(deliverySum)}</td></tr>`;
+        kHtml += `<tr class="service-row"><td>Сборка и установка (${assemblyPercent}%)</td><td>-</td><td style="text-align:center">1 усл.</td><td class="col-num">${fmt(assemblySum)}</td></tr>`;
+        if (showD) {
+            kHtml += `<tr class="discount-row"><td>Скидка (согласована с руководством)</td><td>-</td><td style="text-align:center">-</td><td class="col-num">−${fmt(D)}</td></tr>`;
+        }
+        kHtml += `<tr class="total-row"><td colspan="3" style="text-align:right">ИТОГО ПО ДОГОВОРУ:</td><td class="col-num">${fmt(totalDisp)}</td></tr>`;
+        const p1 = Math.round(totalDisp*0.6), p2 = Math.round(totalDisp*0.3), p3 = totalDisp - p1 - p2;
+        kHtml += `<tr class="service-row"><td>Предоплата 60% (запуск в производство)</td><td>-</td><td style="text-align:center">-</td><td class="col-num">${fmt(p1)}</td></tr>`;
+        kHtml += `<tr class="service-row"><td>Платёж при доставке 30%</td><td>-</td><td style="text-align:center">-</td><td class="col-num">${fmt(p2)}</td></tr>`;
+        kHtml += `<tr class="service-row"><td>Платёж после сборки 10%</td><td>-</td><td style="text-align:center">-</td><td class="col-num">${fmt(p3)}</td></tr>`;
+        if(addWorksSum > 0) {
+            kHtml += `<tr style="background:#fff3e0;"><td colspan="3" style="text-align:right; font-size:12px;"><strong>Доп. работы (оплата сборщику на месте):</strong> ${addWorksList.join(', ')}</td><td class="col-num" style="font-size:12px;">${fmt(addWorksSum)} ₽</td></tr>`;
+        }
+        document.getElementById('kp-body').innerHTML = kHtml;
+
+        document.getElementById('kp-exact-display').innerText = `Точная расчётная стоимость: ${fmt(grandTotal)}`;
+        document.getElementById('kp-final-display').innerText = `Итог в КП (клиент увидит): ${fmt(totalDisp)}${showD ? ` (со скидкой ${fmt(D)})` : ''}`;
+    }
+
+    // === ШАБЛОНЫ ===
     const LS_KEY = 'km_templates_v25';
 
     function saveTemplatesSilent() {
