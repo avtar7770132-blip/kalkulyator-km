@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <title>КМ Калькулятор v25.0 MULTI</title>
+    <title>КМ Калькулятор v25.2 MULTI PRO</title>
     <style>
         :root { --primary: #d32f2f; --secondary: #ff9800; --dark: #333; --light: #f5f5f5; --border: #ddd; --success: #2e7d32; }
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -78,15 +78,15 @@
 
 <div class="container">
 
-    <!-- === ВКЛАДКА 1: КАЛЬКУЛЯТОР (МУЛЬТИ-ИЗДЕЛИЯ) === -->
+    <!-- === ВКЛАДКА 1: КАЛЬКУЛЯТОР === -->
     <div id="calc" class="section active">
         <div class="card">
-            <h2>🛠 Конструктор сметы (v25.0 MULTI)</h2>
-            <p style="color:#666; font-size:13px; margin-bottom:15px;">Можно добавить несколько изделий в одну смету (кухня + шкаф + тумба). У каждого изделия своё название и свои позиции.</p>
+            <h2>🛠 Конструктор сметы (v25.2 MULTI PRO)</h2>
+            <p style="color:#666; font-size:13px; margin-bottom:15px;">Несколько изделий в одной смете (кухня + шкаф + тумба). Точный расчёт без округлений — округляете сами в диалоге с клиентом.</p>
             <div id="items-container"></div>
             <button class="btn btn-add" onclick="addItem()">➕ ДОБАВИТЬ ИЗДЕЛИЕ (кухня, шкаф и т.д.)</button>
             <div style="margin-top: 20px; padding: 15px; background: #f9f9f9; border-radius: 8px; border: 1px solid #eee;">
-                <h3 style="font-size: 16px; margin-bottom: 10px;">Услуги и Доп. работы (на весь заказ)</h3>
+                <h3 style="font-size: 16px; margin-bottom: 10px;">Услуги (на весь заказ)</h3>
                 <div class="form-group">
                     <label>Доставка и подъём (фикс.)</label>
                     <input type="number" id="delivery_sum" value="5000">
@@ -95,13 +95,21 @@
                     <label>Сборка и установка (%)</label>
                     <input type="number" id="assembly_percent" value="10">
                 </div>
-                <div style="margin-top: 10px; font-size: 13px; color: #555;">
-                    <strong>Доп. работы (оплата сборщику на месте):</strong><br>
-                    <label style="display:inline-block; margin-right:15px;"><input type="checkbox" id="add_cut" value="1500"> Вырез под мойку/варочную (1500₽)</label>
-                    <label style="display:inline-block; margin-right:15px;"><input type="checkbox" id="add_sink" value="1500"> Подключение мойки (1500₽)</label>
-                    <label style="display:inline-block; margin-right:15px;"><input type="checkbox" id="add_var" value="1000"> Подключение варочной (1000₽)</label>
-                    <label style="display:inline-block; margin-right:15px;"><input type="checkbox" id="add_wash" value="3500"> Стиральная/посудомойка (3500₽)</label>
-                    <label style="display:inline-block; margin-right:15px;"><input type="checkbox" id="add_stairs" value="0"> Подъём без лифта (этажей: <input type="number" id="stairs_count" value="0" style="width:50px; display:inline-block;"> × 300₽)</label>
+                <div style="margin-top: 15px; font-size: 13px; color: #555;">
+                    <strong>Доп. работы (оплата сборщику на месте, Приложение №2):</strong><br>
+                    <label style="display:inline-block; margin-right:12px;"><input type="checkbox" id="add_cut"> Вырез мойка/варочная (1500₽)</label>
+                    <label style="display:inline-block; margin-right:12px;"><input type="checkbox" id="add_sink"> Подключение мойки (1500₽)</label>
+                    <label style="display:inline-block; margin-right:12px;"><input type="checkbox" id="add_mixer"> Подключение смесителя (1000₽)</label>
+                    <label style="display:inline-block; margin-right:12px;"><input type="checkbox" id="add_var"> Подключение варочной (1000₽)</label>
+                    <label style="display:inline-block; margin-right:12px;"><input type="checkbox" id="add_duh"> Подключение духовки (1000₽)</label>
+                    <label style="display:inline-block; margin-right:12px;"><input type="checkbox" id="add_hood"> Подключение вытяжки (1000₽)</label>
+                    <label style="display:inline-block; margin-right:12px;"><input type="checkbox" id="add_micro"> Монтаж микроволновки (1000₽)</label>
+                    <label style="display:inline-block; margin-right:12px;"><input type="checkbox" id="add_filter"> Подключение фильтра воды (1000₽)</label>
+                    <label style="display:inline-block; margin-right:12px;"><input type="checkbox" id="add_wash"> Стиральная/посудомойка (3500₽)</label>
+                    <label style="display:inline-block; margin-right:12px;"><input type="checkbox" id="add_fridge"> Встроенный холодильник (3500₽)</label>
+                    <label style="display:inline-block; margin-right:12px;"><input type="checkbox" id="add_demont"> Демонтаж шкафа/тумбы 1шт (500₽)</label>
+                    <label style="display:inline-block; margin-right:12px;"><input type="checkbox" id="add_tiles"> Сверление плитки (отверстий: <input type="number" id="tiles_count" value="0" style="width:50px; display:inline-block;"> × 300₽)</label>
+                    <label style="display:inline-block; margin-right:12px;"><input type="checkbox" id="add_stairs"> Подъём без лифта (этажей: <input type="number" id="stairs_count" value="0" style="width:50px; display:inline-block;"> × 300₽)</label>
                 </div>
             </div>
             <button class="btn btn-calc" onclick="calculateTotal()">🧮 РАССЧИТАТЬ ИТОГО</button>
@@ -158,8 +166,8 @@
                 Вызов инженера-замерщика: по г. Москва 500₽, за МКАД и область 1000₽<br><br>
                 <strong>Условия оплаты:</strong><br>
                 Первый платёж 60% — запуск в производство<br>
-                Второй платёж 30%<br>
-                Третий платёж 10% после сборки мебели<br>
+                Второй платёж 30% — при доставке<br>
+                Третий платёж 10% — после сборки мебели<br>
                 Для Вашего удобства при себе специалист имеет эквайринг.<br><br>
                 <strong>Дополнительные работы (оплачиваются сборщику на месте):</strong><br>
                 Вырезы, подключения техники, подъём без лифта — согласно Приложению №2 к Договору.
@@ -180,7 +188,7 @@
         </div>
     </div>
 
-    <!-- === ВКЛАДКА 4: ШАБЛОНЫ (РЕДАКТИРУЕМЫЕ) === -->
+    <!-- === ВКЛАДКА 4: ШАБЛОНЫ === -->
     <div id="templates" class="section">
         <div class="card">
             <h2>📱 Шаблоны сообщений и Визитки</h2>
@@ -414,7 +422,7 @@ https://kompkm.ru/products/
 </div>
 
 <script>
-    // === БАЗА ЦЕН v25.0 MGS FULL ===
+    // === БАЗА ЦЕН v25.2 MGS FULL ===
     const DB = {
         'ldsp_uvadrev': { cat: 'Корпус', name: 'ЛДСП 16мм Увадрев', price: 2500, unit: 'м²', type: 'area' },
         'ldsp_egger': { cat: 'Корпус', name: 'ЛДСП 16мм EGGER', price: 3500, unit: 'м²', type: 'area' },
@@ -660,17 +668,32 @@ https://kompkm.ru/products/
 
         const deliverySum = parseFloat(document.getElementById('delivery_sum').value) || 0;
         const assemblyPercent = parseFloat(document.getElementById('assembly_percent').value) || 0;
+
         let addWorksSum = 0; let addWorksList = [];
         if(document.getElementById('add_cut').checked) { addWorksSum += 1500; addWorksList.push('Вырез мойка/варочная'); }
         if(document.getElementById('add_sink').checked) { addWorksSum += 1500; addWorksList.push('Подключение мойки'); }
+        if(document.getElementById('add_mixer').checked) { addWorksSum += 1000; addWorksList.push('Подключение смесителя'); }
         if(document.getElementById('add_var').checked) { addWorksSum += 1000; addWorksList.push('Подключение варочной'); }
+        if(document.getElementById('add_duh').checked) { addWorksSum += 1000; addWorksList.push('Подключение духовки'); }
+        if(document.getElementById('add_hood').checked) { addWorksSum += 1000; addWorksList.push('Подключение вытяжки'); }
+        if(document.getElementById('add_micro').checked) { addWorksSum += 1000; addWorksList.push('Монтаж микроволновки'); }
+        if(document.getElementById('add_filter').checked) { addWorksSum += 1000; addWorksList.push('Подключение фильтра воды'); }
         if(document.getElementById('add_wash').checked) { addWorksSum += 3500; addWorksList.push('Стиральная/посудомойка'); }
+        if(document.getElementById('add_fridge').checked) { addWorksSum += 3500; addWorksList.push('Встроенный холодильник'); }
+        if(document.getElementById('add_demont').checked) { addWorksSum += 500; addWorksList.push('Демонтаж шкафа/тумбы'); }
+        const tilesCount = parseInt(document.getElementById('tiles_count').value) || 0;
+        if(document.getElementById('add_tiles').checked && tilesCount > 0) { addWorksSum += tilesCount * 300; addWorksList.push(`Сверление плитки (${tilesCount} отв.)`); }
         const stairsCount = parseInt(document.getElementById('stairs_count').value) || 0;
-        if(stairsCount > 0) { addWorksSum += stairsCount * 300; addWorksList.push(`Подъём без лифта (${stairsCount} эт.)`); }
+        if(document.getElementById('add_stairs').checked && stairsCount > 0) { addWorksSum += stairsCount * 300; addWorksList.push(`Подъём без лифта (${stairsCount} эт.)`); }
 
         const furnitureTotal = groups.reduce((a, g) => a + g.sum, 0);
         const assemblySum = Math.round(furnitureTotal * (assemblyPercent / 100));
         const grandTotal = furnitureTotal + deliverySum + assemblySum;
+
+        // График платежей 60/30/10 — точными суммами без округлений вверх
+        const pay1 = Math.round(grandTotal * 0.6);
+        const pay2 = Math.round(grandTotal * 0.3);
+        const pay3 = grandTotal - pay1 - pay2;
 
         const names = groups.map(g => g.name).join(' + ');
         document.getElementById('tech-title').innerText = `ПРОСЧЁТ: ${names.toUpperCase()}`;
@@ -694,6 +717,12 @@ https://kompkm.ru/products/
         kHtml += `<tr class="service-row"><td>Сборка и установка (${assemblyPercent}%)</td><td>-</td><td style="text-align:center">1 усл.</td><td class="col-num">${fmt(assemblySum)}</td></tr>`;
         tHtml += `<tr class="total-row"><td colspan="6" style="text-align:right">ИТОГО ПО ДОГОВОРУ:</td><td class="col-num">${fmt(grandTotal)}</td></tr>`;
         kHtml += `<tr class="total-row"><td colspan="3" style="text-align:right">ИТОГО ПО ДОГОВОРУ:</td><td class="col-num">${fmt(grandTotal)}</td></tr>`;
+        tHtml += `<tr class="service-row"><td colspan="6" style="text-align:right">Предоплата 60% (запуск в производство):</td><td class="col-num">${fmt(pay1)}</td></tr>`;
+        tHtml += `<tr class="service-row"><td colspan="6" style="text-align:right">Платёж при доставке 30%:</td><td class="col-num">${fmt(pay2)}</td></tr>`;
+        tHtml += `<tr class="service-row"><td colspan="6" style="text-align:right">Платёж после сборки 10%:</td><td class="col-num">${fmt(pay3)}</td></tr>`;
+        kHtml += `<tr class="service-row"><td>Предоплата 60% (запуск в производство)</td><td>-</td><td style="text-align:center">-</td><td class="col-num">${fmt(pay1)}</td></tr>`;
+        kHtml += `<tr class="service-row"><td>Платёж при доставке 30%</td><td>-</td><td style="text-align:center">-</td><td class="col-num">${fmt(pay2)}</td></tr>`;
+        kHtml += `<tr class="service-row"><td>Платёж после сборки 10%</td><td>-</td><td style="text-align:center">-</td><td class="col-num">${fmt(pay3)}</td></tr>`;
         if(addWorksSum > 0) {
             tHtml += `<tr style="background:#fff3e0;"><td colspan="6" style="text-align:right; font-size:12px;"><strong>Доп. работы (оплата сборщику на месте):</strong> ${addWorksList.join(', ')}</td><td class="col-num" style="font-size:12px;">${fmt(addWorksSum)} ₽</td></tr>`;
             kHtml += `<tr style="background:#fff3e0;"><td colspan="3" style="text-align:right; font-size:12px;"><strong>Доп. работы (оплата сборщику на месте):</strong> ${addWorksList.join(', ')}</td><td class="col-num" style="font-size:12px;">${fmt(addWorksSum)} ₽</td></tr>`;
@@ -703,7 +732,9 @@ https://kompkm.ru/products/
 
         let alertText = 'Готово!\n';
         groups.forEach(g => { alertText += `📦 ${g.name}: ${fmt(g.sum)}\n`; });
-        alertText += `\nМебель: ${fmt(furnitureTotal)}\nДоставка: ${fmt(deliverySum)}\nСборка: ${fmt(assemblySum)}\nИТОГО: ${fmt(grandTotal)}\n\nДоп. работы (на месте): ${fmt(addWorksSum)}`;
+        alertText += `\nМебель: ${fmt(furnitureTotal)}\nДоставка: ${fmt(deliverySum)}\nСборка: ${fmt(assemblySum)}\nИТОГО: ${fmt(grandTotal)}`;
+        alertText += `\n\n💳 График платежей:\n60% запуск: ${fmt(pay1)}\n30% при доставке: ${fmt(pay2)}\n10% после сборки: ${fmt(pay3)}`;
+        alertText += `\n\nДоп. работы (на месте): ${fmt(addWorksSum)}`;
         alert(alertText);
     }
 
