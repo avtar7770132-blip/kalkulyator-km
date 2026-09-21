@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <title>КМ Калькулятор v25.4 MULTI PRO</title>
+    <title>КМ Калькулятор v25.5 MULTI PRO</title>
     <style>
         :root { --primary: #d32f2f; --secondary: #ff9800; --dark: #333; --light: #f5f5f5; --border: #ddd; --success: #2e7d32; }
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -50,20 +50,26 @@
         .kp-terms { font-size: 14px; line-height: 1.6; margin: 20px 0; padding: 15px; background: #f5f5f5; border-radius: 8px; }
         .kp-footer { margin-top: 30px; padding-top: 20px; border-top: 2px solid var(--primary); text-align: center; font-size: 14px; }
         .kp-manager { font-size: 18px; font-weight: bold; color: var(--primary); margin-bottom: 10px; }
+        .kp-portfolio { margin-top: 15px; padding: 12px; background: #fff8e1; border-radius: 8px; font-size: 13px; line-height: 1.7; }
+        .kp-portfolio a { color: #1565c0; text-decoration: none; font-weight: 600; }
         .script-block { margin-bottom: 20px; padding: 15px; background: #fff; border-radius: 8px; border-left: 4px solid var(--secondary); }
         .script-phrase { background: #fff8e1; padding: 10px; border-radius: 6px; margin: 8px 0; font-style: italic; border-left: 3px solid var(--secondary); white-space: pre-wrap; }
         .tpl-body[contenteditable="true"] { outline: 1px dashed #bbb; cursor: text; }
         .tpl-body[contenteditable="true"]:focus { outline: 2px solid var(--secondary); background: #fffdf5; }
         .script-list { margin-left: 20px; margin-top: 10px; }
         .script-list li { margin-bottom: 6px; }
+        .site-footer { margin-top: 40px; padding: 20px; background: #fff; border-top: 1px solid var(--border); text-align: center; font-size: 13px; color: #666; line-height: 1.8; }
+        .site-footer a { color: var(--primary); text-decoration: none; font-weight: 600; margin: 0 8px; display: inline-block; }
+        .site-footer a:hover { text-decoration: underline; }
         @media print {
             body { background: #fff; }
-            .tabs, .btn, .no-print, .btn-upload, .manager-input-group, .calc-controls { display: none !important; }
+            .tabs, .btn, .no-print, .btn-upload, .manager-input-group, .calc-controls, .site-footer { display: none !important; }
             .section { display: block !important; }
             .card { box-shadow: none; border: none; padding: 0; }
             .container { max-width: 100%; padding: 0; }
             .photo-slot { border: 1px solid #ccc; break-inside: avoid; }
             #tech-voiced { border: none; background: transparent; font-size: 14px; }
+            .kp-portfolio { background: #f5f5f5 !important; }
         }
     </style>
 </head>
@@ -84,7 +90,7 @@
     <!-- === ВКЛАДКА 1: КАЛЬКУЛЯТОР === -->
     <div id="calc" class="section active">
         <div class="card">
-            <h2>🛠 Конструктор сметы (v25.4 MULTI PRO)</h2>
+            <h2>🛠 Конструктор сметы (v25.5 MULTI PRO)</h2>
             <p style="color:#666; font-size:13px; margin-bottom:15px;">Несколько изделий в одной смете. Точный расчёт без округлений — округляете сами в диалоге с клиентом.</p>
             <div id="items-container"></div>
             <button class="btn btn-add" onclick="addItem()">➕ ДОБАВИТЬ ИЗДЕЛИЕ (кухня, шкаф и т.д.)</button>
@@ -204,6 +210,12 @@
             <div class="kp-footer">
                 <div class="kp-manager" id="kp-manager-display">С Уважением, менеджер Александр</div>
                 <div>Мебельная компания КМ | WhatsApp: +7999-579-77-59</div>
+                <div class="kp-portfolio">
+                    <strong>Посмотрите наши готовые работы и убедитесь в качестве:</strong><br>
+                    🌐 Основной сайт: <a href="https://kompkm.ru" target="_blank">kompkm.ru</a><br>
+                    ✈️ Telegram-канал с проектами: <a href="https://t.me/kuhnya_mebeli_msk" target="_blank">t.me/kuhnya_mebeli_msk</a><br>
+                    🟦 Группа ВКонтакте: <a href="https://vk.com/kuhnyamebelimsk" target="_blank">vk.com/kuhnyamebelimsk</a>
+                </div>
             </div>
             <button class="btn btn-print" onclick="window.print()" style="margin-top:20px;">🖨 ПЕЧАТЬ КП</button>
         </div>
@@ -233,8 +245,14 @@
 ✅ Замер + 3D-проект бесплатно
 ✅ Рассрочка 0% до 199 000 ₽
 
-🌐 Каталог и цены:
-https://kompkm.ru/products/
+🌐 Основной сайт:
+https://kompkm.ru
+
+✈️ Telegram — наши готовые работы:
+https://t.me/kuhnya_mebeli_msk
+
+🟦 Группа ВКонтакте:
+https://vk.com/kuhnyamebelimsk
 
 📞 Александр: +7 (999) 579-77-59
 💬 WhatsApp / Telegram — всегда на связи</div>
@@ -442,8 +460,17 @@ https://kompkm.ru/products/
 
 </div>
 
+<!-- МИНИ-ФУТЕР САЙТА (всегда виден на любой вкладке, при печати скрыт) -->
+<div class="site-footer no-print">
+    <strong style="color: var(--dark);">🍲 Кухня Мебели (КМ)</strong> — корпусная мебель под заказ<br>
+    🌐 <a href="https://kompkm.ru" target="_blank">kompkm.ru</a> |
+    ✈️ <a href="https://t.me/kuhnya_mebeli_msk" target="_blank">Telegram</a> |
+    🟦 <a href="https://vk.com/kuhnyamebelimsk" target="_blank">ВКонтакте</a> |
+    📞 <a href="tel:+79995797759">+7 (999) 579-77-59</a>
+</div>
+
 <script>
-    // === БАЗА ЦЕН v25.4 MGS FULL ===
+    // === БАЗА ЦЕН v25.5 MGS FULL ===
     const DB = {
         'ldsp_uvadrev': { cat: 'Корпус', name: 'ЛДСП 16мм Увадрев', price: 2500, unit: 'м²', type: 'area' },
         'ldsp_egger': { cat: 'Корпус', name: 'ЛДСП 16мм EGGER', price: 3500, unit: 'м²', type: 'area' },
@@ -590,7 +617,6 @@ https://kompkm.ru/products/
 
     function fmt(n) { return n.toLocaleString('ru-RU', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' ₽'; }
 
-    // === МУЛЬТИ-ИЗДЕЛИЯ ===
     function addItem() {
         itemCounter++;
         const itemId = itemCounter;
@@ -651,7 +677,6 @@ https://kompkm.ru/products/
         if (el) el.remove();
     }
 
-    // === ОЗВУЧЕННАЯ СУММА (Тех. бланк) ===
     function setVoiced(v) {
         voicedSum = v;
         refreshVoicedDiff();
@@ -672,7 +697,6 @@ https://kompkm.ru/products/
         }
     }
 
-    // === РАСЧЁТ ===
     function calculateTotal() {
         const blocks = document.querySelectorAll('.item-block');
         let groups = [];
@@ -754,7 +778,6 @@ https://kompkm.ru/products/
         alert(alertText);
     }
 
-    // === ТЕХ. БЛАНК (всегда точный + графа «Озвучено клиенту») ===
     function renderTech() {
         if (!lastCalc) return;
         const { groups, deliverySum, assemblySum, assemblyPercent, furnitureTotal, grandTotal, addWorksSum, addWorksList } = lastCalc;
@@ -784,7 +807,6 @@ https://kompkm.ru/products/
         refreshVoicedDiff();
     }
 
-    // === КП (с правками менеджера: скидка + озвученный итог) ===
     function renderKP() {
         if (!lastCalc) return;
         const { groups, deliverySum, assemblySum, assemblyPercent, furnitureTotal, grandTotal, addWorksSum, addWorksList } = lastCalc;
@@ -836,7 +858,6 @@ https://kompkm.ru/products/
         document.getElementById('kp-final-display').innerText = `Итог в КП (клиент увидит): ${fmt(totalDisp)}${showD ? ` (со скидкой ${fmt(D)})` : ''}`;
     }
 
-    // === ШАБЛОНЫ ===
     const LS_KEY = 'km_templates_v25';
 
     function saveTemplatesSilent() {
@@ -916,7 +937,6 @@ https://kompkm.ru/products/
         (saved.custom || []).forEach(t => createCustomBlock(t.id, t.title, t.text));
     }
 
-    // === СТАРТ ===
     addItem();
     restoreTemplates();
     document.querySelectorAll('.tpl-builtin').forEach(el => {
