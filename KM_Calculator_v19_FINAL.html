@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <title>КМ Калькулятор v25.5 MULTI PRO</title>
+    <title>КМ Калькулятор v25.6 MULTI PRO</title>
     <style>
         :root { --primary: #d32f2f; --secondary: #ff9800; --dark: #333; --light: #f5f5f5; --border: #ddd; --success: #2e7d32; }
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -58,6 +58,8 @@
         .tpl-body[contenteditable="true"]:focus { outline: 2px solid var(--secondary); background: #fffdf5; }
         .script-list { margin-left: 20px; margin-top: 10px; }
         .script-list li { margin-bottom: 6px; }
+        .glossary { font-size: 14px; line-height: 1.75; }
+        .glossary b { color: var(--primary); }
         .site-footer { margin-top: 40px; padding: 20px; background: #fff; border-top: 1px solid var(--border); text-align: center; font-size: 13px; color: #666; line-height: 1.8; }
         .site-footer a { color: var(--primary); text-decoration: none; font-weight: 600; margin: 0 8px; display: inline-block; }
         .site-footer a:hover { text-decoration: underline; }
@@ -90,7 +92,7 @@
     <!-- === ВКЛАДКА 1: КАЛЬКУЛЯТОР === -->
     <div id="calc" class="section active">
         <div class="card">
-            <h2>🛠 Конструктор сметы (v25.5 MULTI PRO)</h2>
+            <h2>🛠 Конструктор сметы (v25.6 MULTI PRO)</h2>
             <p style="color:#666; font-size:13px; margin-bottom:15px;">Несколько изделий в одной смете. Точный расчёт без округлений — округляете сами в диалоге с клиентом.</p>
             <div id="items-container"></div>
             <button class="btn btn-add" onclick="addItem()">➕ ДОБАВИТЬ ИЗДЕЛИЕ (кухня, шкаф и т.д.)</button>
@@ -259,6 +261,25 @@ https://vk.com/kuhnyamebelimsk
                 <button class="btn btn-copy" onclick="copyText('tpl-visita')">📋 Копировать визитку</button>
             </div>
             <div class="script-block">
+                <h3>🔗 Контакты компании (сайт, Telegram, ВК, шоурум)</h3>
+                <div class="script-phrase tpl-builtin" id="tpl-contacts" contenteditable="true">🍲 КУХНЯ МЕБЕЛИ (КМ) — контакты:
+
+🌐 Основной сайт:
+https://kompkm.ru
+
+✈️ Telegram — наши готовые работы:
+https://t.me/kuhnya_mebeli_msk
+
+🟦 Группа ВКонтакте:
+https://vk.com/kuhnyamebelimsk
+
+📍 Шоурум: г. Люберцы, Новорязанское шоссе, д. 1А, ТЦ «Калибри» (рядом с метро Котельники)
+🕒 Ежедневно с 10:00 до 20:00, парковка бесплатная
+
+📞 Александр: +7 (999) 579-77-59 (WhatsApp / Telegram)</div>
+                <button class="btn btn-copy" onclick="copyText('tpl-contacts')">📋 Копировать контакты</button>
+            </div>
+            <div class="script-block">
                 <h3>👻 Клиент молчит после визитки</h3>
                 <div class="script-phrase tpl-builtin" id="tpl-silent1" contenteditable="true">Здравствуйте! 👋
 Не хочу вас беспокоить, просто уточню — получилось ли посмотреть мою визитку?
@@ -407,6 +428,31 @@ https://vk.com/kuhnyamebelimsk
         <div class="card">
             <h2>🎨 Презентация материалов (MGS FULL)</h2>
             <div class="script-phrase" style="margin-bottom: 20px;">«Давайте я озвучу материалы, которые мы используем в своих проектах, — чтобы вы понимали, откуда складывается цена.»</div>
+
+            <div class="script-block">
+                <h3>📖 Расшифровка аббревиатур — чтобы никогда не зависать</h3>
+                <p class="glossary">
+                    <b>ЛДСП</b> — Ламинированная Древесно-Стружечная Плита. Основа: ДСП (спрессованная древесная стружка), сверху — декоративное ламинирующее покрытие. Идёт на корпуса, полки, видимые части. Главное: недорого, надёжно, сотни декоров.<br>
+                    <b>МДФ</b> — Medium Density Fibreboard (древесно-волокнистая плита средней плотности). Мелкие древесные волокна, спрессованные с натуральным связующим. Плотнее, прочнее и влагостойчнее ЛДСП; поддаётся фрезеровке (узоры, рамки) и покрытию плёнкой или эмалью. Идёт на фасады.<br>
+                    <b>ПВХ</b> — ПолиВинилХлорид. Безопасный термопластик (из него же делают оконные профили и кромки). В мебели: плёнка ПВХ для фасадов МДФ и кромка на торцах деталей.<br>
+                    <b>ДСП</b> — древесно-стружечная плита, «голая» основа без покрытия; после ламинации становится ЛДСП.<br>
+                    <b>ДВП / ХДФ</b> — древесно-волокнистая плита высокой плотности. Тонкие прочные листы: задние стенки шкафов, днища ящиков.<br>
+                    <b>ПЭТ</b> — полиэстер (PET). Плёнка для глянца/мата на фасадах; устойчивее к ударам, чем ПВХ.<br>
+                    <b>HPL</b> — High Pressure Laminate (пластик высокого давления). Спекается под давлением и температурой; компакт-плита HPL — столешницы, которым не страшны вода, царапины и температура.<br>
+                    <b>УФ-лак</b> — лак ультрафиолетового отверждения. Покрытие плит ALVIC: мгновенно твердеет под УФ-лампой, поэтому поверхность твёрдая, стойкая и не выгорает.<br>
+                    <b>Постформинг</b> — скруглённый загиб кромки столешницы, где пластик плавно переходит на торец (без шва, в который забивается грязь).<br>
+                    <b>Кромка</b> — облицовочная лента (ПВХ 0,4–2 мм) на торце детали. Защищает от влаги и сколов.<br>
+                    <b>Gola (Гола)</b> — профиль-ручка: врезной алюминиевый профиль вместо накладных ручек, стиль «без ручек».
+                </p>
+            </div>
+            <div class="script-block">
+                <h3>💬 Как объяснить клиенту одним предложением</h3>
+                <div class="script-phrase">«МДФ — это прессованное древесное волокно, гораздо плотнее и прочнее стружки. Поэтому фасады делают из него: не боится влаги, держит фрезеровку, плёнка и краска ложатся идеально.»</div>
+                <div class="script-phrase">«ЛДСП — это ДСП с ламинированным декоративным покрытием сверху. Надёжная основа корпуса за адекватные деньги, декоры от дерева до камня.»</div>
+                <div class="script-phrase">«ПВХ — безопасный пластик (из него даже оконные профили делают). Из него плёнка для фасадов и кромка на торцах — чтобы влага не попадала внутрь детали.»</div>
+                <div class="script-phrase">«Разница простая: ЛДСП — это корпус (надёжно и недорого), МДФ — это фасад (плотно, красиво, можно фрезеровать). Оба материала на древесной основе, класс безопасности Е1 — подходят даже для детской.»</div>
+            </div>
+
             <div class="script-block">
                 <h3>🪵 Корпус ЛДСП (Увадрев / EGGER / Kronospan)</h3>
                 <p>«Корпус — ЛДСП первого класса ламинации, класс эмиссии Е1: полностью экологичный, без запахов. Плита трёхслойная, без воздушных пустот. Три производителя: Увадрев (база), EGGER (премиум декоры), Kronospan (бюджет).»</p>
@@ -425,7 +471,7 @@ https://vk.com/kuhnyamebelimsk
             </div>
             <div class="script-block">
                 <h3>✨ ALVIC (Испания)</h3>
-                <p>«Запатентованный пластик. Суперглянец 85%, супермат, имитация камня. Плита 18 мм. Эксклюзивные цвета. 18 000–22 000 ₽/м².»</p>
+                <p>«Запатентованная поверхность, спекённая с плитой под УФ-отверждением, — не приклеенная плёнка, поэтому не отходит на кромках. Суперглянец 85%, супермат, имитация камня. Плита 18 мм, покрытие двустороннее. Эксклюзивные цвета. 18 000–22 000 ₽/м².»</p>
             </div>
             <div class="script-block">
                 <h3>🎨 Эмаль (Премиум)</h3>
@@ -460,7 +506,7 @@ https://vk.com/kuhnyamebelimsk
 
 </div>
 
-<!-- МИНИ-ФУТЕР САЙТА (всегда виден на любой вкладке, при печати скрыт) -->
+<!-- МИНИ-ФУТЕР САЙТА -->
 <div class="site-footer no-print">
     <strong style="color: var(--dark);">🍲 Кухня Мебели (КМ)</strong> — корпусная мебель под заказ<br>
     🌐 <a href="https://kompkm.ru" target="_blank">kompkm.ru</a> |
@@ -470,7 +516,7 @@ https://vk.com/kuhnyamebelimsk
 </div>
 
 <script>
-    // === БАЗА ЦЕН v25.5 MGS FULL ===
+    // === БАЗА ЦЕН v25.6 MGS FULL ===
     const DB = {
         'ldsp_uvadrev': { cat: 'Корпус', name: 'ЛДСП 16мм Увадрев', price: 2500, unit: 'м²', type: 'area' },
         'ldsp_egger': { cat: 'Корпус', name: 'ЛДСП 16мм EGGER', price: 3500, unit: 'м²', type: 'area' },
@@ -858,7 +904,9 @@ https://vk.com/kuhnyamebelimsk
         document.getElementById('kp-final-display').innerText = `Итог в КП (клиент увидит): ${fmt(totalDisp)}${showD ? ` (со скидкой ${fmt(D)})` : ''}`;
     }
 
-    const LS_KEY = 'km_templates_v25';
+    // === ШАБЛОНЫ (ключ v26: старые автосохранения больше не перетирают новые стандартные шаблоны) ===
+    const LS_KEY = 'km_templates_v26';
+    const LS_KEY_OLD = 'km_templates_v25';
 
     function saveTemplatesSilent() {
         const builtin = {};
@@ -882,6 +930,7 @@ https://vk.com/kuhnyamebelimsk
     function resetTemplates() {
         if (confirm('Сбросить все шаблоны к стандартным? Ваши правки и свои шаблоны будут удалены.')) {
             try { localStorage.removeItem(LS_KEY); } catch(e) {}
+            try { localStorage.removeItem(LS_KEY_OLD); } catch(e) {}
             location.reload();
         }
     }
@@ -929,7 +978,16 @@ https://vk.com/kuhnyamebelimsk
     function restoreTemplates() {
         let saved = null;
         try { saved = JSON.parse(localStorage.getItem(LS_KEY) || 'null'); } catch(e) {}
-        if (!saved) return;
+        if (!saved) {
+            // Миграция: из старой версии переносим только СВОИ шаблоны, стандартные берём свежие
+            let old = null;
+            try { old = JSON.parse(localStorage.getItem(LS_KEY_OLD) || 'null'); } catch(e) {}
+            if (old && old.custom && old.custom.length) {
+                old.custom.forEach(t => createCustomBlock(t.id, t.title, t.text));
+                saveTemplatesSilent();
+            }
+            return;
+        }
         for (const id in (saved.builtin || {})) {
             const el = document.getElementById(id);
             if (el) el.innerText = saved.builtin[id];
@@ -945,5 +1003,5 @@ https://vk.com/kuhnyamebelimsk
 </script>
 </body>
 </html>
-          
+
                   
