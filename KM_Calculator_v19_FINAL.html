@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <title>КМ Калькулятор v25.8 MULTI PRO</title>
+    <title>КМ Калькулятор v26.0 MULTI PRO</title>
     <style>
         :root { --primary: #d32f2f; --secondary: #ff9800; --dark: #333; --light: #f5f5f5; --border: #ddd; --success: #2e7d32; }
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -23,7 +23,7 @@
         @media (max-width: 768px) { .calc-row { grid-template-columns: 1fr 1fr; } .calc-row > div:first-child { grid-column: span 2; } }
         .form-group { margin-bottom: 5px; }
         label { display: block; font-weight: 600; margin-bottom: 2px; font-size: 12px; color: #777; }
-        select, input[type="number"], input[type="text"] { width: 100%; padding: 8px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; background: #fff; }
+        select, input[type="number"], input[type="text"], textarea { width: 100%; padding: 8px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; background: #fff; }
         .btn { padding: 10px 15px; border: none; border-radius: 6px; font-size: 14px; font-weight: 700; cursor: pointer; transition: 0.2s; text-align: center; }
         .btn-calc { background: var(--success); color: #fff; width: 100%; font-size: 18px; padding: 15px; margin-top: 20px; }
         .btn-add { background: #1976d2; color: #fff; width: 100%; margin-bottom: 10px; }
@@ -48,6 +48,7 @@
         .kp-title { font-size: 24px; font-weight: bold; color: var(--dark); }
         .kp-subtitle { color: #666; margin-bottom: 20px; font-size: 18px; font-weight: bold; }
         .kp-terms { font-size: 14px; line-height: 1.6; margin: 20px 0; padding: 15px; background: #f5f5f5; border-radius: 8px; }
+        .kp-config { font-size: 14px; line-height: 1.6; margin: 10px 0; padding: 12px; background: #fff8e1; border-radius: 8px; white-space: pre-wrap; }
         .kp-footer { margin-top: 30px; padding-top: 20px; border-top: 2px solid var(--primary); text-align: center; font-size: 14px; }
         .kp-manager { font-size: 18px; font-weight: bold; color: var(--primary); margin-bottom: 10px; }
         .kp-portfolio { margin-top: 15px; padding: 12px; background: #fff8e1; border-radius: 8px; font-size: 13px; line-height: 1.7; }
@@ -71,7 +72,7 @@
             .container { max-width: 100%; padding: 0; }
             .photo-slot { border: 1px solid #ccc; break-inside: avoid; }
             #tech-voiced { border: none; background: transparent; font-size: 14px; }
-            .kp-portfolio { background: #f5f5f5 !important; }
+            .kp-portfolio, .kp-config { background: #f5f5f5 !important; }
         }
     </style>
 </head>
@@ -92,23 +93,19 @@
     <!-- === ВКЛАДКА 1: КАЛЬКУЛЯТОР === -->
     <div id="calc" class="section active">
         <div class="card">
-            <h2>🛠 Конструктор сметы (v25.8 MULTI PRO)</h2>
-            <p style="color:#666; font-size:13px; margin-bottom:15px;">Логика отдела: модули MGS × 2,7 — сборка и доставка уже внутри коэффициента. Скидка % — от общей суммы. Несколько изделий в одной смете.</p>
+            <h2>🛠 Конструктор сметы (v26.0 MULTI PRO)</h2>
+            <p style="color:#666; font-size:13px; margin-bottom:15px;">Логика отдела: площадь × закупочная цена MGS × 2,7 (сборка внутри) − скидка 20% от всей суммы. Доставка считается инженером отдельно. База цен v26 = закупочные MGS.</p>
             <div id="items-container"></div>
-            <button class="btn btn-add" onclick="addItem()">➕ ДОБАВИТЬ ИЗДЕЛИЕ (кухня, шкаф и т.д.)</button>
+            <button class="btn btn-add" onclick="addItem()">➕ ДОБАВИТЬ ИЗДЕЛИЕ (кухня, шкаф, детская и т.д.)</button>
             <div style="margin-top: 20px; padding: 15px; background: #f9f9f9; border-radius: 8px; border: 1px solid #eee;">
-                <h3 style="font-size: 16px; margin-bottom: 10px;">Параметры цены и разбивка для договора</h3>
+                <h3 style="font-size: 16px; margin-bottom: 10px;">Параметры цены</h3>
                 <div class="form-group">
-                    <label>Скидка, % (стандарт 20) — от общей суммы</label>
+                    <label>Скидка, % (стандарт 20) — от всей суммы</label>
                     <input type="number" id="discount_percent" value="20">
                 </div>
                 <div class="form-group">
-                    <label>Доставка, ₽ (внутри цены; для разбивки строк договора)</label>
+                    <label>Доставка, ₽ (считается инженером на замере; здесь для разбивки строк договора)</label>
                     <input type="number" id="delivery_sum" value="5000">
-                </div>
-                <div class="form-group">
-                    <label>Сборка, % (внутри цены; для разбивки строк договора)</label>
-                    <input type="number" id="assembly_percent" value="10">
                 </div>
                 <div style="margin-top: 15px; font-size: 13px; color: #555;">
                     <strong>Доп. работы (оплата сборщику на месте, Приложение №2):</strong><br>
@@ -120,6 +117,7 @@
                     <label style="display:inline-block; margin-right:12px;"><input type="checkbox" id="add_hood"> Подключение вытяжки (1000₽)</label>
                     <label style="display:inline-block; margin-right:12px;"><input type="checkbox" id="add_micro"> Монтаж микроволновки (1000₽)</label>
                     <label style="display:inline-block; margin-right:12px;"><input type="checkbox" id="add_filter"> Подключение фильтра воды (1000₽)</label>
+                    <label style="display:inline-block; margin-right:12px;"><input type="checkbox" id="add_disposal"> Подключение измельчителя (1500₽)</label>
                     <label style="display:inline-block; margin-right:12px;"><input type="checkbox" id="add_wash"> Стиральная/посудомойка (3500₽)</label>
                     <label style="display:inline-block; margin-right:12px;"><input type="checkbox" id="add_fridge"> Встроенный холодильник (3500₽)</label>
                     <label style="display:inline-block; margin-right:12px;"><input type="checkbox" id="add_demont"> Демонтаж шкафа/тумбы 1шт (500₽)</label>
@@ -177,6 +175,10 @@
                     <input type="number" id="kp-final-total" placeholder="Авто (расчётная сумма)" oninput="renderKP()">
                 </div>
                 <div id="kp-final-display" style="font-weight:bold; margin:8px 0; color:var(--primary);">Итог в КП: —</div>
+                <div class="form-group" style="margin-top:10px;">
+                    <label>Комплектация (заполняется автоматически из расчёта, можно править руками)</label>
+                    <textarea id="kp-config" style="height:110px;" oninput="document.getElementById('kp-config-print').innerText=this.value"></textarea>
+                </div>
                 <p style="font-size:12px; color:#777; margin-top:8px;">При вводе озвученного итога суммы позиций пересчитываются так, чтобы таблица сошлась копейка в копейку. Тех. бланк остаётся расчётным.</p>
             </div>
 
@@ -189,14 +191,16 @@
                 <div class="kp-title">Коммерческое предложение</div>
                 <div class="kp-subtitle" id="kp-item-name">Изделие</div>
             </div>
+            <div id="kp-config-print" class="kp-config" style="display:none;"></div>
             <table class="detail-table">
                 <thead><tr><th>Наименование</th><th>Параметры</th><th>Кол-во</th><th>Стоимость</th></tr></thead>
                 <tbody id="kp-body"><tr><td colspan="4" style="text-align:center; color:#999;">Выполните расчёт</td></tr></tbody>
             </table>
             <div class="kp-terms">
-                <strong>Стоимость указана со сборкой и доставкой</strong><br>
+                <strong>Стоимость указана со сборкой (сборка входит в цену)</strong><br>
                 Сроки изготовления: от 15 до 25 рабочих дней<br>
-                Вызов инженера-замерщика: по г. Москва 500₽, за МКАД и область 1000₽<br><br>
+                Вызов инженера-замерщика: по г. Москва 500₽, за МКАД и область 1000₽<br>
+                <strong>Доставка:</strong> рассчитывается инженером на замере после согласования конструктива (чтобы не переплачивать за объём, который поедет к вам)<br><br>
                 <strong>Условия оплаты:</strong><br>
                 Первый платёж 60% — запуск в производство<br>
                 Второй платёж 30% — при доставке<br>
@@ -220,7 +224,8 @@
                     <strong>Посмотрите наши готовые работы и убедитесь в качестве:</strong><br>
                     🌐 Основной сайт: <a href="https://kompkm.ru" target="_blank">kompkm.ru</a><br>
                     ✈️ Telegram-канал с проектами: <a href="https://t.me/kuhnya_mebeli_msk" target="_blank">t.me/kuhnya_mebeli_msk</a><br>
-                    🟦 Группа ВКонтакте: <a href="https://vk.com/kuhnyamebelimsk" target="_blank">vk.com/kuhnyamebelimsk</a>
+                    🟦 Группа ВКонтакте: <a href="https://vk.com/kuhnyamebelimsk" target="_blank">vk.com/kuhnyamebelimsk</a><br>
+                    ⭐ Отзывы и Яндекс.Карты: <a href="https://yandex.ru/maps/-/CDbDENYC" target="_blank">yandex.ru/maps/-/CDbDENYC</a>
                 </div>
             </div>
             <button class="btn btn-print" onclick="window.print()" style="margin-top:20px;">🖨 ПЕЧАТЬ КП</button>
@@ -236,8 +241,65 @@
                 <button class="btn" style="background:#2e7d32; color:#fff; width:auto; margin:0;" onclick="saveTemplates(true)">💾 Сохранить все шаблоны</button>
                 <button class="btn" style="background:#999; color:#fff; width:auto; margin:0;" onclick="resetTemplates()">♻️ Сбросить к стандартным</button>
             </div>
-            <p style="color:#666; font-size:13px; margin-bottom:20px;">✏️ Текст любого шаблона можно редактировать прямо здесь: кликни по жёлтому блоку и правь. Правки сохраняются автоматически в этом браузере. Кнопка «Копировать» берёт текущий (отредактированный) текст.</p>
+            <p style="color:#666; font-size:13px; margin-bottom:10px;">✏️ Текст любого шаблона можно редактировать прямо здесь: кликни по жёлтому блоку и правь. Правки сохраняются автоматически в этом браузере. Кнопка «Копировать» берёт текущий (отредактированный) текст.</p>
+            <p style="color:#c62828; font-size:13px; font-weight:bold; margin-bottom:20px;">⚠️ ВАЖНО: ссылки в WhatsApp отправлять КАЖДУЮ ОТДЕЛЬНЫМ СООБЩЕНИЕМ! Альбомы ВК — только в Telegram/MAX, не в WhatsApp.</p>
 
+            <div class="script-block">
+                <h3>📩 Скрипт Елизаветы: первое сообщение после звонка (контакты + акции)</h3>
+                <div class="script-phrase tpl-builtin" id="tpl-liza" contenteditable="true">Добрый день, это {ИМЯ}, мебельная компания КМ.
+Общались с Вами сегодня насчет мебели под заказ.
+
+Как и обещала, высылаю наши контакты:
+
+💻 Наш основной сайт https://kompkm.ru
+📲 Наши готовые работы в телеграм https://t.me/kuhnya_mebeli_msk
+⭐ Отзывы и яндекс карты https://yandex.ru/maps/-/CDbDENYC
+🟦 Так же мы в ВК https://vk.com/kuhnyamebelimsk
+☎️ +7 499-325-53-11
+
+✅ Адреса наших салонов:
+1. Метро Котельники, ул. Новорязанское шоссе 1а, ТЦ «Калибри», второй этаж. Часы работы - с 10 до 20.
+2. г. Химки. Часы работы - только по предварительной записи в этом чате.
+
+⏳ АКЦИИ и СКИДКИ:
+🔥 Акция комплект мебели 20%
+🔥 Новоселам скидка 20%
+🔥 Акция бесплатная сборка
+
+Сроки изготовления - 2-3 недели.
+Сборка - собственные сборщики с многолетним стажем.
+Оплата - любым способом.
+Сервис премиум класса. 100%-ая отработка рекламаций при любых несовершенствах.
+
+С Уважением, ведущий менеджер {ИМЯ}
+Мебельная компания КМ.
+тел. ☎️ +7 499-325-53-11
+https://kompkm.ru</div>
+                <button class="btn btn-copy" onclick="copyText('tpl-liza')">📋 Копировать</button>
+            </div>
+            <div class="script-block">
+                <h3>📚 Альбомы ВК с работами (ТОЛЬКО Telegram/MAX, не WhatsApp!)</h3>
+                <div class="script-phrase tpl-builtin" id="tpl-vk-albums" contenteditable="true">✅ Выполненные работы и проекты:
+🛠 Кухни: https://vk.com/album-211165861_283109453
+🚪 Шкафы распашные: https://vk.com/album-211165861_291324793
+🚪 Шкафы купе: https://vk.com/album-211165861_308622286
+🛁 Санузлы: https://vk.com/album-211165861_308954167
+👗 Гардеробные: https://vk.com/album-211165861_308932738
+🍳 Рабочие зоны: https://vk.com/album-211165861_309009449
+🧒 Детские: https://vk.ru/album-211165861_311940304
+🚪 Прихожие: https://vk.ru/album-211165861_311939629
+🛋 Гостиные/ТВ зоны: https://vk.ru/album-211165861_311938943</div>
+                <button class="btn btn-copy" onclick="copyText('tpl-vk-albums')">📋 Копировать</button>
+            </div>
+            <div class="script-block">
+                <h3>🚚 Про доставку (отстройка от конкурентов)</h3>
+                <div class="script-phrase tpl-builtin" id="tpl-delivery" contenteditable="true">Доставка рассчитывается на месте инженером после согласования конструктива. Это нужно, чтобы понимать, какой объём к вам поедет.
+
+Другие компании заранее рассчитывают доставку наобум, и всегда в большую сторону. Но это не совсем правильно. Вы по итогу переплатите.
+
+Мы же на месте смотрим, сколько мебели, какой адрес, и только тогда рассчитывается доставка так, чтобы вам не переплачивать.</div>
+                <button class="btn btn-copy" onclick="copyText('tpl-delivery')">📋 Копировать</button>
+            </div>
             <div class="script-block">
                 <h3>🪪 Визитка компании (для первого контакта)</h3>
                 <div class="script-phrase tpl-builtin" id="tpl-visita" contenteditable="true">🍲 КУХНЯ МЕБЕЛИ (КМ)
@@ -260,6 +322,9 @@ https://t.me/kuhnya_mebeli_msk
 🟦 Группа ВКонтакте:
 https://vk.com/kuhnyamebelimsk
 
+⭐ Отзывы и Яндекс.Карты:
+https://yandex.ru/maps/-/CDbDENYC
+
 📞 Александр: +7 (999) 579-77-59
 💬 WhatsApp / Telegram — всегда на связи</div>
                 <button class="btn btn-copy" onclick="copyText('tpl-visita')">📋 Копировать визитку</button>
@@ -277,9 +342,14 @@ https://t.me/kuhnya_mebeli_msk
 🟦 Группа ВКонтакте:
 https://vk.com/kuhnyamebelimsk
 
-📍 Шоурум: г. Люберцы, Новорязанское шоссе, д. 1А, ТЦ «Калибри» (рядом с метро Котельники)
-🕒 Ежедневно с 10:00 до 20:00, парковка бесплатная
+⭐ Отзывы и Яндекс.Карты:
+https://yandex.ru/maps/-/CDbDENYC
 
+📍 Шоурум: г. Люберцы, Новорязанское шоссе, д. 1А, ТЦ «Калибри», 2 этаж (рядом с метро Котельники)
+🕒 Ежедневно с 10:00 до 20:00, парковка бесплатная
+📍 Салон г. Химки — по предварительной записи
+
+☎️ Компания: +7 499-325-53-11
 📞 Александр: +7 (999) 579-77-59 (WhatsApp / Telegram)</div>
                 <button class="btn btn-copy" onclick="copyText('tpl-contacts')">📋 Копировать контакты</button>
             </div>
@@ -336,7 +406,7 @@ https://vk.com/kuhnyamebelimsk
                 <h3>🏢 Приглашение в шоурум (ТЦ Калибри)</h3>
                 <div class="script-phrase tpl-builtin" id="tpl-showroom" contenteditable="true">Если вам удобнее посмотреть материалы вживую перед замером — приглашаю вас в наш шоурум!
 
-📍 Адрес: г. Люберцы, Новорязанское шоссе, д. 1А, ТЦ «Калибри» (рядом с метро Котельники)
+📍 Адрес: г. Люберцы, Новорязанское шоссе, д. 1А, ТЦ «Калибри», 2 этаж (рядом с метро Котельники)
 🕒 Работаем ежедневно с 10:00 до 20:00
 🅿️ Парковка бесплатная для посетителей ТЦ
 
@@ -394,6 +464,7 @@ https://vk.com/kuhnyamebelimsk
                 <ul class="script-list">
                     <li><strong>Рассрочка:</strong> Максимум 199 000 ₽ (банки: Тинькофф, ОТП, МТС, Ренессанс). Скидка 10% от прайса при рассрочке.</li>
                     <li><strong>Скидка 10%</strong> при оплате по счёту (безнал).</li>
+                    <li><strong>Акции:</strong> комплект мебели 20%, новосёлам 20%, бесплатная сборка.</li>
                     <li><strong>Акции для постоянных:</strong> 3 000 ₽ за пост в домовом чате. 5 000 ₽ за приведённого клиента. 1 000 ₽ за отзыв на Яндекс.Картах.</li>
                 </ul>
             </div>
@@ -406,7 +477,7 @@ https://vk.com/kuhnyamebelimsk
             <h2>🛡 Отработка возражений (Полная версия)</h2>
             <div class="script-block">
                 <h3>💰 «Дорого»</h3>
-                <div class="script-phrase">«Понимаю. Давайте разберём, из чего цена: корпус Е1 трёхслойный (Увадрев/Egger/Kronospan), фасад Тадж/Аделит, фурнитура Boyard/Blum/Hettich с доводчиками, доставка и сборка уже внутри. Дешевле бывает у тех, кто экономит на плите и плёнке.»</div>
+                <div class="script-phrase">«Понимаю. Давайте разберём, из чего цена: корпус Е1 трёхслойный (Увадрев/Egger/Kronospan), фасад Тадж/Аделит, фурнитура Boyard/Blum/Hettich с доводчиками, сборка уже внутри. Дешевле бывает у тех, кто экономит на плите и плёнке.»</div>
             </div>
             <div class="script-block">
                 <h3>🤔 «Цена — единственное, что вас останавливает?»</h3>
@@ -463,35 +534,35 @@ https://vk.com/kuhnyamebelimsk
             </div>
             <div class="script-block">
                 <h3>🚪 Фасад ЛДСП Egger (Эконом)</h3>
-                <p>«Бюджетный вариант с красивым декором — фасады из ЛДСП Egger. Выглядит достойно в современных стилях. ~5 000 ₽/м². Идеально для дачи или аренды.»</p>
+                <p>«Бюджетный вариант с красивым декором — фасады из ЛДСП Egger. Выглядит достойно в современных стилях. Идеально для дачи или аренды.»</p>
             </div>
             <div class="script-block">
                 <h3>🚪 МДФ ПВХ (Плёнка)</h3>
-                <p>«Лучшее соотношение цена–качество. Тадж и Аделит: более 450 цветов. Плёнка антивандальная, влагостойкая. 11 000–12 500 ₽/м².»</p>
+                <p>«Лучшее соотношение цена–качество. Тадж и Аделит: более 450 цветов. Плёнка антивандальная, влагостойкая.»</p>
             </div>
             <div class="script-block">
                 <h3>🏡 МДФ ПВХ с фрезеровкой (Прованс)</h3>
-                <p>«Фасады с фрезеровкой (рамочный профиль). Только МДФ в плёнке — другие материалы фрезеровать нельзя. 12 000 ₽/м². Выглядит как классика, дешевле эмали.»</p>
+                <p>«Фасады с фрезеровкой (рамочный профиль). Только МДФ в плёнке — другие материалы фрезеровать нельзя. Выглядит как классика, дешевле эмали.»</p>
             </div>
             <div class="script-block">
                 <h3>✨ ALVIC (Испания)</h3>
-                <p>«Запатентованная поверхность, спекённая с плитой под УФ-отверждением, — не приклеенная плёнка, поэтому не отходит на кромках. Суперглянец 85%, супермат, имитация камня. Плита 18 мм, покрытие двустороннее. Эксклюзивные цвета. 18 000–22 000 ₽/м².»</p>
+                <p>«Запатентованная поверхность, спекённая с плитой под УФ-отверждением, — не приклеенная плёнка, поэтому не отходит на кромках. Суперглянец 85%, супермат, имитация камня. Плита 18 мм, покрытие двустороннее. Эксклюзивные цвета.»</p>
             </div>
             <div class="script-block">
                 <h3>🎨 Эмаль (Премиум)</h3>
-                <p>«34 000 ₽/м². Любые цвета, идеальная поверхность, влагостойкость. Можно фрезеровать. Срок 35 дней. Итальянские материалы, 1000+ цветов.»</p>
+                <p>«Любые цвета, идеальная поверхность, влагостойкость. Можно фрезеровать. Срок 35 дней. Итальянские материалы, 1000+ цветов.»</p>
             </div>
             <div class="script-block">
                 <h3>🛡 Компакт-плита HPL</h3>
-                <p>«Сверхпрочная плита 10–12 мм для столешниц и столов: не боится воды, царапин, температуры. Торцы — чёрные или в цвет. Arcobaleno/СЛОПЛАСТ 17 000 ₽/м², ALVIC 19 800 ₽/м², MGS+Fenix до 24 300 ₽/м². Обработка и полировка торцов — бесплатно.»</p>
+                <p>«Сверхпрочная плита 10–12 мм для столешниц и столов: не боится воды, царапин, температуры. Торцы — чёрные или в цвет. Обработка и полировка торцов — бесплатно.»</p>
             </div>
             <div class="script-block">
                 <h3>💎 Кварц и Керамика</h3>
-                <p>«Кварцевая столешница ALG: 12 мм — 38 000 ₽/м², 26 мм — 45 000 ₽/м². Керамика 24 мм — 38 120 ₽/м². Это вечные материалы: не царапаются, не боятся горячего. Вырезы под мойку и варочную — 6 750 ₽, под розетку/смеситель — 3 000 ₽.»</p>
+                <p>«Кварцевая столешница ALG: 12 и 26 мм. Керамика 24 мм. Это вечные материалы: не царапаются, не боятся горячего. Вырезы под мойку и варочную, отверстия под розетку/смеситель — делаем на производстве.»</p>
             </div>
             <div class="script-block">
                 <h3>🌳 Массив (Ольха / Дуб / Ясень)</h3>
-                <p>«Натуральное дерево. 60 000–70 000 ₽/м². Экологично, уникальный рисунок, долгий срок службы.»</p>
+                <p>«Натуральное дерево. Экологично, уникальный рисунок, долгий срок службы.»</p>
             </div>
             <div class="script-block">
                 <h3>🪞 Зеркало и Стекло</h3>
@@ -499,11 +570,11 @@ https://vk.com/kuhnyamebelimsk
             </div>
             <div class="script-block">
                 <h3>🗄 Ящики Hettich AvanTech YOU</h3>
-                <p>«Премиальные ящики с плавным ходом: Silent System (доводчик) или Push to Open (открываются от нажатия). Высоты 77–251 мм, нагрузка до 40 кг. Комплект от 6 594 ₽ до 10 493 ₽ в зависимости от высоты.»</p>
+                <p>«Премиальные ящики с плавным ходом: Silent System (доводчик) или Push to Open (открываются от нажатия). Высоты 77–251 мм, нагрузка до 40 кг.»</p>
             </div>
             <div class="script-block">
                 <h3>💡 Подсветка</h3>
-                <p>«LED-подсветка: 4000 ₽/м с подключением или 2000 ₽/м только подключение (если лента уже куплена). Есть врезные светильники в дно верхних шкафов, подсветка внутри ящиков с датчиком и светящийся профиль Gola.»</p>
+                <p>«LED-подсветка: с подключением или только подключение (если лента уже куплена). Есть врезные светильники в дно верхних шкафов, подсветка внутри ящиков с датчиком и светящийся профиль Gola.»</p>
             </div>
         </div>
     </div>
@@ -516,51 +587,52 @@ https://vk.com/kuhnyamebelimsk
     🌐 <a href="https://kompkm.ru" target="_blank">kompkm.ru</a> |
     ✈️ <a href="https://t.me/kuhnya_mebeli_msk" target="_blank">Telegram</a> |
     🟦 <a href="https://vk.com/kuhnyamebelimsk" target="_blank">ВКонтакте</a> |
+    ⭐ <a href="https://yandex.ru/maps/-/CDbDENYC" target="_blank">Отзывы</a> |
     📞 <a href="tel:+79995797759">+7 (999) 579-77-59</a>
 </div>
 
 <script>
-    // === БАЗА ЦЕН v25.8 MGS FULL (цены — закупка MGS; продажа = закупка × 2,7, сборка и доставка внутри) ===
+    // === БАЗА ЦЕН v26.0: ЗАКУПОЧНЫЕ ЦЕНЫ MGS (продажа = закупка × 2,7, сборка внутри, доставка отдельно) ===
     const DB = {
         'ldsp_uvadrev': { cat: 'Корпус', name: 'ЛДСП 16мм Увадрев', price: 2500, unit: 'м²', type: 'area' },
         'ldsp_egger': { cat: 'Корпус', name: 'ЛДСП 16мм EGGER', price: 3500, unit: 'м²', type: 'area' },
         'ldsp_kronospan': { cat: 'Корпус', name: 'ЛДСП 16мм Kronospan', price: 2300, unit: 'м²', type: 'area' },
-        'dvb': { cat: 'Корпус', name: 'ДВП задняя стенка', price: 400, unit: 'м²', type: 'area' },
-        'facade_ldsp_egger': { cat: 'Фасад ЛДСП', name: 'Фасад ЛДСП Egger (кромка ПВХ)', price: 5000, unit: 'м²', type: 'area' },
-        'mdf_matte': { cat: 'Фасад МДФ', name: 'МДФ ПВХ Матовый 16мм', price: 11000, unit: 'м²', type: 'area' },
-        'mdf_gloss': { cat: 'Фасад МДФ', name: 'МДФ ПВХ Глянцевый 16мм', price: 12000, unit: 'м²', type: 'area' },
-        'mdf_supermat': { cat: 'Фасад МДФ', name: 'МДФ ПВХ Супермат 16мм', price: 12500, unit: 'м²', type: 'area' },
-        'mdf_provens': { cat: 'Фасад МДФ', name: 'МДФ ПВХ Фрезеровка (Прованс)', price: 12000, unit: 'м²', type: 'area' },
-        'enamel_16': { cat: 'Фасад Эмаль', name: 'Эмаль 16мм Матовая/Глянцевая', price: 34000, unit: 'м²', type: 'area' },
-        'alvic_1': { cat: 'Фасад Alvic', name: 'Alvic Кат 1 (Испания)', price: 18000, unit: 'м²', type: 'area' },
-        'alvic_2': { cat: 'Фасад Alvic', name: 'Alvic Кат 2', price: 20000, unit: 'м²', type: 'area' },
-        'alvic_3': { cat: 'Фасад Alvic', name: 'Alvic Кат 3', price: 22000, unit: 'м²', type: 'area' },
-        'tss_1': { cat: 'Фасад TSS', name: 'TSS Cleaf Кат 1', price: 19000, unit: 'м²', type: 'area' },
-        'tss_2': { cat: 'Фасад TSS', name: 'TSS Cleaf Кат 2', price: 21000, unit: 'м²', type: 'area' },
-        'arpa_1': { cat: 'Фасад ARPA', name: 'ARPA Fenix Кат 1', price: 17000, unit: 'м²', type: 'area' },
-        'fenix_8': { cat: 'Фасад ARPA', name: 'Fenix NTM Кат 8', price: 25000, unit: 'м²', type: 'area' },
-        'massiv_olha': { cat: 'Фасад Массив', name: 'Массив Ольха', price: 60000, unit: 'м²', type: 'area' },
-        'massiv_dub': { cat: 'Фасад Массив', name: 'Массив Дуб', price: 70000, unit: 'м²', type: 'area' },
-        'massiv_yasen': { cat: 'Фасад Массив', name: 'Массив Ясень', price: 65000, unit: 'м²', type: 'area' },
-        'mirror_silver': { cat: 'Фасад Стекло', name: 'Зеркало Серебро 4мм', price: 4500, unit: 'м²', type: 'area' },
-        'mirror_bronze': { cat: 'Фасад Стекло', name: 'Зеркало Бронза 4мм', price: 5500, unit: 'м²', type: 'area' },
-        'glass_lacomat': { cat: 'Фасад Стекло', name: 'Стекло Лакомат', price: 5000, unit: 'м²', type: 'area' },
-        'glass_lacobel': { cat: 'Фасад Стекло', name: 'Стекло Лакобель', price: 5500, unit: 'м²', type: 'area' },
-        'facade_keramo': { cat: 'Фасад Керамика', name: 'Керамический фасад Keramo 18мм', price: 23570, unit: 'м²', type: 'area' },
-        'top_plast_1': { cat: 'Столешница', name: 'Пластик 38мм Кат 1 (FORST/Кедр)', price: 4500, unit: 'м²', type: 'area' },
-        'top_plast_2': { cat: 'Столешница', name: 'Пластик 38мм Кат 2', price: 5500, unit: 'м²', type: 'area' },
-        'top_plast_3': { cat: 'Столешница', name: 'Пластик 38мм Кат 3', price: 6500, unit: 'м²', type: 'area' },
-        'top_alvic': { cat: 'Столешница', name: 'Alvic 38мм', price: 8500, unit: 'м²', type: 'area' },
-        'top_fenix': { cat: 'Столешница', name: 'Fenix 38мм', price: 11500, unit: 'м²', type: 'area' },
-        'top_quartz_12': { cat: 'Столешница', name: 'Кварцевая столешница ALG 12мм', price: 38000, unit: 'м²', type: 'area' },
-        'top_quartz_26': { cat: 'Столешница', name: 'Кварцевая столешница ALG 26мм', price: 45000, unit: 'м²', type: 'area' },
-        'top_ceramic': { cat: 'Столешница', name: 'Керамическая столешница 24мм', price: 38120, unit: 'м²', type: 'area' },
-        'sink_cs01': { cat: 'Столешница', name: 'Керамическая раковина CS-01', price: 28000, unit: 'шт', type: 'qty' },
-        'sink_cs02': { cat: 'Столешница', name: 'Керамическая раковина CS-02', price: 28000, unit: 'шт', type: 'qty' },
-        'hole_quartz': { cat: 'Столешница', name: 'Вырез мойка/варочная (кварц/керамика)', price: 6750, unit: 'шт', type: 'qty' },
-        'hole_socket_q': { cat: 'Столешница', name: 'Отверстие розетка/смеситель (кварц/керамика)', price: 3000, unit: 'шт', type: 'qty' },
-        'frez_otv': { cat: 'Столешница', name: 'Фрезеровка отверстия любого размера', price: 1500, unit: 'шт', type: 'qty' },
-        'ktop_styazhka': { cat: 'Столешница', name: 'K-TOP стяжка (плиты от 10мм)', price: 260, unit: 'шт', type: 'qty' },
+        'dvb': { cat: 'Корпус', name: 'ДВП задняя стенка', price: 150, unit: 'м²', type: 'area' },
+        'facade_ldsp_egger': { cat: 'Фасад ЛДСП', name: 'Фасад ЛДСП Egger (кромка ПВХ)', price: 1850, unit: 'м²', type: 'area' },
+        'mdf_matte': { cat: 'Фасад МДФ', name: 'МДФ ПВХ Матовый 16мм', price: 6200, unit: 'м²', type: 'area' },
+        'mdf_gloss': { cat: 'Фасад МДФ', name: 'МДФ ПВХ Глянцевый 16мм', price: 6500, unit: 'м²', type: 'area' },
+        'mdf_supermat': { cat: 'Фасад МДФ', name: 'МДФ ПВХ Супермат 16мм', price: 6800, unit: 'м²', type: 'area' },
+        'mdf_provens': { cat: 'Фасад МДФ', name: 'МДФ ПВХ Фрезеровка (Прованс)', price: 7300, unit: 'м²', type: 'area' },
+        'enamel_16': { cat: 'Фасад Эмаль', name: 'Эмаль 16мм Матовая/Глянцевая', price: 12600, unit: 'м²', type: 'area' },
+        'alvic_1': { cat: 'Фасад Alvic', name: 'Alvic Кат 1 (Испания)', price: 6700, unit: 'м²', type: 'area' },
+        'alvic_2': { cat: 'Фасад Alvic', name: 'Alvic Кат 2', price: 7400, unit: 'м²', type: 'area' },
+        'alvic_3': { cat: 'Фасад Alvic', name: 'Alvic Кат 3', price: 8150, unit: 'м²', type: 'area' },
+        'tss_1': { cat: 'Фасад TSS', name: 'TSS Cleaf Кат 1', price: 7000, unit: 'м²', type: 'area' },
+        'tss_2': { cat: 'Фасад TSS', name: 'TSS Cleaf Кат 2', price: 7800, unit: 'м²', type: 'area' },
+        'arpa_1': { cat: 'Фасад ARPA', name: 'ARPA Fenix Кат 1', price: 6300, unit: 'м²', type: 'area' },
+        'fenix_8': { cat: 'Фасад ARPA', name: 'Fenix NTM Кат 8', price: 9260, unit: 'м²', type: 'area' },
+        'massiv_olha': { cat: 'Фасад Массив', name: 'Массив Ольха', price: 22200, unit: 'м²', type: 'area' },
+        'massiv_dub': { cat: 'Фасад Массив', name: 'Массив Дуб', price: 25900, unit: 'м²', type: 'area' },
+        'massiv_yasen': { cat: 'Фасад Массив', name: 'Массив Ясень', price: 24000, unit: 'м²', type: 'area' },
+        'mirror_silver': { cat: 'Фасад Стекло', name: 'Зеркало Серебро 4мм', price: 1700, unit: 'м²', type: 'area' },
+        'mirror_bronze': { cat: 'Фасад Стекло', name: 'Зеркало Бронза 4мм', price: 2000, unit: 'м²', type: 'area' },
+        'glass_lacomat': { cat: 'Фасад Стекло', name: 'Стекло Лакомат', price: 1850, unit: 'м²', type: 'area' },
+        'glass_lacobel': { cat: 'Фасад Стекло', name: 'Стекло Лакобель', price: 2000, unit: 'м²', type: 'area' },
+        'facade_keramo': { cat: 'Фасад Керамика', name: 'Керамический фасад Keramo 18мм', price: 8730, unit: 'м²', type: 'area' },
+        'top_plast_1': { cat: 'Столешница', name: 'Пластик 38мм Кат 1 (FORST/Кедр)', price: 1700, unit: 'м²', type: 'area' },
+        'top_plast_2': { cat: 'Столешница', name: 'Пластик 38мм Кат 2', price: 2050, unit: 'м²', type: 'area' },
+        'top_plast_3': { cat: 'Столешница', name: 'Пластик 38мм Кат 3', price: 2400, unit: 'м²', type: 'area' },
+        'top_alvic': { cat: 'Столешница', name: 'Alvic 38мм', price: 3150, unit: 'м²', type: 'area' },
+        'top_fenix': { cat: 'Столешница', name: 'Fenix 38мм', price: 4260, unit: 'м²', type: 'area' },
+        'top_quartz_12': { cat: 'Столешница', name: 'Кварцевая столешница ALG 12мм', price: 14100, unit: 'м²', type: 'area' },
+        'top_quartz_26': { cat: 'Столешница', name: 'Кварцевая столешница ALG 26мм', price: 16670, unit: 'м²', type: 'area' },
+        'top_ceramic': { cat: 'Столешница', name: 'Керамическая столешница 24мм', price: 14120, unit: 'м²', type: 'area' },
+        'sink_cs01': { cat: 'Столешница', name: 'Керамическая раковина CS-01', price: 10400, unit: 'шт', type: 'qty' },
+        'sink_cs02': { cat: 'Столешница', name: 'Керамическая раковина CS-02', price: 10400, unit: 'шт', type: 'qty' },
+        'hole_quartz': { cat: 'Столешница', name: 'Вырез мойка/варочная (кварц/керамика)', price: 2500, unit: 'шт', type: 'qty' },
+        'hole_socket_q': { cat: 'Столешница', name: 'Отверстие розетка/смеситель (кварц/керамика)', price: 1100, unit: 'шт', type: 'qty' },
+        'frez_otv': { cat: 'Столешница', name: 'Фрезеровка отверстия любого размера', price: 550, unit: 'шт', type: 'qty' },
+        'ktop_styazhka': { cat: 'Столешница', name: 'K-TOP стяжка (плиты от 10мм)', price: 100, unit: 'шт', type: 'qty' },
         'compact_arcobaleno': { cat: 'Компакт-плита', name: 'Компакт-плита HPL Arcobaleno 12мм (склад)', price: 17000, unit: 'м²', type: 'area' },
         'compact_sloplast': { cat: 'Компакт-плита', name: 'Компакт-плита HPL СЛОПЛАСТ 12мм', price: 17000, unit: 'м²', type: 'area' },
         'compact_mgs_tx000': { cat: 'Компакт-плита', name: 'Компакт-плита HPL MGS TX-000 чёрный+Fenix', price: 18260, unit: 'м²', type: 'area' },
@@ -568,7 +640,7 @@ https://vk.com/kuhnyamebelimsk
         'compact_alvic': { cat: 'Компакт-плита', name: 'Компакт-плита HPL ALVIC 10мм', price: 19800, unit: 'м²', type: 'area' },
         'compact_sht1': { cat: 'Компакт-плита', name: 'Компакт-плита Arcobaleno кат.1 (ШТУЧНАЯ)', price: 46000, unit: 'шт', type: 'qty' },
         'compact_sht2': { cat: 'Компакт-плита', name: 'Компакт-плита Arcobaleno кат.2 (ШТУЧНАЯ)', price: 48000, unit: 'шт', type: 'qty' },
-        'wall_plast': { cat: 'Стеновая', name: 'Стеновая панель Пластик 5мм', price: 3500, unit: 'м²', type: 'area' },
+        'wall_plast': { cat: 'Стеновая', name: 'Стеновая панель Пластик 5мм', price: 1300, unit: 'м²', type: 'area' },
         'kromka_egger_uzk': { cat: 'Кромка', name: 'Кромка EGGER 23/1 (узкая)', price: 125, unit: 'пог.м', type: 'length' },
         'kromka_egger_shir': { cat: 'Кромка', name: 'Кромка EGGER 43/2 (широкая)', price: 420, unit: 'пог.м', type: 'length' },
         'kromka_egger_ps': { cat: 'Кромка', name: 'Кромка EGGER Perfect Sense 23/1', price: 105, unit: 'пог.м', type: 'length' },
@@ -593,10 +665,11 @@ https://vk.com/kuhnyamebelimsk
         'vodootboinik': { cat: 'Водоотбойник', name: 'Водоотбойник 3м/4м', price: 700, unit: 'шт', type: 'qty' },
         'vodootboinik_alu': { cat: 'Водоотбойник', name: 'Водоотбойник алюминиевый 3м', price: 1000, unit: 'шт', type: 'qty' },
         'vodootboinik_korner': { cat: 'Водоотбойник', name: 'Водоотбойник Korner LB 3м', price: 800, unit: 'шт', type: 'qty' },
-        'hw_blum_drawer': { cat: 'Фурнитура', name: 'Ящик Blum Tandembox', price: 6500, unit: 'шт', type: 'qty' },
-        'hw_boyard_drawer': { cat: 'Фурнитура', name: 'Ящик Boyard Start', price: 2500, unit: 'шт', type: 'qty' },
-        'hw_hettich_drawer': { cat: 'Фурнитура', name: 'Ящик Hettich InnoTech', price: 5500, unit: 'шт', type: 'qty' },
-        'termo_film': { cat: 'Фурнитура', name: 'Термозащита корпуса (духовка, посудомойка)', price: 1000, unit: 'шт', type: 'qty' },
+        'hw_blum_drawer': { cat: 'Фурнитура', name: 'Ящик Blum Tandembox', price: 2400, unit: 'шт', type: 'qty' },
+        'hw_boyard_drawer': { cat: 'Фурнитура', name: 'Ящик Boyard Start', price: 920, unit: 'шт', type: 'qty' },
+        'hw_hettich_drawer': { cat: 'Фурнитура', name: 'Ящик Hettich InnoTech', price: 2040, unit: 'шт', type: 'qty' },
+        'termo_film': { cat: 'Фурнитура', name: 'Термозащита корпуса (духовка, посудомойка)', price: 370, unit: 'шт', type: 'qty' },
+        'lat_base': { cat: 'Фурнитура', name: 'Основание кровати реечное (латофлексы)', price: 2000, unit: 'шт', type: 'qty' },
         'hw_avantech_h77': { cat: 'Ящики Hettich', name: 'Ящик AvanTech YOU H77 (Push to Open Silent)', price: 9870, unit: 'компл', type: 'qty' },
         'hw_avantech_h101': { cat: 'Ящики Hettich', name: 'Ящик AvanTech YOU H101 (Silent)', price: 6594, unit: 'компл', type: 'qty' },
         'hw_avantech_h139': { cat: 'Ящики Hettich', name: 'Ящик AvanTech YOU H139 (Silent)', price: 7012, unit: 'компл', type: 'qty' },
@@ -605,26 +678,26 @@ https://vk.com/kuhnyamebelimsk
         'hw_avantech_sync': { cat: 'Ящики Hettich', name: 'Синхронизация Push to Open (штанга L2000)', price: 923, unit: 'шт', type: 'qty' },
         'hw_avantech_adapter': { cat: 'Ящики Hettich', name: 'Адаптер синхронизации Push to Open Silent', price: 215, unit: 'шт', type: 'qty' },
         'hw_avantech_stab': { cat: 'Ящики Hettich', name: 'Стабилизатор передней панели AvanTech', price: 139, unit: 'шт', type: 'qty' },
-        'hw_hinge_boyard': { cat: 'Фурнитура', name: 'Петля Boyard с доводчиком', price: 250, unit: 'шт', type: 'qty' },
-        'hw_hinge_blum': { cat: 'Фурнитура', name: 'Петля Blum Clip Top', price: 850, unit: 'шт', type: 'qty' },
-        'hw_hinge_hettich': { cat: 'Фурнитура', name: 'Петля Hettich с доводчиком', price: 550, unit: 'шт', type: 'qty' },
-        'hw_handle_gola': { cat: 'Ручки', name: 'Ручка профиль Gola (пог.м)', price: 3500, unit: 'пог.м', type: 'length' },
-        'gola_light': { cat: 'Ручки', name: 'Профиль Gola светящийся (пог.м)', price: 6000, unit: 'пог.м', type: 'length' },
-        'hw_handle_skoba_1': { cat: 'Ручки', name: 'Ручка-скоба 128мм (хром)', price: 350, unit: 'шт', type: 'qty' },
-        'hw_handle_skoba_2': { cat: 'Ручки', name: 'Ручка-скоба 160мм (чёрная)', price: 450, unit: 'шт', type: 'qty' },
-        'hw_handle_skoba_3': { cat: 'Ручки', name: 'Ручка-скоба 256мм (золото)', price: 650, unit: 'шт', type: 'qty' },
-        'hw_handle_knob': { cat: 'Ручки', name: 'Ручка-кнопка (классика)', price: 250, unit: 'шт', type: 'qty' },
-        'hw_rod': { cat: 'Фурнитура', name: 'Штанга хром d25', price: 800, unit: 'пог.м', type: 'length' },
-        'hw_tipon': { cat: 'Фурнитура', name: 'Tip-ON Blum (толкатель)', price: 800, unit: 'шт', type: 'qty' },
-        'hw_dryer': { cat: 'Фурнитура', name: 'Сушка 600мм белая', price: 1500, unit: 'шт', type: 'qty' },
-        'hw_bottle': { cat: 'Фурнитура', name: 'Бутылочница 150мм Boyard', price: 2500, unit: 'шт', type: 'qty' },
-        'hw_bottle_hettich': { cat: 'Фурнитура', name: 'Бутылочница 150мм Hettich', price: 4000, unit: 'шт', type: 'qty' },
-        'hw_gaslift': { cat: 'Фурнитура', name: 'Газ-лифт', price: 1000, unit: 'шт', type: 'qty' },
-        'hw_pantograph': { cat: 'Фурнитура', name: 'Пантограф', price: 5500, unit: 'шт', type: 'qty' },
-        'led_light_full': { cat: 'Подсветка', name: 'LED подсветка с подключением', price: 4000, unit: 'пог.м', type: 'length' },
-        'led_light_connect': { cat: 'Подсветка', name: 'Только подключение подсветки', price: 2000, unit: 'пог.м', type: 'length' },
-        'led_flush': { cat: 'Подсветка', name: 'Светильник врезной в дно верха (пог.м)', price: 3500, unit: 'пог.м', type: 'length' },
-        'led_drawer': { cat: 'Подсветка', name: 'Подсветка внутри ящика с датчиком', price: 2500, unit: 'шт', type: 'qty' }
+        'hw_hinge_boyard': { cat: 'Фурнитура', name: 'Петля Boyard с доводчиком', price: 90, unit: 'шт', type: 'qty' },
+        'hw_hinge_blum': { cat: 'Фурнитура', name: 'Петля Blum Clip Top', price: 320, unit: 'шт', type: 'qty' },
+        'hw_hinge_hettich': { cat: 'Фурнитура', name: 'Петля Hettich с доводчиком', price: 200, unit: 'шт', type: 'qty' },
+        'hw_handle_gola': { cat: 'Ручки', name: 'Ручка профиль Gola (пог.м)', price: 1300, unit: 'пог.м', type: 'length' },
+        'gola_light': { cat: 'Ручки', name: 'Профиль Gola светящийся (пог.м)', price: 2200, unit: 'пог.м', type: 'length' },
+        'hw_handle_skoba_1': { cat: 'Ручки', name: 'Ручка-скоба 128мм (хром)', price: 130, unit: 'шт', type: 'qty' },
+        'hw_handle_skoba_2': { cat: 'Ручки', name: 'Ручка-скоба 160мм (чёрная)', price: 170, unit: 'шт', type: 'qty' },
+        'hw_handle_skoba_3': { cat: 'Ручки', name: 'Ручка-скоба 256мм (золото)', price: 240, unit: 'шт', type: 'qty' },
+        'hw_handle_knob': { cat: 'Ручки', name: 'Ручка-кнопка (классика)', price: 90, unit: 'шт', type: 'qty' },
+        'hw_rod': { cat: 'Фурнитура', name: 'Штанга хром d25', price: 300, unit: 'пог.м', type: 'length' },
+        'hw_tipon': { cat: 'Фурнитура', name: 'Tip-ON Blum (толкатель)', price: 300, unit: 'шт', type: 'qty' },
+        'hw_dryer': { cat: 'Фурнитура', name: 'Сушка 600мм белая', price: 560, unit: 'шт', type: 'qty' },
+        'hw_bottle': { cat: 'Фурнитура', name: 'Бутылочница 150мм Boyard', price: 930, unit: 'шт', type: 'qty' },
+        'hw_bottle_hettich': { cat: 'Фурнитура', name: 'Бутылочница 150мм Hettich', price: 1480, unit: 'шт', type: 'qty' },
+        'hw_gaslift': { cat: 'Фурнитура', name: 'Газ-лифт', price: 370, unit: 'шт', type: 'qty' },
+        'hw_pantograph': { cat: 'Фурнитура', name: 'Пантограф', price: 2040, unit: 'шт', type: 'qty' },
+        'led_light_full': { cat: 'Подсветка', name: 'LED подсветка с подключением', price: 1500, unit: 'пог.м', type: 'length' },
+        'led_light_connect': { cat: 'Подсветка', name: 'Только подключение подсветки', price: 750, unit: 'пог.м', type: 'length' },
+        'led_flush': { cat: 'Подсветка', name: 'Светильник врезной в дно верха (пог.м)', price: 1300, unit: 'пог.м', type: 'length' },
+        'led_drawer': { cat: 'Подсветка', name: 'Подсветка внутри ящика с датчиком', price: 950, unit: 'шт', type: 'qty' }
     };
 
     let itemCounter = 0;
@@ -751,7 +824,7 @@ https://vk.com/kuhnyamebelimsk
         }
     }
 
-    // === РАСЧЁТ ПО ЛОГИКЕ ОТДЕЛА: модули MGS × 2,7 (сборка и доставка внутри), скидка % от общей суммы ===
+    // === РАСЧЁТ: площадь × закупка MGS × 2,7 (сборка внутри), скидка % от всей суммы, доставка отдельно ===
     function calculateTotal() {
         const blocks = document.querySelectorAll('.item-block');
         let groups = [];
@@ -780,7 +853,7 @@ https://vk.com/kuhnyamebelimsk
                     calcStr = (w > 0 || h > 0) ? `${w}x${h}x${d}мм` : '-';
                 }
                 const raw = qty * item.price;
-                if (raw > 0) rows.push({ n: item.name, m: calcStr, u: item.unit, q: qty.toFixed(2), p: item.price, sale27: Math.round(raw * 2.7) });
+                if (raw > 0) rows.push({ n: item.name, cat: item.cat, m: calcStr, u: item.unit, q: qty.toFixed(2), p: item.price, sale27: Math.round(raw * 2.7) });
             });
             if (rows.length) {
                 const gSum = rows.reduce((a, r) => a + r.sale27, 0);
@@ -790,13 +863,11 @@ https://vk.com/kuhnyamebelimsk
 
         if (!groups.length) { alert('Добавьте хотя бы одну позицию с материалом!'); return; }
 
-        const S = groups.reduce((a, g) => a + g.sum, 0);                 // модули × 2,7 (без скидки)
+        const S = groups.reduce((a, g) => a + g.sum, 0);
         const discPct = parseFloat(document.getElementById('discount_percent').value) || 0;
-        const T = Math.round(S * (1 - discPct / 100));                   // итог со скидкой от общей суммы
+        const furnitureWithDiscount = Math.round(S * (1 - discPct / 100));
         const D = parseFloat(document.getElementById('delivery_sum').value) || 0;
-        const pctA = parseFloat(document.getElementById('assembly_percent').value) || 0;
-        let A = (T - D) > 0 ? Math.round((T - D) * pctA / (100 + pctA)) : 0;   // сборка для разбивки договора
-        const F = T - D - A;                                             // мебель для разбивки договора
+        const T = furnitureWithDiscount + D;
 
         let addWorksSum = 0; let addWorksList = [];
         if(document.getElementById('add_cut').checked) { addWorksSum += 1500; addWorksList.push('Вырез мойка/варочная'); }
@@ -807,6 +878,7 @@ https://vk.com/kuhnyamebelimsk
         if(document.getElementById('add_hood').checked) { addWorksSum += 1000; addWorksList.push('Подключение вытяжки'); }
         if(document.getElementById('add_micro').checked) { addWorksSum += 1000; addWorksList.push('Монтаж микроволновки'); }
         if(document.getElementById('add_filter').checked) { addWorksSum += 1000; addWorksList.push('Подключение фильтра воды'); }
+        if(document.getElementById('add_disposal').checked) { addWorksSum += 1500; addWorksList.push('Подключение измельчителя'); }
         if(document.getElementById('add_wash').checked) { addWorksSum += 3500; addWorksList.push('Стиральная/посудомойка'); }
         if(document.getElementById('add_fridge').checked) { addWorksSum += 3500; addWorksList.push('Встроенный холодильник'); }
         if(document.getElementById('add_demont').checked) { addWorksSum += 500; addWorksList.push('Демонтаж шкафа/тумбы'); }
@@ -815,45 +887,56 @@ https://vk.com/kuhnyamebelimsk
         const stairsCount = parseInt(document.getElementById('stairs_count').value) || 0;
         if(document.getElementById('add_stairs').checked && stairsCount > 0) { addWorksSum += stairsCount * 300; addWorksList.push(`Подъём без лифта (${stairsCount} эт.)`); }
 
-        lastCalc = { groups, S, T, F, A, D, discPct, addWorksSum, addWorksList };
+        lastCalc = { groups, S, T, furnitureWithDiscount, D, discPct, addWorksSum, addWorksList };
 
         const names = groups.map(g => g.name).join(' + ');
         document.getElementById('tech-title').innerText = `ПРОСЧЁТ: ${names.toUpperCase()}`;
         document.getElementById('kp-item-name').innerText = names;
+
+        // Авто-комплектация для КП
+        const cfgOrder = ['Корпус','Фасад ЛДСП','Фасад МДФ','Фасад Эмаль','Фасад Alvic','Фасад TSS','Фасад ARPA','Фасад Массив','Фасад Стекло','Фасад Керамика','Столешница','Компакт-плита','Стеновая','Ручки','Ящики Hettich','Фурнитура','Подсветка'];
+        let cfgLines = [];
+        cfgOrder.forEach(c => {
+            let used = [];
+            groups.forEach(g => g.rows.forEach(r => { if (r.cat === c && used.indexOf(r.n) === -1) used.push(r.n); }));
+            if (used.length) cfgLines.push(c + ': ' + used.join(', '));
+        });
+        const cfgText = 'КОМПЛЕКТАЦИЯ:\n' + cfgLines.join('\n');
+        document.getElementById('kp-config').value = cfgText;
+        const cfgPrint = document.getElementById('kp-config-print');
+        cfgPrint.innerText = cfgText;
+        cfgPrint.style.display = 'block';
 
         renderTech();
         renderKP();
 
         let alertText = 'Готово!\n';
         groups.forEach(g => { alertText += `📦 ${g.name}: ${fmt(Math.round(g.sum * (1 - discPct/100)))}\n`; });
-        alertText += `\nМодули × 2,7 (без скидки): ${fmt(S)}\nСкидка ${discPct}%: −${fmt(S - T)}`;
-        alertText += `\nИТОГО (сборка и доставка внутри): ${fmt(T)}`;
-        alertText += `\n\n📄 Разбивка для договора:\nМебель: ${fmt(F)}\nСборка: ${fmt(A)}\nДоставка: ${fmt(D)}`;
-        alertText += `\n\n💳 График платежей (60/30/10):\n${fmt(Math.round(T*0.6))} / ${fmt(Math.round(T*0.3))} / ${fmt(T - Math.round(T*0.6) - Math.round(T*0.3))}`;
+        alertText += `\nМодули × 2,7 (со сборкой, без скидки): ${fmt(S)}\nСкидка ${discPct}%: −${fmt(S - furnitureWithDiscount)}`;
+        alertText += `\nМебель со скидкой: ${fmt(furnitureWithDiscount)}\n+ Доставка: ${fmt(D)}`;
+        alertText += `\nИТОГО: ${fmt(T)}`;
+        alertText += `\n\n💳 График платежей (60/30/10 от ИТОГО):\n${fmt(Math.round(T*0.6))} / ${fmt(Math.round(T*0.3))} / ${fmt(T - Math.round(T*0.6) - Math.round(T*0.3))}`;
         alertText += `\n\nДоп. работы (на месте): ${fmt(addWorksSum)}`;
         alertText += `\n\n🗣 В Тех. бланке впишите озвученную клиенту сумму. ✏️ В КП можно подогнать итог и добавить согласованную скидку.`;
         alert(alertText);
     }
 
-    // === ТЕХ. БЛАНК: строки масштабируются до F, далее разбивка F+A=D=T (как в договорах) ===
     function renderTech() {
         if (!lastCalc) return;
-        const { groups, S, T, F, A, D, addWorksSum, addWorksList } = lastCalc;
+        const { groups, S, T, furnitureWithDiscount, D, addWorksSum, addWorksList } = lastCalc;
         let tHtml = ''; let num = 0;
-        const k = S > 0 ? F / S : 1;
+        const k = S > 0 ? furnitureWithDiscount / S : 1;
         groups.forEach(g => {
             tHtml += `<tr class="group-row"><td colspan="7">📦 ${g.name}</td></tr>`;
             let gDisp = 0;
-            g.rows.forEach((r, idx) => {
+            g.rows.forEach(r => {
                 num++;
-                let disp = Math.round(r.sale27 * k);
-                if (idx === g.rows.length - 1) { /* округление правим ниже по группе */ }
+                const disp = Math.round(r.sale27 * k);
                 gDisp += disp;
                 tHtml += `<tr><td style="text-align:center">${num}</td><td>${r.n}</td><td>${r.m}</td><td style="text-align:center">${r.u}</td><td style="text-align:center">${r.q}</td><td class="col-num">${fmt(Math.round(r.p * 2.7 * k))}</td><td class="col-num">${fmt(disp)}</td></tr>`;
             });
             tHtml += `<tr class="service-row"><td colspan="6" style="text-align:right">Подытог по «${g.name}»:</td><td class="col-num">${fmt(gDisp)}</td></tr>`;
         });
-        tHtml += `<tr class="service-row"><td></td><td>Сборка и установка</td><td>-</td><td>усл.</td><td>1</td><td class="col-num">-</td><td class="col-num">${fmt(A)}</td></tr>`;
         tHtml += `<tr class="service-row"><td></td><td>Доставка и подъём</td><td>-</td><td>усл.</td><td>1</td><td class="col-num">${fmt(D)}</td><td class="col-num">${fmt(D)}</td></tr>`;
         tHtml += `<tr class="total-row"><td colspan="6" style="text-align:right">ИТОГО ПО ДОГОВОРУ:</td><td class="col-num">${fmt(T)}</td></tr>`;
         tHtml += `<tr class="voiced-row"><td colspan="6" style="text-align:right"><strong>🗣 Озвучено клиенту (заполняет менеджер):</strong></td><td class="col-num"><input type="number" id="tech-voiced" value="${voicedSum}" placeholder="—" style="width:120px; padding:4px 6px; border:1px solid #999; border-radius:4px; font-weight:bold; font-size:14px; text-align:right;" oninput="setVoiced(this.value)"></td></tr>`;
@@ -869,7 +952,6 @@ https://vk.com/kuhnyamebelimsk
         refreshVoicedDiff();
     }
 
-    // === КП: строки = sale27 со стандартной скидкой; доп. скидка ₽ и озвученный итог — правки менеджера ===
     function renderKP() {
         if (!lastCalc) return;
         const { groups, S, T, discPct, addWorksSum, addWorksList } = lastCalc;
@@ -879,7 +961,7 @@ https://vk.com/kuhnyamebelimsk
         const Finput = parseFloat(document.getElementById('kp-final-total').value);
         const final = (isNaN(Finput) || Finput <= 0) ? (T - (showD ? Dextra : 0)) : Finput;
 
-        const baseSum = T; // строки после стандартной скидки
+        const baseSum = T;
         const rowsTarget = final + (showD ? Dextra : 0);
         const k = baseSum > 0 ? rowsTarget / baseSum : 1;
 
@@ -910,7 +992,7 @@ https://vk.com/kuhnyamebelimsk
         }
         document.getElementById('kp-body').innerHTML = kHtml;
 
-        document.getElementById('kp-exact-display').innerText = `Модули × 2,7: ${fmt(S)} | скидка ${discPct}% | расчётный итог: ${fmt(T)}`;
+        document.getElementById('kp-exact-display').innerText = `Модули × 2,7 (со сборкой): ${fmt(S)} | скидка ${discPct}% | + доставка | расчётный итог: ${fmt(T)}`;
         document.getElementById('kp-final-display').innerText = `Итог в КП (клиент увидит): ${fmt(totalDisp)}${showD ? ` (со доп. скидкой ${fmt(Dextra)})` : ''}`;
     }
 
