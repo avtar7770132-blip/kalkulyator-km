@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <title>КМ Калькулятор v25.6 MULTI PRO</title>
+    <title>КМ Калькулятор v25.8 MULTI PRO</title>
     <style>
         :root { --primary: #d32f2f; --secondary: #ff9800; --dark: #333; --light: #f5f5f5; --border: #ddd; --success: #2e7d32; }
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -92,18 +92,22 @@
     <!-- === ВКЛАДКА 1: КАЛЬКУЛЯТОР === -->
     <div id="calc" class="section active">
         <div class="card">
-            <h2>🛠 Конструктор сметы (v25.6 MULTI PRO)</h2>
-            <p style="color:#666; font-size:13px; margin-bottom:15px;">Несколько изделий в одной смете. Точный расчёт без округлений — округляете сами в диалоге с клиентом.</p>
+            <h2>🛠 Конструктор сметы (v25.8 MULTI PRO)</h2>
+            <p style="color:#666; font-size:13px; margin-bottom:15px;">Логика отдела: модули MGS × 2,7 — сборка и доставка уже внутри коэффициента. Скидка % — от общей суммы. Несколько изделий в одной смете.</p>
             <div id="items-container"></div>
             <button class="btn btn-add" onclick="addItem()">➕ ДОБАВИТЬ ИЗДЕЛИЕ (кухня, шкаф и т.д.)</button>
             <div style="margin-top: 20px; padding: 15px; background: #f9f9f9; border-radius: 8px; border: 1px solid #eee;">
-                <h3 style="font-size: 16px; margin-bottom: 10px;">Услуги (на весь заказ)</h3>
+                <h3 style="font-size: 16px; margin-bottom: 10px;">Параметры цены и разбивка для договора</h3>
                 <div class="form-group">
-                    <label>Доставка и подъём (фикс.)</label>
+                    <label>Скидка, % (стандарт 20) — от общей суммы</label>
+                    <input type="number" id="discount_percent" value="20">
+                </div>
+                <div class="form-group">
+                    <label>Доставка, ₽ (внутри цены; для разбивки строк договора)</label>
                     <input type="number" id="delivery_sum" value="5000">
                 </div>
                 <div class="form-group">
-                    <label>Сборка и установка (%)</label>
+                    <label>Сборка, % (внутри цены; для разбивки строк договора)</label>
                     <input type="number" id="assembly_percent" value="10">
                 </div>
                 <div style="margin-top: 15px; font-size: 13px; color: #555;">
@@ -162,18 +166,18 @@
             <!-- ПРАВКИ МЕНЕДЖЕРА (не печатаются) -->
             <div class="no-print" style="margin-bottom: 15px; padding: 15px; background: #fff8e1; border-radius: 8px; border: 1px solid #ffe082;">
                 <h3 style="font-size:16px; margin-bottom:10px;">✏️ Правки менеджера (влияют только на КП, не на Тех. бланк)</h3>
-                <div id="kp-exact-display" style="font-weight:bold; margin:8px 0;">Точная расчётная стоимость: —</div>
+                <div id="kp-exact-display" style="font-weight:bold; margin:8px 0;">Расчёт: —</div>
                 <div class="form-group">
-                    <label>Скидка, ₽ (0 = скидки не было; согласуется с руководством)</label>
+                    <label>Доп. скидка, ₽ (согласованная с руководством; 0 = нет)</label>
                     <input type="number" id="kp-discount" value="0" min="0" oninput="renderKP()">
                 </div>
                 <label style="display:inline-block; margin:5px 0; font-size:13px;"><input type="checkbox" id="kp-show-discount" checked onchange="renderKP()"> Показывать строку «Скидка» в КП (сними галочку — строки не будет)</label>
                 <div class="form-group">
-                    <label>Итог итоговый, как озвучили клиенту, ₽ (пусто = точная сумма)</label>
-                    <input type="number" id="kp-final-total" placeholder="Авто (точная сумма)" oninput="renderKP()">
+                    <label>Итог итоговый, как озвучили клиенту, ₽ (пусто = расчётный)</label>
+                    <input type="number" id="kp-final-total" placeholder="Авто (расчётная сумма)" oninput="renderKP()">
                 </div>
                 <div id="kp-final-display" style="font-weight:bold; margin:8px 0; color:var(--primary);">Итог в КП: —</div>
-                <p style="font-size:12px; color:#777; margin-top:8px;">При вводе озвученного итога суммы позиций пересчитываются так, чтобы таблица сошлась копейка в копейку. Тех. бланк остаётся точным.</p>
+                <p style="font-size:12px; color:#777; margin-top:8px;">При вводе озвученного итога суммы позиций пересчитываются так, чтобы таблица сошлась копейка в копейку. Тех. бланк остаётся расчётным.</p>
             </div>
 
             <button class="btn btn-upload no-print" onclick="document.getElementById('kp-head-img').click()">📷 ФОТО ДЛЯ ШАПКИ</button>
@@ -190,7 +194,7 @@
                 <tbody id="kp-body"><tr><td colspan="4" style="text-align:center; color:#999;">Выполните расчёт</td></tr></tbody>
             </table>
             <div class="kp-terms">
-                <strong>Стоимость со сборкой и доставкой</strong><br>
+                <strong>Стоимость указана со сборкой и доставкой</strong><br>
                 Сроки изготовления: от 15 до 25 рабочих дней<br>
                 Вызов инженера-замерщика: по г. Москва 500₽, за МКАД и область 1000₽<br><br>
                 <strong>Условия оплаты:</strong><br>
@@ -499,7 +503,7 @@ https://vk.com/kuhnyamebelimsk
             </div>
             <div class="script-block">
                 <h3>💡 Подсветка</h3>
-                <p>«LED-подсветка: 4000 ₽/м с подключением или 2000 ₽/м только подключение (если лента уже куплена).»</p>
+                <p>«LED-подсветка: 4000 ₽/м с подключением или 2000 ₽/м только подключение (если лента уже куплена). Есть врезные светильники в дно верхних шкафов, подсветка внутри ящиков с датчиком и светящийся профиль Gola.»</p>
             </div>
         </div>
     </div>
@@ -516,7 +520,7 @@ https://vk.com/kuhnyamebelimsk
 </div>
 
 <script>
-    // === БАЗА ЦЕН v25.6 MGS FULL ===
+    // === БАЗА ЦЕН v25.8 MGS FULL (цены — закупка MGS; продажа = закупка × 2,7, сборка и доставка внутри) ===
     const DB = {
         'ldsp_uvadrev': { cat: 'Корпус', name: 'ЛДСП 16мм Увадрев', price: 2500, unit: 'м²', type: 'area' },
         'ldsp_egger': { cat: 'Корпус', name: 'ЛДСП 16мм EGGER', price: 3500, unit: 'м²', type: 'area' },
@@ -592,6 +596,7 @@ https://vk.com/kuhnyamebelimsk
         'hw_blum_drawer': { cat: 'Фурнитура', name: 'Ящик Blum Tandembox', price: 6500, unit: 'шт', type: 'qty' },
         'hw_boyard_drawer': { cat: 'Фурнитура', name: 'Ящик Boyard Start', price: 2500, unit: 'шт', type: 'qty' },
         'hw_hettich_drawer': { cat: 'Фурнитура', name: 'Ящик Hettich InnoTech', price: 5500, unit: 'шт', type: 'qty' },
+        'termo_film': { cat: 'Фурнитура', name: 'Термозащита корпуса (духовка, посудомойка)', price: 1000, unit: 'шт', type: 'qty' },
         'hw_avantech_h77': { cat: 'Ящики Hettich', name: 'Ящик AvanTech YOU H77 (Push to Open Silent)', price: 9870, unit: 'компл', type: 'qty' },
         'hw_avantech_h101': { cat: 'Ящики Hettich', name: 'Ящик AvanTech YOU H101 (Silent)', price: 6594, unit: 'компл', type: 'qty' },
         'hw_avantech_h139': { cat: 'Ящики Hettich', name: 'Ящик AvanTech YOU H139 (Silent)', price: 7012, unit: 'компл', type: 'qty' },
@@ -604,6 +609,7 @@ https://vk.com/kuhnyamebelimsk
         'hw_hinge_blum': { cat: 'Фурнитура', name: 'Петля Blum Clip Top', price: 850, unit: 'шт', type: 'qty' },
         'hw_hinge_hettich': { cat: 'Фурнитура', name: 'Петля Hettich с доводчиком', price: 550, unit: 'шт', type: 'qty' },
         'hw_handle_gola': { cat: 'Ручки', name: 'Ручка профиль Gola (пог.м)', price: 3500, unit: 'пог.м', type: 'length' },
+        'gola_light': { cat: 'Ручки', name: 'Профиль Gola светящийся (пог.м)', price: 6000, unit: 'пог.м', type: 'length' },
         'hw_handle_skoba_1': { cat: 'Ручки', name: 'Ручка-скоба 128мм (хром)', price: 350, unit: 'шт', type: 'qty' },
         'hw_handle_skoba_2': { cat: 'Ручки', name: 'Ручка-скоба 160мм (чёрная)', price: 450, unit: 'шт', type: 'qty' },
         'hw_handle_skoba_3': { cat: 'Ручки', name: 'Ручка-скоба 256мм (золото)', price: 650, unit: 'шт', type: 'qty' },
@@ -616,7 +622,9 @@ https://vk.com/kuhnyamebelimsk
         'hw_gaslift': { cat: 'Фурнитура', name: 'Газ-лифт', price: 1000, unit: 'шт', type: 'qty' },
         'hw_pantograph': { cat: 'Фурнитура', name: 'Пантограф', price: 5500, unit: 'шт', type: 'qty' },
         'led_light_full': { cat: 'Подсветка', name: 'LED подсветка с подключением', price: 4000, unit: 'пог.м', type: 'length' },
-        'led_light_connect': { cat: 'Подсветка', name: 'Только подключение подсветки', price: 2000, unit: 'пог.м', type: 'length' }
+        'led_light_connect': { cat: 'Подсветка', name: 'Только подключение подсветки', price: 2000, unit: 'пог.м', type: 'length' },
+        'led_flush': { cat: 'Подсветка', name: 'Светильник врезной в дно верха (пог.м)', price: 3500, unit: 'пог.м', type: 'length' },
+        'led_drawer': { cat: 'Подсветка', name: 'Подсветка внутри ящика с датчиком', price: 2500, unit: 'шт', type: 'qty' }
     };
 
     let itemCounter = 0;
@@ -730,19 +738,20 @@ https://vk.com/kuhnyamebelimsk
 
     function refreshVoicedDiff() {
         const el = document.getElementById('voiced-diff-row');
-        if (!el) return;
+        if (!el || !lastCalc) return;
         const v = parseFloat(voicedSum);
-        if (!lastCalc || isNaN(v) || v <= 0) { el.innerHTML = '<td colspan="7" style="font-size:12px; color:#999; padding:4px 6px;">Менеджер: впишите сумму, озвученную клиенту (строка выше). При печати она попадёт в Тех. бланк.</td>'; return; }
-        const diff = v - lastCalc.grandTotal;
+        if (isNaN(v) || v <= 0) { el.innerHTML = '<td colspan="7" style="font-size:12px; color:#999; padding:4px 6px;">Менеджер: впишите сумму, озвученную клиенту (строка выше). При печати она попадёт в Тех. бланк.</td>'; return; }
+        const diff = v - lastCalc.T;
         if (diff === 0) {
-            el.innerHTML = '<td colspan="7" style="font-size:12px; color:#2e7d32; padding:4px 6px;">✔ Озвученная сумма совпадает с точным расчётом</td>';
+            el.innerHTML = '<td colspan="7" style="font-size:12px; color:#2e7d32; padding:4px 6px;">✔ Озвученная сумма совпадает с расчётом</td>';
         } else if (diff > 0) {
-            el.innerHTML = `<td colspan="7" style="font-size:12px; color:#777; padding:4px 6px;">Разница с точным расчётом: +${fmt(diff)} (озвучено выше точной суммы)</td>`;
+            el.innerHTML = `<td colspan="7" style="font-size:12px; color:#777; padding:4px 6px;">Разница с расчётом: +${fmt(diff)} (озвучено выше)</td>`;
         } else {
-            el.innerHTML = `<td colspan="7" style="font-size:12px; color:#777; padding:4px 6px;">Разница с точным расчётом: −${fmt(Math.abs(diff))} (озвучено ниже точной суммы)</td>`;
+            el.innerHTML = `<td colspan="7" style="font-size:12px; color:#777; padding:4px 6px;">Разница с расчётом: −${fmt(Math.abs(diff))} (озвучено ниже)</td>`;
         }
     }
 
+    // === РАСЧЁТ ПО ЛОГИКЕ ОТДЕЛА: модули MGS × 2,7 (сборка и доставка внутри), скидка % от общей суммы ===
     function calculateTotal() {
         const blocks = document.querySelectorAll('.item-block');
         let groups = [];
@@ -770,19 +779,24 @@ https://vk.com/kuhnyamebelimsk
                     qty = qInput;
                     calcStr = (w > 0 || h > 0) ? `${w}x${h}x${d}мм` : '-';
                 }
-                const sum = qty * item.price;
-                if (sum > 0) rows.push({ n: item.name, m: calcStr, u: item.unit, q: qty.toFixed(2), p: item.price, sale: Math.round(sum * 2.7 * 0.8) });
+                const raw = qty * item.price;
+                if (raw > 0) rows.push({ n: item.name, m: calcStr, u: item.unit, q: qty.toFixed(2), p: item.price, sale27: Math.round(raw * 2.7) });
             });
             if (rows.length) {
-                const gSum = rows.reduce((a, r) => a + r.sale, 0);
+                const gSum = rows.reduce((a, r) => a + r.sale27, 0);
                 groups.push({ name: name, rows: rows, sum: gSum });
             }
         });
 
         if (!groups.length) { alert('Добавьте хотя бы одну позицию с материалом!'); return; }
 
-        const deliverySum = parseFloat(document.getElementById('delivery_sum').value) || 0;
-        const assemblyPercent = parseFloat(document.getElementById('assembly_percent').value) || 0;
+        const S = groups.reduce((a, g) => a + g.sum, 0);                 // модули × 2,7 (без скидки)
+        const discPct = parseFloat(document.getElementById('discount_percent').value) || 0;
+        const T = Math.round(S * (1 - discPct / 100));                   // итог со скидкой от общей суммы
+        const D = parseFloat(document.getElementById('delivery_sum').value) || 0;
+        const pctA = parseFloat(document.getElementById('assembly_percent').value) || 0;
+        let A = (T - D) > 0 ? Math.round((T - D) * pctA / (100 + pctA)) : 0;   // сборка для разбивки договора
+        const F = T - D - A;                                             // мебель для разбивки договора
 
         let addWorksSum = 0; let addWorksList = [];
         if(document.getElementById('add_cut').checked) { addWorksSum += 1500; addWorksList.push('Вырез мойка/варочная'); }
@@ -801,11 +815,7 @@ https://vk.com/kuhnyamebelimsk
         const stairsCount = parseInt(document.getElementById('stairs_count').value) || 0;
         if(document.getElementById('add_stairs').checked && stairsCount > 0) { addWorksSum += stairsCount * 300; addWorksList.push(`Подъём без лифта (${stairsCount} эт.)`); }
 
-        const furnitureTotal = groups.reduce((a, g) => a + g.sum, 0);
-        const assemblySum = Math.round(furnitureTotal * (assemblyPercent / 100));
-        const grandTotal = furnitureTotal + deliverySum + assemblySum;
-
-        lastCalc = { groups, deliverySum, assemblySum, assemblyPercent, furnitureTotal, grandTotal, addWorksSum, addWorksList };
+        lastCalc = { groups, S, T, F, A, D, discPct, addWorksSum, addWorksList };
 
         const names = groups.map(g => g.name).join(' + ');
         document.getElementById('tech-title').innerText = `ПРОСЧЁТ: ${names.toUpperCase()}`;
@@ -815,34 +825,40 @@ https://vk.com/kuhnyamebelimsk
         renderKP();
 
         let alertText = 'Готово!\n';
-        groups.forEach(g => { alertText += `📦 ${g.name}: ${fmt(g.sum)}\n`; });
-        alertText += `\nМебель: ${fmt(furnitureTotal)}\nДоставка: ${fmt(deliverySum)}\nСборка: ${fmt(assemblySum)}\nИТОГО ТОЧНО: ${fmt(grandTotal)}`;
-        alertText += `\n\n💳 График платежей (60/30/10):\n${fmt(Math.round(grandTotal*0.6))} / ${fmt(Math.round(grandTotal*0.3))} / ${fmt(grandTotal - Math.round(grandTotal*0.6) - Math.round(grandTotal*0.3))}`;
+        groups.forEach(g => { alertText += `📦 ${g.name}: ${fmt(Math.round(g.sum * (1 - discPct/100)))}\n`; });
+        alertText += `\nМодули × 2,7 (без скидки): ${fmt(S)}\nСкидка ${discPct}%: −${fmt(S - T)}`;
+        alertText += `\nИТОГО (сборка и доставка внутри): ${fmt(T)}`;
+        alertText += `\n\n📄 Разбивка для договора:\nМебель: ${fmt(F)}\nСборка: ${fmt(A)}\nДоставка: ${fmt(D)}`;
+        alertText += `\n\n💳 График платежей (60/30/10):\n${fmt(Math.round(T*0.6))} / ${fmt(Math.round(T*0.3))} / ${fmt(T - Math.round(T*0.6) - Math.round(T*0.3))}`;
         alertText += `\n\nДоп. работы (на месте): ${fmt(addWorksSum)}`;
-        alertText += `\n\n🗣 В Тех. бланке впишите озвученную клиенту сумму в графу после ИТОГО.`;
-        alertText += `\n✏️ Во вкладке КП можно подогнать итог под озвученную цифру и добавить скидку.`;
+        alertText += `\n\n🗣 В Тех. бланке впишите озвученную клиенту сумму. ✏️ В КП можно подогнать итог и добавить согласованную скидку.`;
         alert(alertText);
     }
 
+    // === ТЕХ. БЛАНК: строки масштабируются до F, далее разбивка F+A=D=T (как в договорах) ===
     function renderTech() {
         if (!lastCalc) return;
-        const { groups, deliverySum, assemblySum, assemblyPercent, furnitureTotal, grandTotal, addWorksSum, addWorksList } = lastCalc;
+        const { groups, S, T, F, A, D, addWorksSum, addWorksList } = lastCalc;
         let tHtml = ''; let num = 0;
+        const k = S > 0 ? F / S : 1;
         groups.forEach(g => {
             tHtml += `<tr class="group-row"><td colspan="7">📦 ${g.name}</td></tr>`;
-            g.rows.forEach(r => {
+            let gDisp = 0;
+            g.rows.forEach((r, idx) => {
                 num++;
-                tHtml += `<tr><td style="text-align:center">${num}</td><td>${r.n}</td><td>${r.m}</td><td style="text-align:center">${r.u}</td><td style="text-align:center">${r.q}</td><td class="col-num">${fmt(r.p)}</td><td class="col-num">${fmt(r.sale)}</td></tr>`;
+                let disp = Math.round(r.sale27 * k);
+                if (idx === g.rows.length - 1) { /* округление правим ниже по группе */ }
+                gDisp += disp;
+                tHtml += `<tr><td style="text-align:center">${num}</td><td>${r.n}</td><td>${r.m}</td><td style="text-align:center">${r.u}</td><td style="text-align:center">${r.q}</td><td class="col-num">${fmt(Math.round(r.p * 2.7 * k))}</td><td class="col-num">${fmt(disp)}</td></tr>`;
             });
-            const gSum = g.rows.reduce((a, r) => a + r.sale, 0);
-            tHtml += `<tr class="service-row"><td colspan="6" style="text-align:right">Подытог по «${g.name}»:</td><td class="col-num">${fmt(gSum)}</td></tr>`;
+            tHtml += `<tr class="service-row"><td colspan="6" style="text-align:right">Подытог по «${g.name}»:</td><td class="col-num">${fmt(gDisp)}</td></tr>`;
         });
-        tHtml += `<tr class="service-row"><td></td><td>Доставка и подъём</td><td>-</td><td>усл.</td><td>1</td><td class="col-num">${fmt(deliverySum)}</td><td class="col-num">${fmt(deliverySum)}</td></tr>`;
-        tHtml += `<tr class="service-row"><td></td><td>Сборка и установка (${assemblyPercent}%)</td><td>-</td><td>усл.</td><td>1</td><td class="col-num">-</td><td class="col-num">${fmt(assemblySum)}</td></tr>`;
-        tHtml += `<tr class="total-row"><td colspan="6" style="text-align:right">ИТОГО ПО ДОГОВОРУ (точно):</td><td class="col-num">${fmt(grandTotal)}</td></tr>`;
+        tHtml += `<tr class="service-row"><td></td><td>Сборка и установка</td><td>-</td><td>усл.</td><td>1</td><td class="col-num">-</td><td class="col-num">${fmt(A)}</td></tr>`;
+        tHtml += `<tr class="service-row"><td></td><td>Доставка и подъём</td><td>-</td><td>усл.</td><td>1</td><td class="col-num">${fmt(D)}</td><td class="col-num">${fmt(D)}</td></tr>`;
+        tHtml += `<tr class="total-row"><td colspan="6" style="text-align:right">ИТОГО ПО ДОГОВОРУ:</td><td class="col-num">${fmt(T)}</td></tr>`;
         tHtml += `<tr class="voiced-row"><td colspan="6" style="text-align:right"><strong>🗣 Озвучено клиенту (заполняет менеджер):</strong></td><td class="col-num"><input type="number" id="tech-voiced" value="${voicedSum}" placeholder="—" style="width:120px; padding:4px 6px; border:1px solid #999; border-radius:4px; font-weight:bold; font-size:14px; text-align:right;" oninput="setVoiced(this.value)"></td></tr>`;
         tHtml += `<tr id="voiced-diff-row"></tr>`;
-        const p1 = Math.round(grandTotal*0.6), p2 = Math.round(grandTotal*0.3), p3 = grandTotal - p1 - p2;
+        const p1 = Math.round(T*0.6), p2 = Math.round(T*0.3), p3 = T - p1 - p2;
         tHtml += `<tr class="service-row"><td colspan="6" style="text-align:right">Предоплата 60% (запуск в производство):</td><td class="col-num">${fmt(p1)}</td></tr>`;
         tHtml += `<tr class="service-row"><td colspan="6" style="text-align:right">Платёж при доставке 30%:</td><td class="col-num">${fmt(p2)}</td></tr>`;
         tHtml += `<tr class="service-row"><td colspan="6" style="text-align:right">Платёж после сборки 10%:</td><td class="col-num">${fmt(p3)}</td></tr>`;
@@ -853,43 +869,37 @@ https://vk.com/kuhnyamebelimsk
         refreshVoicedDiff();
     }
 
+    // === КП: строки = sale27 со стандартной скидкой; доп. скидка ₽ и озвученный итог — правки менеджера ===
     function renderKP() {
         if (!lastCalc) return;
-        const { groups, deliverySum, assemblySum, assemblyPercent, furnitureTotal, grandTotal, addWorksSum, addWorksList } = lastCalc;
+        const { groups, S, T, discPct, addWorksSum, addWorksList } = lastCalc;
 
-        const D = Math.max(0, parseFloat(document.getElementById('kp-discount').value) || 0);
-        const showD = document.getElementById('kp-show-discount').checked && D > 0;
+        const Dextra = Math.max(0, parseFloat(document.getElementById('kp-discount').value) || 0);
+        const showD = document.getElementById('kp-show-discount').checked && Dextra > 0;
         const Finput = parseFloat(document.getElementById('kp-final-total').value);
-        let finalTotal = (isNaN(Finput) || Finput <= 0) ? (grandTotal - (showD ? D : 0)) : Finput;
+        const final = (isNaN(Finput) || Finput <= 0) ? (T - (showD ? Dextra : 0)) : Finput;
 
-        let targetFurniture = finalTotal + (showD ? D : 0) - deliverySum - assemblySum;
-        let k = furnitureTotal > 0 ? targetFurniture / furnitureTotal : 1;
-        if (!isFinite(k) || k <= 0) { k = 1; finalTotal = furnitureTotal + deliverySum + assemblySum - (showD ? D : 0); targetFurniture = furnitureTotal; }
-
-        let scaledGroups = groups.map(g => ({ name: g.name, rows: g.rows.map(r => ({ ...r, disp: Math.round(r.sale * k) })) }));
-        let sumScaled = scaledGroups.reduce((a,g) => a + g.rows.reduce((b,r) => b + r.disp, 0), 0);
-        const delta = Math.round(targetFurniture) - sumScaled;
-        if (delta !== 0 && scaledGroups.length && scaledGroups[scaledGroups.length-1].rows.length) {
-            const lg = scaledGroups[scaledGroups.length-1];
-            lg.rows[lg.rows.length-1].disp += delta;
-            sumScaled += delta;
-        }
-        const totalDisp = sumScaled + deliverySum + assemblySum - (showD ? D : 0);
+        const baseSum = T; // строки после стандартной скидки
+        const rowsTarget = final + (showD ? Dextra : 0);
+        const k = baseSum > 0 ? rowsTarget / baseSum : 1;
 
         let kHtml = '';
-        scaledGroups.forEach(g => {
+        let totalRows = 0;
+        groups.forEach(g => {
             kHtml += `<tr class="group-row"><td colspan="4">📦 ${g.name}</td></tr>`;
+            let gDisp = 0;
             g.rows.forEach(r => {
-                kHtml += `<tr><td>${r.n}</td><td>${r.m}</td><td style="text-align:center">${r.q} ${r.u}</td><td class="col-num">${fmt(r.disp)}</td></tr>`;
+                const disp = Math.round(r.sale27 * (1 - discPct/100) * k);
+                gDisp += disp;
+                kHtml += `<tr><td>${r.n}</td><td>${r.m}</td><td style="text-align:center">${r.q} ${r.u}</td><td class="col-num">${fmt(disp)}</td></tr>`;
             });
-            const gSum = g.rows.reduce((b,r) => b + r.disp, 0);
-            kHtml += `<tr class="service-row"><td colspan="3" style="text-align:right">Подытог по «${g.name}»:</td><td class="col-num">${fmt(gSum)}</td></tr>`;
+            totalRows += gDisp;
+            kHtml += `<tr class="service-row"><td colspan="3" style="text-align:right">Подытог по «${g.name}»:</td><td class="col-num">${fmt(gDisp)}</td></tr>`;
         });
-        kHtml += `<tr class="service-row"><td>Доставка и подъём</td><td>-</td><td style="text-align:center">1 усл.</td><td class="col-num">${fmt(deliverySum)}</td></tr>`;
-        kHtml += `<tr class="service-row"><td>Сборка и установка (${assemblyPercent}%)</td><td>-</td><td style="text-align:center">1 усл.</td><td class="col-num">${fmt(assemblySum)}</td></tr>`;
         if (showD) {
-            kHtml += `<tr class="discount-row"><td>Скидка (согласована с руководством)</td><td>-</td><td style="text-align:center">-</td><td class="col-num">−${fmt(D)}</td></tr>`;
+            kHtml += `<tr class="discount-row"><td>Скидка (согласована с руководством)</td><td>-</td><td style="text-align:center">-</td><td class="col-num">−${fmt(Dextra)}</td></tr>`;
         }
+        const totalDisp = totalRows - (showD ? Dextra : 0);
         kHtml += `<tr class="total-row"><td colspan="3" style="text-align:right">ИТОГО ПО ДОГОВОРУ:</td><td class="col-num">${fmt(totalDisp)}</td></tr>`;
         const p1 = Math.round(totalDisp*0.6), p2 = Math.round(totalDisp*0.3), p3 = totalDisp - p1 - p2;
         kHtml += `<tr class="service-row"><td>Предоплата 60% (запуск в производство)</td><td>-</td><td style="text-align:center">-</td><td class="col-num">${fmt(p1)}</td></tr>`;
@@ -900,11 +910,11 @@ https://vk.com/kuhnyamebelimsk
         }
         document.getElementById('kp-body').innerHTML = kHtml;
 
-        document.getElementById('kp-exact-display').innerText = `Точная расчётная стоимость: ${fmt(grandTotal)}`;
-        document.getElementById('kp-final-display').innerText = `Итог в КП (клиент увидит): ${fmt(totalDisp)}${showD ? ` (со скидкой ${fmt(D)})` : ''}`;
+        document.getElementById('kp-exact-display').innerText = `Модули × 2,7: ${fmt(S)} | скидка ${discPct}% | расчётный итог: ${fmt(T)}`;
+        document.getElementById('kp-final-display').innerText = `Итог в КП (клиент увидит): ${fmt(totalDisp)}${showD ? ` (со доп. скидкой ${fmt(Dextra)})` : ''}`;
     }
 
-    // === ШАБЛОНЫ (ключ v26: старые автосохранения больше не перетирают новые стандартные шаблоны) ===
+    // === ШАБЛОНЫ ===
     const LS_KEY = 'km_templates_v26';
     const LS_KEY_OLD = 'km_templates_v25';
 
@@ -979,7 +989,6 @@ https://vk.com/kuhnyamebelimsk
         let saved = null;
         try { saved = JSON.parse(localStorage.getItem(LS_KEY) || 'null'); } catch(e) {}
         if (!saved) {
-            // Миграция: из старой версии переносим только СВОИ шаблоны, стандартные берём свежие
             let old = null;
             try { old = JSON.parse(localStorage.getItem(LS_KEY_OLD) || 'null'); } catch(e) {}
             if (old && old.custom && old.custom.length) {
@@ -1003,5 +1012,3 @@ https://vk.com/kuhnyamebelimsk
 </script>
 </body>
 </html>
-
-                  
